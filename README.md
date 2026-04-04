@@ -39,7 +39,7 @@ go build -o ../bin/gjoule ./cmd/geth
   --datadir ./data \
   --networkid 707070 \
   --mine --miner.etherbase YOUR_ADDRESS \
-  --bootnodes "enode://369ca3173dbbdbcff271c45a920012f30dc92c6b93d60f95c0695877014d9459cb3fba7754210f0318372877656037082d78f7a0a9d83b59633aa050bb4d7ef3@46.131.66.189:30307"
+  --bootnodes "enode://369ca3173dbbdbcff271c45a920012f30dc92c6b93d60f95c0695877014d9459cb3fba7754210f0318372877656037082d78f7a0a9d83b59633aa050bb4d7ef3@[2a00:16e0:100c:c246:136e:a601:d286:5044]:30307"
 ```
 
 ### 4. Add to MetaMask
