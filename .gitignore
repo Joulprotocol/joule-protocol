@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build artifacts
+contracts/artifacts/
+contracts/cache/
+contracts/typechain-types/
+bin/
+
+# Chain data (NEVER commit — contains keys and state)
+data/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pid
+*.log
+*.key
+.env
+
+# Go build
+go-joule/build/bin/
+go-joule/vendor/
+
+# Large test data in go-joule (keep only modified files)
+go-joule/signer/fourbyte/4byte.json

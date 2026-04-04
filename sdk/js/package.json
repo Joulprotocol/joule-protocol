@@ -1,0 +1,20 @@
+{
+  "name": "joule-sdk",
+  "version": "0.1.0",
+  "description": "JOULE Protocol SDK — programmable energy payments in 5 lines of code",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [
+    "joule",
+    "energy",
+    "crypto",
+    "payments",
+    "iot",
+    "ai",
+    "m2m"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^6.16.0"
+  }
+}
