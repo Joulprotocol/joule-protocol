@@ -61,6 +61,7 @@ contract OracleConsensus is AccessControl {
     address[] public oracleList;
     mapping(bytes32 => EnergyReport) public reports;
     bytes32[] public pendingReportIds;
+    uint256 public pendingReportCleanupIndex; // tracks cleanup progress
 
     uint256 public totalStaked;
     uint256 public totalSlashed;
@@ -300,5 +301,46 @@ contract OracleConsensus is AccessControl {
 
     function getReportSubmissions(bytes32 _reportId) external view returns (uint256[] memory) {
         return reports[_reportId].submissions;
+    }
+
+    // ─── Cleanup ───────────────────────────────────────────────────
+
+    /**
+     * @notice Remove finalized reports from pendingReportIds.
+     * Prevents unbounded array growth. Anyone can call.
+     * Processes up to `_batchSize` entries per call (gas limit friendly).
+     */
+    function cleanupPendingReports(uint256 _batchSize) external {
+        uint256 len = pendingReportIds.length;
+        if (len == 0 || pendingReportCleanupIndex >= len) return;
+
+        uint256 end = pendingReportCleanupIndex + _batchSize;
+        if (end > len) end = len;
+
+        // Compact: move non-finalized to front
+        uint256 writeIdx = pendingReportCleanupIndex;
+        for (uint256 i = pendingReportCleanupIndex; i < end; i++) {
+            if (!reports[pendingReportIds[i]].finalized) {
+                if (i != writeIdx) {
+                    pendingReportIds[writeIdx] = pendingReportIds[i];
+                }
+                writeIdx++;
+            }
+        }
+
+        // If we processed the entire array, truncate
+        if (end == len) {
+            // Remove finalized entries from the end
+            while (pendingReportIds.length > writeIdx) {
+                pendingReportIds.pop();
+            }
+            pendingReportCleanupIndex = 0; // reset for next cycle
+        } else {
+            pendingReportCleanupIndex = end;
+        }
+    }
+
+    function getPendingReportCount() external view returns (uint256) {
+        return pendingReportIds.length;
     }
 }

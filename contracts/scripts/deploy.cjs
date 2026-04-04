@@ -109,6 +109,12 @@ async function main() {
 
   console.log("All roles configured");
 
+  // SECURITY: Renounce admin on JOLToken — no more role changes possible
+  // This makes the token contract immutable. Only PoEMining and EnergyPeg can mint.
+  // Uncomment for mainnet deploy:
+  // await jolToken.renounceAdmin();
+  // console.log("JOLToken admin renounced — contract is now immutable");
+
   console.log("\n═══ JOULE v2 — Satoshi Model — Deployment Complete ═══");
   console.log({
     // Core

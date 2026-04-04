@@ -28,7 +28,16 @@ contract JOLToken is ERC20, AccessControl {
 
     constructor(address admin) ERC20("JOULE", "JOL") {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        _grantRole(MINTER_ROLE, admin);
+        // MINTER_ROLE granted only to contracts (PoEMining, EnergyPeg), never to addresses.
+        // Admin sets up roles via grantRole() then renounces ADMIN for immutability.
+    }
+
+    /**
+     * @notice Admin should call this after all roles are configured.
+     * Makes the token contract fully immutable — no new minters/burners can be added.
+     */
+    function renounceAdmin() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        renounceRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
     /**

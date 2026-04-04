@@ -28,6 +28,11 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
 
     JOLToken public jolToken;
 
+    // Energy Reserve cap — shared with PoEMining (total 42M for energy)
+    // EnergyPeg uses the Energy Reserve allocation (20% of supply)
+    // This cap prevents unlimited minting via depositEnergy
+    uint256 public constant MAX_PEG_MINT = 42_000_000 ether; // 20% of 210M
+
     // Energy Reserve: total kWh backing in the system
     uint256 public totalEnergyReserveKWh;
     uint256 public totalMintedFromEnergy;
@@ -121,6 +126,10 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
         require(producers[_producer].active, "Not registered producer");
         require(_kWh > 0, "Zero kWh");
 
+        // Check peg mint cap
+        uint256 jolAmount = _kWh * 1 ether;
+        require(totalMintedFromEnergy * 1 ether + jolAmount <= MAX_PEG_MINT, "Peg mint cap reached");
+
         // Update producer state
         producers[_producer].totalDeposited += _kWh;
         producers[_producer].availableKWh += _kWh;
@@ -129,8 +138,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
         totalEnergyReserveKWh += _kWh;
         totalMintedFromEnergy += _kWh;
 
-        // Mint 1 JOL per kWh to producer
-        uint256 jolAmount = _kWh * 1 ether;
+        // Mint 1 JOL per kWh to producer — capped
         jolToken.mint(_producer, jolAmount);
 
         emit EnergyDeposited(_producer, _kWh, jolAmount);
