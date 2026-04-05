@@ -25,11 +25,12 @@ import "./PoEMining.sol";
  * to tamper), registered GPS location, and weather cross-check.
  */
 contract OracleConsensus is AccessControl {
-    uint256 public constant MIN_STAKE = 10_000 ether;    // 10,000 JOL
-    uint256 public constant QUORUM = 3;                    // 3-of-5 minimum
+    uint256 public constant MIN_ORACLES = 5;                // minimum oracle network size
+    uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
+    uint256 public constant QUORUM = 3;                    // 3-of-5 consensus required
     uint256 public constant SLASH_PERCENT = 50;            // 50% slash for fraud
     uint256 public constant REPORT_WINDOW = 1 hours;       // time to submit reports
-    uint256 public constant MAX_DEVIATION_BPS = 1000;      // 10% max deviation from median
+    uint256 public constant MAX_DEVIATION_BPS = 500;       // 5% max deviation from median
 
     struct OracleNode {
         address operator;
