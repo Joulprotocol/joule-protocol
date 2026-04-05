@@ -3,7 +3,9 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./JOLToken.sol";
+import "./EnergyPeg.sol";
 
 /**
  * @title EnergyMarketplace
@@ -11,8 +13,9 @@ import "./JOLToken.sol";
  * Producers list energy credits, buyers purchase with JOL.
  * 1% of trades is burned (deflationary), 0.5% commission.
  */
-contract EnergyMarketplace is AccessControl, ReentrancyGuard {
+contract EnergyMarketplace is AccessControl, ReentrancyGuard, Pausable {
     JOLToken public jolToken;
+    EnergyPeg public energyPeg;
 
     uint256 public constant BURN_BPS = 150;          // 1.5% burn (all fees burned — no founder cut)
 
@@ -40,10 +43,14 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard {
     event TradExecuted(uint256 indexed listingId, address indexed buyer, uint256 kWh, uint256 totalPrice);
     event FeeBurned(uint256 amount);
 
-    constructor(address admin, address _jolToken) {
+    constructor(address admin, address _jolToken, address _energyPeg) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
+        energyPeg = EnergyPeg(_energyPeg);
     }
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
 
     /**
      * @notice List energy credits for sale
@@ -53,9 +60,15 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard {
         uint256 _pricePerKWh,
         string calldata _energyType,
         string calldata _country
-    ) external returns (uint256) {
+    ) external whenNotPaused returns (uint256) {
         require(_kWh > 0, "Zero kWh");
         require(_pricePerKWh > 0, "Zero price");
+
+        // Verify seller has energy credits in the peg registry
+        if (address(energyPeg) != address(0)) {
+            (, , , , , , uint256 availableKWh, ) = energyPeg.producers(msg.sender);
+            require(availableKWh >= _kWh, "Insufficient energy credits in registry");
+        }
 
         uint256 id = nextListingId++;
         listings[id] = Listing({
@@ -76,7 +89,7 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard {
     /**
      * @notice Buy energy credits from a listing
      */
-    function buy(uint256 _listingId, uint256 _kWh) external nonReentrant {
+    function buy(uint256 _listingId, uint256 _kWh) external nonReentrant whenNotPaused {
         Listing storage listing = listings[_listingId];
         require(listing.active, "Listing not active");
         require(_kWh > 0 && _kWh <= listing.kWh, "Invalid kWh amount");

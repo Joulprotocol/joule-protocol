@@ -8,7 +8,7 @@ const { ethers } = require("hardhat");
  * Ring must be complete from day one.
  */
 describe("LiquidityMining — Launch Day Liquidity", function () {
-  let liqMining, jolToken;
+  let liqMining, jolToken, lpTokenA, lpTokenB;
   let owner, lp1, lp2;
 
   beforeEach(async function () {
@@ -17,12 +17,32 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
     const JOLToken = await ethers.getContractFactory("JOLToken");
     jolToken = await JOLToken.deploy(owner.address);
 
+    // Deploy mock LP tokens (reuse JOLToken as a simple ERC20 mock)
+    lpTokenA = await JOLToken.deploy(owner.address);
+    lpTokenB = await JOLToken.deploy(owner.address);
+
     const LiquidityMining = await ethers.getContractFactory("LiquidityMining");
     liqMining = await LiquidityMining.deploy(owner.address, jolToken.target);
 
-    // Grant minter role to LiquidityMining
+    // Set LP tokens
+    await liqMining.setLPTokens(lpTokenA.target, lpTokenB.target);
+
+    // Grant minter role to LiquidityMining (for JOL rewards)
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     await jolToken.grantRole(MINTER_ROLE, liqMining.target);
+
+    // Mint LP tokens to test users and approve
+    const LP_MINTER = await lpTokenA.MINTER_ROLE();
+    await lpTokenA.grantRole(LP_MINTER, owner.address);
+    await lpTokenB.grantRole(LP_MINTER, owner.address);
+    await lpTokenA.mint(lp1.address, ethers.parseEther("100000"));
+    await lpTokenA.mint(lp2.address, ethers.parseEther("100000"));
+    await lpTokenB.mint(lp1.address, ethers.parseEther("100000"));
+    await lpTokenB.mint(lp2.address, ethers.parseEther("100000"));
+    await lpTokenA.connect(lp1).approve(liqMining.target, ethers.MaxUint256);
+    await lpTokenA.connect(lp2).approve(liqMining.target, ethers.MaxUint256);
+    await lpTokenB.connect(lp1).approve(liqMining.target, ethers.MaxUint256);
+    await lpTokenB.connect(lp2).approve(liqMining.target, ethers.MaxUint256);
   });
 
   // ─── Program Constants ──────────────────────────────────────

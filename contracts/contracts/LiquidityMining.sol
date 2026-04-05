@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./JOLToken.sol";
 
 /**
@@ -55,6 +56,10 @@ contract LiquidityMining is AccessControl {
     // Daily pool totals for reward calculation
     mapping(uint256 => uint256) public dailyTotalStaked; // day → total LP staked
 
+    // LP token contracts (set by admin at launch)
+    IERC20 public lpTokenPoolA; // JOL/USDC LP
+    IERC20 public lpTokenPoolB; // JOL/ETH LP
+
     uint256 public totalLPStaked;
     uint256 public activeLPCount;
 
@@ -66,6 +71,16 @@ contract LiquidityMining is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
         programStart = block.timestamp;
+    }
+
+    /**
+     * @notice Set LP token addresses (admin only, before staking starts)
+     */
+    function setLPTokens(address _poolA, address _poolB) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(address(lpTokenPoolA) == address(0), "Already set");
+        require(_poolA != address(0) && _poolB != address(0), "Zero address");
+        lpTokenPoolA = IERC20(_poolA);
+        lpTokenPoolB = IERC20(_poolB);
     }
 
     /**
@@ -102,6 +117,11 @@ contract LiquidityMining is AccessControl {
         require(isActive(), "Program ended");
         require(_amount > 0, "Zero amount");
         require(_pool <= 1, "Invalid pool");
+
+        // Transfer LP tokens from user to this contract
+        IERC20 lpToken = _pool == 0 ? lpTokenPoolA : lpTokenPoolB;
+        require(address(lpToken) != address(0), "LP token not set");
+        require(lpToken.transferFrom(msg.sender, address(this), _amount), "LP transfer failed");
 
         positionId = nextPositionId++;
         uint256 day = currentDay();
@@ -143,6 +163,10 @@ contract LiquidityMining is AccessControl {
         uint256 amount = pos.amount;
         totalLPStaked -= amount;
         activeLPCount--;
+
+        // Return LP tokens to user
+        IERC20 lpToken = pos.pool == 0 ? lpTokenPoolA : lpTokenPoolB;
+        require(lpToken.transfer(msg.sender, amount), "LP return failed");
 
         emit LPUnstaked(_positionId, msg.sender, amount);
         if (pending > 0) {

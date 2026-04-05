@@ -3,6 +3,8 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
 import "./PoEMining.sol";
 
@@ -25,7 +27,7 @@ import "./PoEMining.sol";
  * Weakest link: hardware manipulation. Mitigated by MID certification (criminal offense
  * to tamper), registered GPS location, and weather cross-check.
  */
-contract OracleConsensus is AccessControl, ReentrancyGuard {
+contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
     uint256 public constant MIN_ORACLES = 5;                // minimum oracle network size
     uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
     uint256 public constant QUORUM = 3;                    // 3-of-5 consensus required
@@ -56,8 +58,10 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
         bool anomalyFlagged;        // true if cross-check found suspicious data
     }
 
+    JOLToken public jolToken;
     EnergyRegistry public registry;
     PoEMining public poeMining;
+    address public slashTreasury; // where slashed funds go
 
     mapping(address => OracleNode) public oracles;
     address[] public oracleList;
@@ -76,10 +80,15 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
     event ReportFinalized(bytes32 indexed reportId, uint256 facilityId, uint256 kWh);
     event AnomalyFlagged(bytes32 indexed reportId, uint256 facilityId, string reason);
 
-    constructor(address admin, address _registry) {
+    constructor(address admin, address _jolToken, address _registry, address _slashTreasury) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
         registry = EnergyRegistry(_registry);
+        slashTreasury = _slashTreasury;
     }
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
 
     function setPoEMining(address _poeMining) external onlyRole(DEFAULT_ADMIN_ROLE) {
         poeMining = PoEMining(_poeMining);
@@ -90,13 +99,16 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
     /**
      * @notice Stake JOL to become an oracle node
      */
-    function joinAsOracle() external payable {
-        require(msg.value >= MIN_STAKE, "Insufficient stake");
+    function joinAsOracle(uint256 _stakeAmount) external whenNotPaused {
+        require(_stakeAmount >= MIN_STAKE, "Insufficient stake");
         require(!oracles[msg.sender].active, "Already active");
+
+        // Transfer JOL stake from oracle to this contract
+        require(jolToken.transferFrom(msg.sender, address(this), _stakeAmount), "Stake transfer failed");
 
         oracles[msg.sender] = OracleNode({
             operator: msg.sender,
-            stake: msg.value,
+            stake: _stakeAmount,
             reportsSubmitted: 0,
             reportsAccepted: 0,
             slashCount: 0,
@@ -105,9 +117,9 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
         });
 
         oracleList.push(msg.sender);
-        totalStaked += msg.value;
+        totalStaked += _stakeAmount;
 
-        emit OracleJoined(msg.sender, msg.value);
+        emit OracleJoined(msg.sender, _stakeAmount);
     }
 
     /**
@@ -123,8 +135,8 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
         node.stake = 0;
         totalStaked -= stakeReturn;
 
-        (bool sent, ) = msg.sender.call{value: stakeReturn}("");
-        require(sent, "Transfer failed");
+        // Return JOL stake
+        require(jolToken.transfer(msg.sender, stakeReturn), "Stake return failed");
 
         emit OracleExited(msg.sender, stakeReturn);
     }
@@ -150,7 +162,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
         uint256 _periodEnd,
         uint256 _kWhProduced,
         bytes32 _weatherHash
-    ) external {
+    ) external whenNotPaused {
         require(oracles[msg.sender].active, "Not active oracle");
         require(registry.isActive(_facilityId), "Facility not active");
 
@@ -256,7 +268,11 @@ contract OracleConsensus is AccessControl, ReentrancyGuard {
         node.slashCount++;
         totalSlashed += slashAmount;
 
-        // Burned — sent to address(0) effectively by not redistributing
+        // Transfer slashed JOL to treasury (not stuck in contract)
+        if (slashTreasury != address(0)) {
+            jolToken.transfer(slashTreasury, slashAmount);
+        }
+
         emit OracleSlashed(_oracle, slashAmount, _reportId);
 
         // Deactivate if stake falls below minimum

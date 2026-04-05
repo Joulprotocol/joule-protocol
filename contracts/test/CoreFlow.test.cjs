@@ -37,17 +37,19 @@ describe("JOULE Core Flow", function () {
     poeMining = await PoEMining.deploy(owner.address, jolToken.target, registry.target);
 
     const OracleConsensus = await ethers.getContractFactory("OracleConsensus");
-    oracle = await OracleConsensus.deploy(owner.address, registry.target);
+    oracle = await OracleConsensus.deploy(owner.address, jolToken.target, registry.target, owner.address);
 
     const Governance = await ethers.getContractFactory("Governance");
     governance = await Governance.deploy(owner.address, jolToken.target);
 
-    const EnergyMarketplace = await ethers.getContractFactory("EnergyMarketplace");
-    marketplace = await EnergyMarketplace.deploy(owner.address, jolToken.target);
-
-    // Deploy machine economy layer
+    // Deploy EnergyPeg before Marketplace (Marketplace references it)
     const EnergyPeg = await ethers.getContractFactory("EnergyPeg");
     energyPeg = await EnergyPeg.deploy(owner.address, jolToken.target);
+
+    const EnergyMarketplace = await ethers.getContractFactory("EnergyMarketplace");
+    marketplace = await EnergyMarketplace.deploy(owner.address, jolToken.target, energyPeg.target);
+
+    // Deploy machine economy layer
 
     const MachineRegistry = await ethers.getContractFactory("MachineRegistry");
     machineReg = await MachineRegistry.deploy(owner.address);
@@ -395,6 +397,12 @@ describe("JOULE Core Flow", function () {
     });
 
     it("creates listing, buyer purchases, fees burned", async function () {
+      // Register producer in EnergyPeg and give credits via oracle
+      await energyPeg.connect(producer).registerProducer("Test Solar", "EE", "solar");
+      const ORACLE_ROLE = await energyPeg.ORACLE_ROLE();
+      await energyPeg.grantRole(ORACLE_ROLE, owner.address);
+      await energyPeg.depositEnergy(producer.address, 200); // 200 kWh credits
+
       // Producer lists 100 kWh at 1 JOL/kWh
       await marketplace.connect(producer).createListing(
         100,

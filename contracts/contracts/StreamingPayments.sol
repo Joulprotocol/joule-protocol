@@ -152,6 +152,10 @@ contract StreamingPayments is ReentrancyGuard {
             s.withdrawn += receiverOwed;
             totalStreamedVolume += receiverOwed;
             require(jolToken.transfer(s.receiver, netAmount), "Receiver payment failed");
+            // Burn protocol fee (deflationary)
+            if (fee > 0) {
+                jolToken.burn(fee);
+            }
         }
 
         // Refund sender

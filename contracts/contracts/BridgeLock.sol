@@ -91,6 +91,11 @@ contract BridgeLock is AccessControl, ReentrancyGuard {
             req.amount = _amount;
             req.ethTxHash = _ethTxHash;
             req.createdAt = block.timestamp;
+        } else {
+            // Subsequent confirmations must match the first — prevents parameter manipulation
+            bytes32 expected = keccak256(abi.encodePacked(_unlockId, req.user, req.amount, req.ethTxHash));
+            bytes32 submitted = keccak256(abi.encodePacked(_unlockId, _user, _amount, _ethTxHash));
+            require(expected == submitted, "Parameters mismatch with first confirmation");
         }
 
         require(!req.hasConfirmed[msg.sender], "Already confirmed");

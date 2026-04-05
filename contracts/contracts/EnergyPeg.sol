@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./JOLToken.sol";
 
 /**
@@ -22,7 +23,7 @@ import "./JOLToken.sol";
  * As global energy prices rise → JOL floor rises.
  * As AI compute demand grows → energy demand grows → JOL floor rises.
  */
-contract EnergyPeg is AccessControl, ReentrancyGuard {
+contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
     bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
     bytes32 public constant PRODUCER_ROLE = keccak256("PRODUCER_ROLE");
 
@@ -83,6 +84,9 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
         jolToken = JOLToken(_jolToken);
     }
 
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+
     // ─── Producer Management ───────────────────────────────────────
 
     /**
@@ -122,7 +126,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
     function depositEnergy(
         address _producer,
         uint256 _kWh
-    ) external onlyRole(ORACLE_ROLE) {
+    ) external onlyRole(ORACLE_ROLE) whenNotPaused {
         require(producers[_producer].active, "Not registered producer");
         require(_kWh > 0, "Zero kWh");
 
@@ -157,7 +161,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
     function redeemForEnergy(
         address _producer,
         uint256 _kWh
-    ) external nonReentrant {
+    ) external nonReentrant whenNotPaused {
         require(producers[_producer].active, "Producer not active");
         require(producers[_producer].availableKWh >= _kWh, "Insufficient producer capacity");
         require(_kWh > 0, "Zero kWh");

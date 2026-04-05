@@ -15,6 +15,7 @@ contract Governance is AccessControl, ReentrancyGuard {
 
     uint256 public constant PROPOSAL_THRESHOLD = 100_000 ether;  // 100k JOL to propose
     uint256 public constant VOTING_PERIOD = 7 days;
+    uint256 public constant EXECUTION_DELAY = 2 days;             // timelock after passing
     uint256 public constant QUORUM_BPS = 400;                     // 4% of circulating supply
     uint256 public constant MAX_WALLET_VOTE_BPS = 500;            // max 5% of circulating supply per voter
 
@@ -26,12 +27,15 @@ contract Governance is AccessControl, ReentrancyGuard {
         string title;
         string description;
         uint256 createdAt;
+        uint256 finalizedAt;        // when voting ended and passed
+        uint256 snapshotSupply;     // total supply at proposal creation (for quorum)
         uint256 votesFor;
         uint256 votesAgainst;
         ProposalState state;
         address[] targets;
         bytes[] calldatas;
         mapping(address => bool) hasVoted;
+        mapping(address => uint256) voteSnapshot; // snapshot balance at vote time
     }
 
     uint256 public nextProposalId = 1;
@@ -41,6 +45,7 @@ contract Governance is AccessControl, ReentrancyGuard {
     event Voted(uint256 indexed proposalId, address indexed voter, bool support, uint256 weight);
     event ProposalExecuted(uint256 indexed id);
     event ProposalCancelled(uint256 indexed id);
+    event ProposalFinalized(uint256 indexed id, ProposalState state);
 
     constructor(address admin, address _jolToken) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
@@ -69,6 +74,7 @@ contract Governance is AccessControl, ReentrancyGuard {
         p.title = _title;
         p.description = _description;
         p.createdAt = block.timestamp;
+        p.snapshotSupply = jolToken.totalSupply();
         p.state = ProposalState.Active;
         p.targets = _targets;
         p.calldatas = _calldatas;
@@ -112,22 +118,27 @@ contract Governance is AccessControl, ReentrancyGuard {
         require(p.state == ProposalState.Active, "Not active");
         require(block.timestamp > p.createdAt + VOTING_PERIOD, "Voting ongoing");
 
-        uint256 quorum = (jolToken.totalSupply() * QUORUM_BPS) / 10000;
+        // Use snapshot supply for quorum (prevents manipulation after proposal)
+        uint256 quorum = (p.snapshotSupply * QUORUM_BPS) / 10000;
         uint256 totalVotes = p.votesFor + p.votesAgainst;
 
         if (totalVotes >= quorum && p.votesFor > p.votesAgainst) {
             p.state = ProposalState.Passed;
+            p.finalizedAt = block.timestamp;
         } else {
             p.state = ProposalState.Rejected;
         }
+
+        emit ProposalFinalized(_proposalId, p.state);
     }
 
     /**
-     * @notice Execute a passed proposal
+     * @notice Execute a passed proposal (anyone can call after timelock)
      */
-    function execute(uint256 _proposalId) external onlyRole(DEFAULT_ADMIN_ROLE) nonReentrant {
+    function execute(uint256 _proposalId) external nonReentrant {
         Proposal storage p = proposals[_proposalId];
         require(p.state == ProposalState.Passed, "Not passed");
+        require(block.timestamp >= p.finalizedAt + EXECUTION_DELAY, "Timelock not expired");
 
         p.state = ProposalState.Executed;
 
