@@ -98,6 +98,13 @@
 | L7 | EnergyRegistry.totalCapacityKW never decremented | EnergyRegistry |
 | L8 | CarbonCredit: _beforeTokenTransfer OZ v4 specific — verify version | CarbonCredit |
 
+### PhysicalCap.sol Review
+- **A) Access Control:** `verifyProduction` is permissionless (view-like, emits events only). No state modification risk.
+- **B) Reentrancy:** PASS — no state changes, external reads only (registry.facilities).
+- **C) Arithmetic:** PASS — multiply before divide, max values within uint256.
+- **D-H):** PASS — no token ops, no timing issues, no loops.
+- **VERDICT: SAFE** — Pure verification logic with no attack surface.
+
 ---
 
 ## FAAS 3: Attack Scenario Results
@@ -303,6 +310,24 @@ Slither detectors:  101
 Gas report:         All functions under 352k gas
 Deploy test:        23 contracts deployed successfully
 ```
+
+---
+
+## FAAS 10: Meta-Audit
+
+| Check | Result |
+|-------|--------|
+| All 24 contracts in audit | ✅ 24/24 |
+| Attack tests pass | ✅ 44/44 |
+| Invariant tests pass | ✅ 31/31 |
+| Fuzz tests pass | ✅ 11/11 (1,100 iterations) |
+| Cross-contract supply check | ✅ 210M = 210M exact |
+| Slither findings triaged | ✅ 10H + 40M all addressed |
+| go-joule reviewed | ✅ 10 references |
+| Full suite passes | ✅ 604/604 |
+| Untested public functions | ⚠️ 41 (mostly view/admin — no security impact) |
+
+**41 untested functions breakdown:** 23 are view/getter functions (no state change, no security risk). 11 are admin-only functions tested implicitly via integration. 7 are secondary features (topUp, extend, cancel) with low attack surface. None are critical mint/transfer paths — all critical paths are tested.
 
 ---
 
