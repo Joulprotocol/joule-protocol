@@ -1,0 +1,51 @@
+=== DANGEROUS PATTERNS ===
+--- delegatecall ---
+NONE
+--- selfdestruct ---
+NONE
+--- tx.origin ---
+NONE
+--- unchecked ---
+NONE
+--- assembly ---
+NONE
+--- low-level .call ---
+contracts/BridgeLock.sol:132:        (bool sent, ) = req.user.call{value: req.amount}("");
+--- block.timestamp count ---
+contracts/AgentWallet.sol:8
+contracts/BridgeLock.sol:3
+contracts/CarbonCredit.sol:1
+contracts/ConflictScore.sol:3
+contracts/DEXLiquidity.sol:0
+contracts/EcosystemTreasury.sol:2
+contracts/EnergyFloor.sol:2
+contracts/EnergyMarketplace.sol:1
+contracts/EnergyProofEngine.sol:1
+contracts/EnergyRegistry.sol:3
+contracts/FounderSellLimit.sol:4
+contracts/FoundersVesting.sol:0
+contracts/Governance.sol:5
+contracts/JOLToken.sol:0
+contracts/LiquidityMining.sol:12
+contracts/MachineRegistry.sol:2
+contracts/OracleConsensus.sol:4
+contracts/PaymentChannel.sol:3
+contracts/PhysicalCap.sol:0
+contracts/PoEMining.sol:1
+contracts/SellLimit.sol:2
+contracts/StakeSlash.sol:5
+contracts/StreamingPayments.sol:7
+contracts/WeatherOracle.sol:2
+--- hardcoded addresses ---
+contracts/JOLToken.sol:24:    address public constant BURN_ADDRESS = 0x0000000000000000000000000000000000000369;
+--- TODO/FIXME ---
+contracts/EnergyRegistry.sol:28:        uint8 latitudeBand;          // 0=tropical, 1=temperate, 2=subarctic, 3=arctic, 4=equator
+contracts/FounderSellLimit.sol:33:    event FounderSellBlocked(uint256 indexed day, uint256 attempted, uint256 totalToday, uint256 limit);
+contracts/MachineRegistry.sol:25:        IoTSensor,          // 0: temperature, humidity, etc.
+contracts/PhysicalCap.sol:37:    uint256 public constant PEAK_HOURS_TEMPERATE = 400;    // 4.0h — 30-45°
+contracts/PhysicalCap.sol:108:     * @param _band Latitude band: 0=tropical, 1=temperate, 2=subarctic, 3=arctic, 4=equator
+contracts/PhysicalCap.sol:117:            return PEAK_HOURS_TEMPERATE;     // 4.0h — 30-45°
+contracts/StakeSlash.sol:14: * False data = lose entire stake + temporary ban.
+contracts/WeatherOracle.sol:56:        uint256 temperature;         // °C × 10 (for future use)
+contracts/WeatherOracle.sol:86:        uint256 _temperature
+contracts/WeatherOracle.sol:110:            temperature: _temperature,

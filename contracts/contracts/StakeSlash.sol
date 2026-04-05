@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
 import "./ConflictScore.sol";
@@ -21,6 +22,8 @@ import "./ConflictScore.sol";
  * Slashed stakes go to the ecosystem treasury (burned or redistributed).
  */
 contract StakeSlash is AccessControl {
+    using SafeERC20 for IERC20;
+
     bytes32 public constant SLASHER_ROLE = keccak256("SLASHER_ROLE");
 
     JOLToken public jolToken;
@@ -115,7 +118,7 @@ contract StakeSlash is AccessControl {
         uint256 amount = requiredStake(_facilityId);
         require(amount > 0, "Zero stake");
 
-        jolToken.transferFrom(msg.sender, address(this), amount);
+        IERC20(address(jolToken)).safeTransferFrom(msg.sender, address(this), amount);
 
         stakeId = nextStakeId++;
         stakes[stakeId] = StakeInfo({
@@ -157,7 +160,7 @@ contract StakeSlash is AccessControl {
         totalSlashed += amount;
 
         // Transfer slashed amount to treasury
-        jolToken.transfer(slashTreasury, amount);
+        IERC20(address(jolToken)).safeTransfer(slashTreasury, amount);
 
         // Ban the staker
         BanInfo storage ban = bans[staker];
@@ -200,7 +203,7 @@ contract StakeSlash is AccessControl {
         facilityStake[_facilityId] = 0;
         totalStaked -= amount;
 
-        jolToken.transfer(msg.sender, amount);
+        IERC20(address(jolToken)).safeTransfer(msg.sender, amount);
 
         emit StakeWithdrawn(stakeId, msg.sender, amount);
     }

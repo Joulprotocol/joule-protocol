@@ -4,6 +4,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
 import "./PoEMining.sol";
@@ -28,6 +29,8 @@ import "./PoEMining.sol";
  * to tamper), registered GPS location, and weather cross-check.
  */
 contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
+    using SafeERC20 for IERC20;
+
     uint256 public quorum = 2;                              // starts 2/3, scales to 3/5+
     uint256 public minOracles = 3;                          // starts 3, scales to 5+
     uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
@@ -116,7 +119,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         require(!oracles[msg.sender].active, "Already active");
 
         // Transfer JOL stake from oracle to this contract
-        require(jolToken.transferFrom(msg.sender, address(this), _stakeAmount), "Stake transfer failed");
+        IERC20(address(jolToken)).safeTransferFrom(msg.sender, address(this), _stakeAmount);
 
         oracles[msg.sender] = OracleNode({
             operator: msg.sender,
@@ -148,7 +151,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         totalStaked -= stakeReturn;
 
         // Return JOL stake
-        require(jolToken.transfer(msg.sender, stakeReturn), "Stake return failed");
+        IERC20(address(jolToken)).safeTransfer(msg.sender, stakeReturn);
 
         emit OracleExited(msg.sender, stakeReturn);
     }
@@ -284,7 +287,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
 
         // Transfer slashed JOL to treasury (not stuck in contract)
         if (slashTreasury != address(0)) {
-            jolToken.transfer(slashTreasury, slashAmount);
+            IERC20(address(jolToken)).safeTransfer(slashTreasury, slashAmount);
         }
 
         emit OracleSlashed(_oracle, slashAmount, _reportId);

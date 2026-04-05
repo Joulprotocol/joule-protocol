@@ -2,7 +2,9 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 
 /**
@@ -16,7 +18,9 @@ import "./JOLToken.sol";
  * Uses accRewardPerShare / rewardDebt model (SushiSwap MasterChef V1).
  * No loops in claim/deposit/withdraw — constant gas regardless of time elapsed.
  */
-contract LiquidityMining is AccessControl {
+contract LiquidityMining is AccessControl, ReentrancyGuard {
+    using SafeERC20 for IERC20;
+
     JOLToken public jolToken;
 
     uint256 public constant TOTAL_REWARDS = 4_200_000 ether;
@@ -139,7 +143,7 @@ contract LiquidityMining is AccessControl {
 
         IERC20 lpToken = _pool == 0 ? lpTokenPoolA : lpTokenPoolB;
         require(address(lpToken) != address(0), "LP token not set");
-        require(lpToken.transferFrom(msg.sender, address(this), _amount), "LP transfer failed");
+        lpToken.safeTransferFrom(msg.sender, address(this), _amount);
 
         updatePool();
 
@@ -162,7 +166,7 @@ contract LiquidityMining is AccessControl {
 
     // ─── Unstaking ────────────────────────────────────────────────
 
-    function unstakeLiquidity(uint256 _positionId) external {
+    function unstakeLiquidity(uint256 _positionId) external nonReentrant {
         LPPosition storage pos = positions[_positionId];
         require(pos.provider == msg.sender, "Not owner");
         require(pos.active, "Not active");
@@ -183,7 +187,7 @@ contract LiquidityMining is AccessControl {
         activeLPCount--;
 
         IERC20 lpToken = pos.pool == 0 ? lpTokenPoolA : lpTokenPoolB;
-        require(lpToken.transfer(msg.sender, amount), "LP return failed");
+        lpToken.safeTransfer(msg.sender, amount);
 
         emit LPUnstaked(_positionId, msg.sender, amount);
         if (pending > 0) {
@@ -193,7 +197,7 @@ contract LiquidityMining is AccessControl {
 
     // ─── Claiming ─────────────────────────────────────────────────
 
-    function claimRewards(uint256 _positionId) external {
+    function claimRewards(uint256 _positionId) external nonReentrant {
         LPPosition storage pos = positions[_positionId];
         require(pos.provider == msg.sender, "Not owner");
         require(pos.active, "Not active");

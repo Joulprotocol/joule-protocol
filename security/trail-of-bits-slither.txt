@@ -1,0 +1,1308 @@
+'npx hardhat clean' running (wd: /home/erkki/paul/projects/joule/contracts)
+'npx hardhat clean --global' running (wd: /home/erkki/paul/projects/joule/contracts)
+'npx hardhat compile --force' running (wd: /home/erkki/paul/projects/joule/contracts)
+INFO:Detectors:
+Detector: arbitrary-send-erc20
+FounderSellLimit.sell(address,uint256) (contracts/FounderSellLimit.sol#58-76) uses arbitrary from in transferFrom: jolToken.transferFrom(founder,_to,_amount) (contracts/FounderSellLimit.sol#73)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#arbitrary-from-in-transferfrom
+INFO:Detectors:
+Detector: incorrect-exp
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) has bitwise-xor operator ^ instead of the exponentiation operator **: 
+	 - inverse = (3 * denominator) ^ 2 (node_modules/@openzeppelin/contracts/utils/math/Math.sol#116)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-exponentiation
+INFO:Detectors:
+Detector: unchecked-transfer
+DEXLiquidity.provisionPoolA(address) (contracts/DEXLiquidity.sol#102-115) ignores return value by jolToken.transfer(_recipient,amount) (contracts/DEXLiquidity.sol#112)
+DEXLiquidity.provisionPoolB(address) (contracts/DEXLiquidity.sol#122-135) ignores return value by jolToken.transfer(_recipient,amount) (contracts/DEXLiquidity.sol#132)
+DEXLiquidity.emergencyWithdraw(address) (contracts/DEXLiquidity.sol#141-148) ignores return value by jolToken.transfer(_to,balance) (contracts/DEXLiquidity.sol#146)
+FounderSellLimit.sell(address,uint256) (contracts/FounderSellLimit.sol#58-76) ignores return value by jolToken.transferFrom(founder,_to,_amount) (contracts/FounderSellLimit.sol#73)
+OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296) ignores return value by jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133) ignores return value by jolToken.transferFrom(msg.sender,address(this),amount) (contracts/StakeSlash.sol#118)
+StakeSlash.slash(uint256,string) (contracts/StakeSlash.sol#139-182) ignores return value by jolToken.transfer(slashTreasury,amount) (contracts/StakeSlash.sol#160)
+StakeSlash.withdrawStake(uint256) (contracts/StakeSlash.sol#188-206) ignores return value by jolToken.transfer(msg.sender,amount) (contracts/StakeSlash.sol#203)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-transfer
+INFO:Detectors:
+Detector: divide-before-multiply
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse = (3 * denominator) ^ 2 (node_modules/@openzeppelin/contracts/utils/math/Math.sol#116)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#120)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#121)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#122)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#123)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#124)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#101)
+	- inverse *= 2 - denominator * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#125)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) performs a multiplication on the result of a division:
+	- prod0 = prod0 / twos (node_modules/@openzeppelin/contracts/utils/math/Math.sol#104)
+	- result = prod0 * inverse (node_modules/@openzeppelin/contracts/utils/math/Math.sol#131)
+ConflictScore._applyDecay(address) (contracts/ConflictScore.sol#122-147) performs a multiplication on the result of a division:
+	- periods = elapsed / DECAY_PERIOD (contracts/ConflictScore.sol#130)
+	- totalDecay = periods * decayRate (contracts/ConflictScore.sol#135)
+ConflictScore._applyDecay(address) (contracts/ConflictScore.sol#122-147) performs a multiplication on the result of a division:
+	- periods = elapsed / DECAY_PERIOD (contracts/ConflictScore.sol#130)
+	- s.lastDecayApplied += periods * DECAY_PERIOD (contracts/ConflictScore.sol#144)
+PhysicalCap.maxDailyOutput(uint256) (contracts/PhysicalCap.sol#53-82) performs a multiplication on the result of a division:
+	- theoreticalMax = capacityKW * peakHours * efficiency / (100 * BPS_BASE) (contracts/PhysicalCap.sol#78)
+	- maxKWh = theoreticalMax * TOLERANCE_BPS / BPS_BASE (contracts/PhysicalCap.sol#81)
+StakeSlash.requiredStake(uint256) (contracts/StakeSlash.sol#88-95) performs a multiplication on the result of a division:
+	- dailyExpected = capacityKW * AVG_PEAK_HOURS * AVG_CAPACITY_FACTOR / BPS_BASE (contracts/StakeSlash.sol#93)
+	- dailyExpected * STAKE_DAYS * JOL_PER_KWH * 1000000000000000000 (contracts/StakeSlash.sol#94)
+WeatherOracle.calcWindMax(uint256,uint256) (contracts/WeatherOracle.sol#215-236) performs a multiplication on the result of a division:
+	- factor = position * 3000 / range (contracts/WeatherOracle.sol#231)
+	- _capacityKW * 24 * factor / BPS_BASE (contracts/WeatherOracle.sol#235)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#divide-before-multiply
+INFO:Detectors:
+Detector: incorrect-equality
+ConflictScore._applyDecay(address) (contracts/ConflictScore.sol#122-147) uses a dangerous strict equality:
+	- periods == 0 (contracts/ConflictScore.sol#131)
+ConflictScore.reportViolation(address,ConflictScore.ViolationType) (contracts/ConflictScore.sol#86-112) uses a dangerous strict equality:
+	- s.lastDecayApplied == 0 (contracts/ConflictScore.sol#107)
+EnergyRegistry.isActive(uint256) (contracts/EnergyRegistry.sol#172-174) uses a dangerous strict equality:
+	- facilities[_id].status == FacilityStatus.Verified (contracts/EnergyRegistry.sol#173)
+ERC20Votes.CLOCK_MODE() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#51-55) uses a dangerous strict equality:
+	- require(bool,string)(clock() == block.number,ERC20Votes: broken clock mode) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#53)
+ERC20Votes._writeCheckpoint(ERC20Votes.Checkpoint[],function(uint256,uint256) returns(uint256),uint256) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#252-271) uses a dangerous strict equality:
+	- pos > 0 && oldCkpt.fromBlock == clock() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#265)
+LiquidityMining._distributeReward(address,uint256) (contracts/LiquidityMining.sol#247-250) uses a dangerous strict equality:
+	- _amount == 0 (contracts/LiquidityMining.sol#248)
+MachineRegistry.isVerified(address) (contracts/MachineRegistry.sol#192-195) uses a dangerous strict equality:
+	- id != 0 && machines[id].status == MachineStatus.Verified (contracts/MachineRegistry.sol#194)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dangerous-strict-equalities
+INFO:Detectors:
+Detector: reentrancy-no-eth
+Reentrancy in OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275):
+	External calls:
+	- _slashOracle(report.voters[i],_reportId) (contracts/OracleConsensus.sol#255)
+		- jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+	State variables written after the call(s):
+	- oracles[report.voters[i]].reportsAccepted ++ (contracts/OracleConsensus.sol#257)
+	OracleConsensus.oracles (contracts/OracleConsensus.sol#68) can be used in cross function reentrancies:
+	- OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275)
+	- OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296)
+	- OracleConsensus._stakeWeightedMedian(address[],uint256[]) (contracts/OracleConsensus.sol#305-343)
+	- OracleConsensus.getActiveOracleCount() (contracts/OracleConsensus.sol#367-373)
+	- OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135)
+	- OracleConsensus.oracles (contracts/OracleConsensus.sol#68)
+	- OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32) (contracts/OracleConsensus.sol#171-218)
+Reentrancy in OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296):
+	External calls:
+	- jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+	State variables written after the call(s):
+	- node.active = false (contracts/OracleConsensus.sol#294)
+	OracleConsensus.oracles (contracts/OracleConsensus.sol#68) can be used in cross function reentrancies:
+	- OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275)
+	- OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296)
+	- OracleConsensus._stakeWeightedMedian(address[],uint256[]) (contracts/OracleConsensus.sol#305-343)
+	- OracleConsensus.getActiveOracleCount() (contracts/OracleConsensus.sol#367-373)
+	- OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135)
+	- OracleConsensus.oracles (contracts/OracleConsensus.sol#68)
+	- OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32) (contracts/OracleConsensus.sol#171-218)
+Reentrancy in OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135):
+	External calls:
+	- require(bool,string)(jolToken.transferFrom(msg.sender,address(this),_stakeAmount),Stake transfer failed) (contracts/OracleConsensus.sol#119)
+	State variables written after the call(s):
+	- oracles[msg.sender] = OracleNode({operator:msg.sender,stake:_stakeAmount,reportsSubmitted:0,reportsAccepted:0,slashCount:0,joinedAt:block.timestamp,active:true}) (contracts/OracleConsensus.sol#121-129)
+	OracleConsensus.oracles (contracts/OracleConsensus.sol#68) can be used in cross function reentrancies:
+	- OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275)
+	- OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296)
+	- OracleConsensus._stakeWeightedMedian(address[],uint256[]) (contracts/OracleConsensus.sol#305-343)
+	- OracleConsensus.getActiveOracleCount() (contracts/OracleConsensus.sol#367-373)
+	- OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135)
+	- OracleConsensus.oracles (contracts/OracleConsensus.sol#68)
+	- OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32) (contracts/OracleConsensus.sol#171-218)
+Reentrancy in EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236):
+	External calls:
+	- physicsOk = physicalCap.verifyProduction(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#152)
+	State variables written after the call(s):
+	- _reject(_facilityId,finalKWh,reportId,1,Physics cap exceeded) (contracts/EnergyProofEngine.sol#154)
+		- processedReports[_reportId] = true (contracts/EnergyProofEngine.sol#247)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+Reentrancy in EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236):
+	External calls:
+	- physicsOk = physicalCap.verifyProduction(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#152)
+	- weatherOk = weatherOracle.verifyWithWeather(_facilityId,finalKWh,day) (contracts/EnergyProofEngine.sol#162)
+	State variables written after the call(s):
+	- _reject(_facilityId,finalKWh,reportId,2,Weather verification failed) (contracts/EnergyProofEngine.sol#164)
+		- processedReports[_reportId] = true (contracts/EnergyProofEngine.sol#247)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+	- _reject(_facilityId,finalKWh,reportId,4,Facility not staked) (contracts/EnergyProofEngine.sol#178)
+		- processedReports[_reportId] = true (contracts/EnergyProofEngine.sol#247)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+	- _reject(_facilityId,finalKWh,reportId,4,Producer is banned) (contracts/EnergyProofEngine.sol#182)
+		- processedReports[_reportId] = true (contracts/EnergyProofEngine.sol#247)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+	- _reject(_facilityId,finalKWh,reportId,5,Conflict score too high (level 3+)) (contracts/EnergyProofEngine.sol#191)
+		- processedReports[_reportId] = true (contracts/EnergyProofEngine.sol#247)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+	- processedReports[reportId] = true (contracts/EnergyProofEngine.sol#209)
+	EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54) can be used in cross function reentrancies:
+	- EnergyProofEngine.isProcessed(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#273-282)
+	- EnergyProofEngine.processedReports (contracts/EnergyProofEngine.sol#54)
+Reentrancy in StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133):
+	External calls:
+	- jolToken.transferFrom(msg.sender,address(this),amount) (contracts/StakeSlash.sol#118)
+	State variables written after the call(s):
+	- facilityStake[_facilityId] = stakeId (contracts/StakeSlash.sol#129)
+	StakeSlash.facilityStake (contracts/StakeSlash.sol#65) can be used in cross function reentrancies:
+	- StakeSlash.facilityStake (contracts/StakeSlash.sol#65)
+	- StakeSlash.isStaked(uint256) (contracts/StakeSlash.sol#218-222)
+	- StakeSlash.slash(uint256,string) (contracts/StakeSlash.sol#139-182)
+	- StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133)
+	- StakeSlash.withdrawStake(uint256) (contracts/StakeSlash.sol#188-206)
+Reentrancy in LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192):
+	External calls:
+	- _distributeReward(msg.sender,pending) (contracts/LiquidityMining.sol#174)
+		- jolToken.mint(_to,_amount) (contracts/LiquidityMining.sol#249)
+	State variables written after the call(s):
+	- pos.totalClaimed += pending (contracts/LiquidityMining.sol#175)
+	LiquidityMining.positions (contracts/LiquidityMining.sol#50) can be used in cross function reentrancies:
+	- LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212)
+	- LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230)
+	- LiquidityMining.positions (contracts/LiquidityMining.sol#50)
+	- LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161)
+	- LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192)
+	- pos.active = false (contracts/LiquidityMining.sol#178)
+	LiquidityMining.positions (contracts/LiquidityMining.sol#50) can be used in cross function reentrancies:
+	- LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212)
+	- LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230)
+	- LiquidityMining.positions (contracts/LiquidityMining.sol#50)
+	- LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161)
+	- LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192)
+	- pos.amount = 0 (contracts/LiquidityMining.sol#180)
+	LiquidityMining.positions (contracts/LiquidityMining.sol#50) can be used in cross function reentrancies:
+	- LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212)
+	- LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230)
+	- LiquidityMining.positions (contracts/LiquidityMining.sol#50)
+	- LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161)
+	- LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192)
+	- pos.rewardDebt = 0 (contracts/LiquidityMining.sol#181)
+	LiquidityMining.positions (contracts/LiquidityMining.sol#50) can be used in cross function reentrancies:
+	- LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212)
+	- LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230)
+	- LiquidityMining.positions (contracts/LiquidityMining.sol#50)
+	- LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161)
+	- LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192)
+	- totalLPStaked -= amount (contracts/LiquidityMining.sol#182)
+	LiquidityMining.totalLPStaked (contracts/LiquidityMining.sol#37) can be used in cross function reentrancies:
+	- LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230)
+	- LiquidityMining.programStats() (contracts/LiquidityMining.sol#236-245)
+	- LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161)
+	- LiquidityMining.totalLPStaked (contracts/LiquidityMining.sol#37)
+	- LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192)
+	- LiquidityMining.updatePool() (contracts/LiquidityMining.sol#112-131)
+Reentrancy in StreamingPayments.withdrawFromStream(uint256) (contracts/StreamingPayments.sol#106-136):
+	External calls:
+	- require(bool,string)(jolToken.transfer(s.receiver,netAmount),Transfer failed) (contracts/StreamingPayments.sol#121)
+	- jolToken.burn(fee) (contracts/StreamingPayments.sol#124)
+	State variables written after the call(s):
+	- s.active = false (contracts/StreamingPayments.sol#132)
+	StreamingPayments.streams (contracts/StreamingPayments.sol#41) can be used in cross function reentrancies:
+	- StreamingPayments.createStream(address,uint256,uint256) (contracts/StreamingPayments.sol#69-101)
+	- StreamingPayments.getAvailableBalance(uint256) (contracts/StreamingPayments.sol#209-211)
+	- StreamingPayments.getFlowRate(address,address) (contracts/StreamingPayments.sol#228-238)
+	- StreamingPayments.getRemainingTime(uint256) (contracts/StreamingPayments.sol#216-223)
+	- StreamingPayments.streams (contracts/StreamingPayments.sol#41)
+	- s.stopTime = block.timestamp (contracts/StreamingPayments.sol#133)
+	StreamingPayments.streams (contracts/StreamingPayments.sol#41) can be used in cross function reentrancies:
+	- StreamingPayments.createStream(address,uint256,uint256) (contracts/StreamingPayments.sol#69-101)
+	- StreamingPayments.getAvailableBalance(uint256) (contracts/StreamingPayments.sol#209-211)
+	- StreamingPayments.getFlowRate(address,address) (contracts/StreamingPayments.sol#228-238)
+	- StreamingPayments.getRemainingTime(uint256) (contracts/StreamingPayments.sol#216-223)
+	- StreamingPayments.streams (contracts/StreamingPayments.sol#41)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-2
+INFO:Detectors:
+Detector: uninitialized-local
+OracleConsensus.getActiveOracleCount().count (contracts/OracleConsensus.sol#368) is a local variable never initialized
+PaymentChannel.getChannelsByPair(address,address).count (contracts/PaymentChannel.sol#200) is a local variable never initialized
+StreamingPayments.getFlowRate(address,address).totalRate (contracts/StreamingPayments.sol#230) is a local variable never initialized
+PaymentChannel.getChannelsByPair(address,address).idx (contracts/PaymentChannel.sol#205) is a local variable never initialized
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-local-variables
+INFO:Detectors:
+Detector: unused-return
+EnergyMarketplace.createListing(uint256,uint256,string,string) (contracts/EnergyMarketplace.sol#58-87) ignores return value by (None,None,None,None,None,None,availableKWh,None) = energyFloor.producers(msg.sender) (contracts/EnergyMarketplace.sol#69)
+PhysicalCap.maxDailyOutput(uint256) (contracts/PhysicalCap.sol#53-82) ignores return value by (None,None,facilityType,capacityKW,None,None,latitudeBand,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/PhysicalCap.sol#54-68)
+PoEMining.accrueReward(uint256,uint256) (contracts/PoEMining.sol#77-113) ignores return value by (None,None,None,capacityKW,None,None,None,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/PoEMining.sol#93)
+StakeSlash.requiredStake(uint256) (contracts/StakeSlash.sol#88-95) ignores return value by (None,None,None,capacityKW,None,None,None,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/StakeSlash.sol#89)
+StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133) ignores return value by (None,None,None,None,None,None,None,None,None,None,status,None,None) = registry.facilities(_facilityId) (contracts/StakeSlash.sol#112)
+WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256) (contracts/WeatherOracle.sol#80-119) ignores return value by (None,None,None,capacityKW,None,None,None,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/WeatherOracle.sol#99)
+WeatherOracle.calcWeatherMax(uint256,uint256) (contracts/WeatherOracle.sol#167-192) ignores return value by (None,None,facilityType,capacityKW,None,None,None,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/WeatherOracle.sol#173-178)
+WeatherOracle.getLatitudeBand(uint256) (contracts/WeatherOracle.sol#263-266) ignores return value by (None,None,None,None,None,None,band,None,None,None,None,None,None) = registry.facilities(_facilityId) (contracts/WeatherOracle.sol#264)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-return
+INFO:Detectors:
+Detector: shadowing-local
+ERC20Permit.constructor(string).name (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#44) shadows:
+	- ERC20.name() (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#62-64) (function)
+	- IERC20Metadata.name() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#17) (function)
+JOULEFoundersVesting.constructor(address,uint64,uint64,uint64).beneficiary (contracts/FoundersVesting.sol#35) shadows:
+	- VestingWallet.beneficiary() (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#47-49) (function)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing
+INFO:Detectors:
+Detector: missing-zero-check
+FounderSellLimit.constructor(address,address,address)._founder (contracts/FounderSellLimit.sol#36) lacks a zero-check on :
+		- founder = _founder (contracts/FounderSellLimit.sol#38)
+FounderSellLimit.constructor(address,address,address)._volumeOracle (contracts/FounderSellLimit.sol#36) lacks a zero-check on :
+		- volumeOracle = _volumeOracle (contracts/FounderSellLimit.sol#39)
+OracleConsensus.constructor(address,address,address,address)._slashTreasury (contracts/OracleConsensus.sol#85) lacks a zero-check on :
+		- slashTreasury = _slashTreasury (contracts/OracleConsensus.sol#89)
+StakeSlash.constructor(address,address,address,address,address)._slashTreasury (contracts/StakeSlash.sol#76) lacks a zero-check on :
+		- slashTreasury = _slashTreasury (contracts/StakeSlash.sol#80)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+INFO:Detectors:
+Detector: calls-loop
+Governance.execute(uint256) (contracts/Governance.sol#149-165) has external calls inside a loop: (success,returnData) = p.targets[i].call(p.calldatas[i]) (contracts/Governance.sol#158)
+OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296) has external calls inside a loop: jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+	Calls stack containing the loop:
+		OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)
+		OracleConsensus._finalizeReport(bytes32)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation/#calls-inside-a-loop
+INFO:Detectors:
+Detector: reentrancy-benign
+Reentrancy in PaymentChannel.closeChannel(uint256,uint256,bytes) (contracts/PaymentChannel.sol#114-154):
+	External calls:
+	- require(bool,string)(jolToken.transfer(ch.receiver,_amount),Receiver payment failed) (contracts/PaymentChannel.sol#141)
+	- require(bool,string)(jolToken.transfer(ch.sender,remainder),Sender refund failed) (contracts/PaymentChannel.sol#147)
+	State variables written after the call(s):
+	- totalChannelsClosed ++ (contracts/PaymentChannel.sol#150)
+	- totalVolume += _amount (contracts/PaymentChannel.sol#151)
+Reentrancy in PaymentChannel.expireChannel(uint256) (contracts/PaymentChannel.sol#159-173):
+	External calls:
+	- require(bool,string)(jolToken.transfer(ch.sender,ch.deposit),Refund failed) (contracts/PaymentChannel.sol#169)
+	State variables written after the call(s):
+	- totalChannelsClosed ++ (contracts/PaymentChannel.sol#171)
+Reentrancy in OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135):
+	External calls:
+	- require(bool,string)(jolToken.transferFrom(msg.sender,address(this),_stakeAmount),Stake transfer failed) (contracts/OracleConsensus.sol#119)
+	State variables written after the call(s):
+	- oracleList.push(msg.sender) (contracts/OracleConsensus.sol#131)
+	- totalStaked += _stakeAmount (contracts/OracleConsensus.sol#132)
+Reentrancy in EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236):
+	External calls:
+	- physicsOk = physicalCap.verifyProduction(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#152)
+	State variables written after the call(s):
+	- _reject(_facilityId,finalKWh,reportId,1,Physics cap exceeded) (contracts/EnergyProofEngine.sol#154)
+		- totalRejected ++ (contracts/EnergyProofEngine.sol#248)
+Reentrancy in EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236):
+	External calls:
+	- physicsOk = physicalCap.verifyProduction(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#152)
+	- weatherOk = weatherOracle.verifyWithWeather(_facilityId,finalKWh,day) (contracts/EnergyProofEngine.sol#162)
+	State variables written after the call(s):
+	- dailyMinted[_facilityId][today] += finalKWh (contracts/EnergyProofEngine.sol#206)
+	- _reject(_facilityId,finalKWh,reportId,2,Weather verification failed) (contracts/EnergyProofEngine.sol#164)
+		- totalRejected ++ (contracts/EnergyProofEngine.sol#248)
+	- _reject(_facilityId,finalKWh,reportId,4,Facility not staked) (contracts/EnergyProofEngine.sol#178)
+		- totalRejected ++ (contracts/EnergyProofEngine.sol#248)
+	- _reject(_facilityId,finalKWh,reportId,4,Producer is banned) (contracts/EnergyProofEngine.sol#182)
+		- totalRejected ++ (contracts/EnergyProofEngine.sol#248)
+	- _reject(_facilityId,finalKWh,reportId,5,Conflict score too high (level 3+)) (contracts/EnergyProofEngine.sol#191)
+		- totalRejected ++ (contracts/EnergyProofEngine.sol#248)
+Reentrancy in EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236):
+	External calls:
+	- physicsOk = physicalCap.verifyProduction(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#152)
+	- weatherOk = weatherOracle.verifyWithWeather(_facilityId,finalKWh,day) (contracts/EnergyProofEngine.sol#162)
+	- poeMining.accrueReward(_facilityId,finalKWh) (contracts/EnergyProofEngine.sol#220)
+	- energyFloor.depositEnergy(producer,finalKWh) (contracts/EnergyProofEngine.sol#223)
+	State variables written after the call(s):
+	- totalMintedJOL += adjustedReward (contracts/EnergyProofEngine.sol#227)
+	- totalVerifiedKWh += finalKWh (contracts/EnergyProofEngine.sol#226)
+Reentrancy in EnergyFloor.redeemForEnergy(address,uint256) (contracts/EnergyFloor.sol#161-194):
+	External calls:
+	- jolToken.protocolBurn(msg.sender,jolAmount,energy_redemption) (contracts/EnergyFloor.sol#181)
+	State variables written after the call(s):
+	- tickets[ticketId] = RedemptionTicket({id:ticketId,redeemer:msg.sender,producer:_producer,kWh:_kWh,createdAt:block.timestamp,fulfilled:false}) (contracts/EnergyFloor.sol#182-189)
+	- userTickets[msg.sender].push(ticketId) (contracts/EnergyFloor.sol#190)
+Reentrancy in StakeSlash.slash(uint256,string) (contracts/StakeSlash.sol#139-182):
+	External calls:
+	- jolToken.transfer(slashTreasury,amount) (contracts/StakeSlash.sol#160)
+	State variables written after the call(s):
+	- ban.banCount ++ (contracts/StakeSlash.sol#164)
+	- ban.totalSlashed += amount (contracts/StakeSlash.sol#165)
+	- ban.bannedUntil = block.timestamp + BAN_MINOR (contracts/StakeSlash.sol#168)
+	- ban.bannedUntil = block.timestamp + BAN_MAJOR (contracts/StakeSlash.sol#170)
+	- ban.bannedUntil = block.timestamp + BAN_PERMANENT (contracts/StakeSlash.sol#172)
+Reentrancy in StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133):
+	External calls:
+	- jolToken.transferFrom(msg.sender,address(this),amount) (contracts/StakeSlash.sol#118)
+	State variables written after the call(s):
+	- stakeId = nextStakeId ++ (contracts/StakeSlash.sol#120)
+	- stakes[stakeId] = StakeInfo({facilityId:_facilityId,staker:msg.sender,amount:amount,stakedAt:block.timestamp,active:true}) (contracts/StakeSlash.sol#121-127)
+	- totalStaked += amount (contracts/StakeSlash.sol#130)
+Reentrancy in LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161):
+	External calls:
+	- require(bool,string)(lpToken.transferFrom(msg.sender,address(this),_amount),LP transfer failed) (contracts/LiquidityMining.sol#142)
+	State variables written after the call(s):
+	- updatePool() (contracts/LiquidityMining.sol#144)
+		- accRewardPerShare += reward * 1e12 / totalLPStaked (contracts/LiquidityMining.sol#128)
+	- activeLPCount ++ (contracts/LiquidityMining.sol#158)
+	- updatePool() (contracts/LiquidityMining.sol#144)
+		- lastRewardTime = block.timestamp (contracts/LiquidityMining.sol#117)
+		- lastRewardTime = block.timestamp (contracts/LiquidityMining.sol#130)
+	- positionId = nextPositionId ++ (contracts/LiquidityMining.sol#146)
+	- positions[positionId] = LPPosition({provider:msg.sender,amount:_amount,pool:_pool,rewardDebt:_amount * accRewardPerShare / 1e12,totalClaimed:0,active:true}) (contracts/LiquidityMining.sol#147-154)
+	- providerPositions[msg.sender].push(positionId) (contracts/LiquidityMining.sol#156)
+	- updatePool() (contracts/LiquidityMining.sol#144)
+		- totalDistributed += reward (contracts/LiquidityMining.sol#129)
+	- totalLPStaked += _amount (contracts/LiquidityMining.sol#157)
+Reentrancy in LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192):
+	External calls:
+	- _distributeReward(msg.sender,pending) (contracts/LiquidityMining.sol#174)
+		- jolToken.mint(_to,_amount) (contracts/LiquidityMining.sol#249)
+	State variables written after the call(s):
+	- activeLPCount -- (contracts/LiquidityMining.sol#183)
+Reentrancy in WeatherOracle.verifyWithWeather(uint256,uint256,uint256) (contracts/WeatherOracle.sol#130-161):
+	External calls:
+	- physicsPassed = physicalCap.verifyProduction(_facilityId,_claimedKWh) (contracts/WeatherOracle.sol#136)
+	State variables written after the call(s):
+	- weatherData[weatherId].verified = true (contracts/WeatherOracle.sol#157)
+Reentrancy in StreamingPayments.withdrawFromStream(uint256) (contracts/StreamingPayments.sol#106-136):
+	External calls:
+	- require(bool,string)(jolToken.transfer(s.receiver,netAmount),Transfer failed) (contracts/StreamingPayments.sol#121)
+	- jolToken.burn(fee) (contracts/StreamingPayments.sol#124)
+	State variables written after the call(s):
+	- activeStreams -- (contracts/StreamingPayments.sol#134)
+	- totalStreamedVolume += available (contracts/StreamingPayments.sol#127)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+INFO:Detectors:
+Detector: reentrancy-events
+Reentrancy in BridgeLock._executeUnlock(uint256) (contracts/BridgeLock.sol#115-136):
+	External calls:
+	- (sent,None) = req.user.call{value: req.amount}() (contracts/BridgeLock.sol#132)
+	Event emitted after the call(s):
+	- JOLUnlocked(_unlockId,req.user,req.amount) (contracts/BridgeLock.sol#135)
+Reentrancy in OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275):
+	External calls:
+	- _slashOracle(report.voters[i],_reportId) (contracts/OracleConsensus.sol#255)
+		- jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+	- registry.recordProduction(report.facilityId,median,report.periodStart,report.periodEnd) (contracts/OracleConsensus.sol#262-267)
+	- poeMining.accrueReward(report.facilityId,median) (contracts/OracleConsensus.sol#271)
+	Event emitted after the call(s):
+	- ReportFinalized(_reportId,report.facilityId,median) (contracts/OracleConsensus.sol#274)
+Reentrancy in OracleConsensus._slashOracle(address,bytes32) (contracts/OracleConsensus.sol#277-296):
+	External calls:
+	- jolToken.transfer(slashTreasury,slashAmount) (contracts/OracleConsensus.sol#287)
+	Event emitted after the call(s):
+	- OracleSlashed(_oracle,slashAmount,_reportId) (contracts/OracleConsensus.sol#290)
+Reentrancy in PoEMining.claimOracleEarnings() (contracts/PoEMining.sol#132-139):
+	External calls:
+	- jolToken.mint(msg.sender,amount) (contracts/PoEMining.sol#137)
+	Event emitted after the call(s):
+	- OracleFeePaid(msg.sender,amount) (contracts/PoEMining.sol#138)
+Reentrancy in LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212):
+	External calls:
+	- _distributeReward(msg.sender,pending) (contracts/LiquidityMining.sol#209)
+		- jolToken.mint(_to,_amount) (contracts/LiquidityMining.sol#249)
+	Event emitted after the call(s):
+	- RewardsClaimed(_positionId,msg.sender,pending) (contracts/LiquidityMining.sol#211)
+Reentrancy in PoEMining.claimRewards() (contracts/PoEMining.sol#118-127):
+	External calls:
+	- jolToken.mint(msg.sender,amount) (contracts/PoEMining.sol#125)
+	Event emitted after the call(s):
+	- RewardClaimed(msg.sender,amount) (contracts/PoEMining.sol#126)
+Reentrancy in StreamingPayments.createStream(address,uint256,uint256) (contracts/StreamingPayments.sol#69-101):
+	External calls:
+	- require(bool,string)(jolToken.transferFrom(msg.sender,address(this),_deposit),Transfer failed) (contracts/StreamingPayments.sol#97)
+	Event emitted after the call(s):
+	- StreamCreated(id,msg.sender,_receiver,_ratePerSecond,_deposit) (contracts/StreamingPayments.sol#99)
+Reentrancy in EnergyFloor.depositEnergy(address,uint256) (contracts/EnergyFloor.sol#126-149):
+	External calls:
+	- jolToken.mint(_producer,jolAmount) (contracts/EnergyFloor.sol#146)
+	Event emitted after the call(s):
+	- EnergyDeposited(_producer,_kWh,jolAmount) (contracts/EnergyFloor.sol#148)
+Reentrancy in DEXLiquidity.emergencyWithdraw(address) (contracts/DEXLiquidity.sol#141-148):
+	External calls:
+	- jolToken.transfer(_to,balance) (contracts/DEXLiquidity.sol#146)
+	Event emitted after the call(s):
+	- EmergencyWithdraw(_to,balance) (contracts/DEXLiquidity.sol#147)
+Reentrancy in EcosystemTreasury.fundTreasury(uint256) (contracts/EcosystemTreasury.sol#90-95):
+	External calls:
+	- jolToken.mint(address(this),_amount) (contracts/EcosystemTreasury.sol#93)
+	Event emitted after the call(s):
+	- TreasuryFunded(_amount,totalMinted) (contracts/EcosystemTreasury.sol#94)
+Reentrancy in OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135):
+	External calls:
+	- require(bool,string)(jolToken.transferFrom(msg.sender,address(this),_stakeAmount),Stake transfer failed) (contracts/OracleConsensus.sol#119)
+	Event emitted after the call(s):
+	- OracleJoined(msg.sender,_stakeAmount) (contracts/OracleConsensus.sol#134)
+Reentrancy in DEXLiquidity.provisionPoolA(address) (contracts/DEXLiquidity.sol#102-115):
+	External calls:
+	- jolToken.transfer(_recipient,amount) (contracts/DEXLiquidity.sol#112)
+	Event emitted after the call(s):
+	- LiquidityProvisioned(JOL/USDC,amount) (contracts/DEXLiquidity.sol#114)
+Reentrancy in DEXLiquidity.provisionPoolB(address) (contracts/DEXLiquidity.sol#122-135):
+	External calls:
+	- jolToken.transfer(_recipient,amount) (contracts/DEXLiquidity.sol#132)
+	Event emitted after the call(s):
+	- LiquidityProvisioned(JOL/ETH,amount) (contracts/DEXLiquidity.sol#134)
+Reentrancy in FounderSellLimit.sell(address,uint256) (contracts/FounderSellLimit.sol#58-76):
+	External calls:
+	- jolToken.transferFrom(founder,_to,_amount) (contracts/FounderSellLimit.sol#73)
+	Event emitted after the call(s):
+	- FounderSell(today,_amount,totalAfter,limit) (contracts/FounderSellLimit.sol#75)
+Reentrancy in StakeSlash.slash(uint256,string) (contracts/StakeSlash.sol#139-182):
+	External calls:
+	- jolToken.transfer(slashTreasury,amount) (contracts/StakeSlash.sol#160)
+	- conflictScore.reportViolation(staker,ConflictScore.ViolationType.FalseOracle) (contracts/StakeSlash.sol#177)
+	Event emitted after the call(s):
+	- Banned(staker,ban.bannedUntil,ban.banCount) (contracts/StakeSlash.sol#181)
+	- Slashed(stakeId,_facilityId,staker,amount,_reason) (contracts/StakeSlash.sol#180)
+Reentrancy in StakeSlash.stake(uint256) (contracts/StakeSlash.sol#101-133):
+	External calls:
+	- jolToken.transferFrom(msg.sender,address(this),amount) (contracts/StakeSlash.sol#118)
+	Event emitted after the call(s):
+	- Staked(stakeId,_facilityId,msg.sender,amount) (contracts/StakeSlash.sol#132)
+Reentrancy in LiquidityMining.stakeLiquidity(uint256,uint256) (contracts/LiquidityMining.sol#135-161):
+	External calls:
+	- require(bool,string)(lpToken.transferFrom(msg.sender,address(this),_amount),LP transfer failed) (contracts/LiquidityMining.sol#142)
+	Event emitted after the call(s):
+	- LPStaked(positionId,msg.sender,_amount,_pool) (contracts/LiquidityMining.sol#160)
+Reentrancy in LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192):
+	External calls:
+	- _distributeReward(msg.sender,pending) (contracts/LiquidityMining.sol#174)
+		- jolToken.mint(_to,_amount) (contracts/LiquidityMining.sol#249)
+	- require(bool,string)(lpToken.transfer(msg.sender,amount),LP return failed) (contracts/LiquidityMining.sol#186)
+	Event emitted after the call(s):
+	- LPUnstaked(_positionId,msg.sender,amount) (contracts/LiquidityMining.sol#188)
+	- RewardsClaimed(_positionId,msg.sender,pending) (contracts/LiquidityMining.sol#190)
+Reentrancy in WeatherOracle.verifyWithWeather(uint256,uint256,uint256) (contracts/WeatherOracle.sol#130-161):
+	External calls:
+	- physicsPassed = physicalCap.verifyProduction(_facilityId,_claimedKWh) (contracts/WeatherOracle.sol#136)
+	Event emitted after the call(s):
+	- WeatherVerified(_facilityId,_claimedKWh,0,false) (contracts/WeatherOracle.sol#138)
+	- WeatherVerified(_facilityId,_claimedKWh,conservativeMax,conservativePassed) (contracts/WeatherOracle.sol#148)
+	- WeatherVerified(_facilityId,_claimedKWh,allowedMax,passed) (contracts/WeatherOracle.sol#160)
+Reentrancy in StakeSlash.withdrawStake(uint256) (contracts/StakeSlash.sol#188-206):
+	External calls:
+	- jolToken.transfer(msg.sender,amount) (contracts/StakeSlash.sol#203)
+	Event emitted after the call(s):
+	- StakeWithdrawn(stakeId,msg.sender,amount) (contracts/StakeSlash.sol#205)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+INFO:Detectors:
+Detector: timestamp
+VestingWallet._vestingSchedule(uint256,uint64) (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#136-144) uses timestamp for comparisons
+	Dangerous comparisons:
+	- timestamp < start() (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#137)
+	- timestamp > start() + duration() (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#139)
+ERC20Permit.permit(address,address,uint256,uint256,uint8,bytes32,bytes32) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#49-68) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp <= deadline,ERC20Permit: expired deadline) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#58)
+ERC20Votes.delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#167-184) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp <= expiry,ERC20Votes: signature expired) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#175)
+AgentWallet.fundWallet(uint256,uint256) (contracts/AgentWallet.sol#126-132) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(w.active,Not active) (contracts/AgentWallet.sol#128)
+AgentWallet.freezeWallet(uint256) (contracts/AgentWallet.sol#137-141) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(wallets[_walletId].owner == msg.sender,Not owner) (contracts/AgentWallet.sol#138)
+AgentWallet.unfreezeWallet(uint256) (contracts/AgentWallet.sol#143-147) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(wallets[_walletId].owner == msg.sender,Not owner) (contracts/AgentWallet.sol#144)
+AgentWallet.updateLimits(uint256,uint256,uint256,uint256) (contracts/AgentWallet.sol#152-164) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(wallets[_walletId].owner == msg.sender,Not owner) (contracts/AgentWallet.sol#158)
+AgentWallet.setWhitelist(uint256,address,bool) (contracts/AgentWallet.sol#169-173) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(wallets[_walletId].owner == msg.sender,Not owner) (contracts/AgentWallet.sol#170)
+AgentWallet.setWhitelistEnabled(uint256,bool) (contracts/AgentWallet.sol#175-178) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(wallets[_walletId].owner == msg.sender,Not owner) (contracts/AgentWallet.sol#176)
+AgentWallet.withdrawBalance(uint256,uint256) (contracts/AgentWallet.sol#183-189) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(w.owner == msg.sender,Not owner) (contracts/AgentWallet.sol#185)
+	- require(bool,string)(_amount <= w.balance,Insufficient balance) (contracts/AgentWallet.sol#186)
+AgentWallet.agentSpend(address,uint256,string) (contracts/AgentWallet.sol#197-238) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(w.active && ! w.frozen,Wallet frozen or inactive) (contracts/AgentWallet.sol#206)
+	- require(bool,string)(_amount <= w.balance,Insufficient balance) (contracts/AgentWallet.sol#207)
+	- require(bool,string)(_amount <= w.maxPerTransaction,Exceeds per-tx limit) (contracts/AgentWallet.sol#208)
+	- require(bool,string)(w.dailySpent + _amount <= w.maxDailySpend,Exceeds daily limit) (contracts/AgentWallet.sol#219)
+	- require(bool,string)(w.monthlySpent + _amount <= w.maxMonthlySpend,Exceeds monthly limit) (contracts/AgentWallet.sol#221)
+AgentWallet._resetCounters(AgentWallet.Wallet) (contracts/AgentWallet.sol#240-251) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp - w.lastDayReset >= 86400 (contracts/AgentWallet.sol#242)
+	- block.timestamp - w.lastMonthReset >= 2592000 (contracts/AgentWallet.sol#247)
+AgentWallet.getRemainingDailyBudget(uint256) (contracts/AgentWallet.sol#255-260) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp - w.lastDayReset >= 86400 (contracts/AgentWallet.sol#257)
+AgentWallet.getRemainingMonthlyBudget(uint256) (contracts/AgentWallet.sol#262-267) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp - w.lastMonthReset >= 2592000 (contracts/AgentWallet.sol#264)
+BridgeLock.confirmUnlock(uint256,address,uint256,bytes32) (contracts/BridgeLock.sol#78-113) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! req.hasConfirmed[msg.sender],Already confirmed) (contracts/BridgeLock.sol#101)
+	- require(bool,string)(! req.executed,Already executed) (contracts/BridgeLock.sol#102)
+BridgeLock._executeUnlock(uint256) (contracts/BridgeLock.sol#115-136) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! req.executed,Already executed) (contracts/BridgeLock.sol#117)
+	- require(bool,string)(address(this).balance >= req.amount,Insufficient bridge balance) (contracts/BridgeLock.sol#118)
+	- require(bool,string)(block.timestamp >= req.createdAt + TIMELOCK_DURATION,Timelock not expired for large amount) (contracts/BridgeLock.sol#122-125)
+CarbonCredit.retireCredit(uint256,string) (contracts/CarbonCredit.sol#118-129) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! credits[_id].retired,Already retired) (contracts/CarbonCredit.sol#120)
+CarbonCredit.auditCredit(uint256,string) (contracts/CarbonCredit.sol#134-139) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! credits[_id].audited,Already audited) (contracts/CarbonCredit.sol#135)
+CarbonCredit._beforeTokenTransfer(address,address,uint256,uint256) (contracts/CarbonCredit.sol#144-149) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! credits[tokenId].retired,Retired credit cannot be transferred) (contracts/CarbonCredit.sol#147)
+ConflictScore.reportViolation(address,ConflictScore.ViolationType) (contracts/ConflictScore.sol#86-112) uses timestamp for comparisons
+	Dangerous comparisons:
+	- s.lastDecayApplied == 0 (contracts/ConflictScore.sol#107)
+ConflictScore._applyDecay(address) (contracts/ConflictScore.sol#122-147) uses timestamp for comparisons
+	Dangerous comparisons:
+	- periods == 0 (contracts/ConflictScore.sol#131)
+	- totalDecay >= s.score (contracts/ConflictScore.sol#137)
+ConflictScore._getLevel(uint256) (contracts/ConflictScore.sol#167-173) uses timestamp for comparisons
+	Dangerous comparisons:
+	- _score >= LEVEL_4_THRESHOLD (contracts/ConflictScore.sol#168)
+	- _score >= LEVEL_3_THRESHOLD (contracts/ConflictScore.sol#169)
+	- _score >= LEVEL_2_THRESHOLD (contracts/ConflictScore.sol#170)
+	- _score >= LEVEL_1_THRESHOLD (contracts/ConflictScore.sol#171)
+EcosystemTreasury.executeInsurancePayout(uint256) (contracts/EcosystemTreasury.sol#218-231) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! req.executed,Already executed) (contracts/EcosystemTreasury.sol#220)
+	- require(bool,string)(req.amount > 0,Invalid request) (contracts/EcosystemTreasury.sol#221)
+	- require(bool,string)(block.timestamp >= req.requestedAt + INSURANCE_TIMELOCK,Timelock not expired) (contracts/EcosystemTreasury.sol#222)
+	- require(bool,string)(req.amount <= insuranceReserve,Exceeds insurance reserve) (contracts/EcosystemTreasury.sol#223)
+	- require(bool,string)(jolToken.transfer(req.recipient,req.amount),Transfer failed) (contracts/EcosystemTreasury.sol#229)
+EnergyFloor.fulfillRedemption(uint256) (contracts/EnergyFloor.sol#199-206) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(ticket.producer == msg.sender,Not your ticket) (contracts/EnergyFloor.sol#201)
+	- require(bool,string)(! ticket.fulfilled,Already fulfilled) (contracts/EnergyFloor.sol#202)
+EnergyMarketplace.buy(uint256,uint256) (contracts/EnergyMarketplace.sol#92-123) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(listing.active,Listing not active) (contracts/EnergyMarketplace.sol#94)
+	- require(bool,string)(_kWh > 0 && _kWh <= listing.kWh,Invalid kWh amount) (contracts/EnergyMarketplace.sol#95)
+	- require(bool,string)(jolToken.transferFrom(msg.sender,listing.seller,sellerReceives),Seller transfer failed) (contracts/EnergyMarketplace.sol#111-114)
+EnergyMarketplace.cancelListing(uint256) (contracts/EnergyMarketplace.sol#128-134) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(listing.seller == msg.sender,Not seller) (contracts/EnergyMarketplace.sol#130)
+	- require(bool,string)(listing.active,Not active) (contracts/EnergyMarketplace.sol#131)
+EnergyMarketplace.getActiveListing(uint256) (contracts/EnergyMarketplace.sol#138-148) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(l.active,Not active) (contracts/EnergyMarketplace.sol#146)
+EnergyProofEngine.processReport(uint256,uint256,uint256) (contracts/EnergyProofEngine.sol#117-236) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(dailyMinted[_facilityId][today] + finalKWh <= maxDaily,Daily production cap exceeded) (contracts/EnergyProofEngine.sol#202-205)
+EnergyRegistry.verifyFacility(uint256) (contracts/EnergyRegistry.sol#102-113) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(f.id != 0,Facility not found) (contracts/EnergyRegistry.sol#104)
+	- require(bool,string)(f.status == FacilityStatus.Pending,Not in pending state) (contracts/EnergyRegistry.sol#105)
+EnergyRegistry.recordProduction(uint256,uint256,uint256,uint256) (contracts/EnergyRegistry.sol#118-139) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(f.status == FacilityStatus.Verified,Not verified) (contracts/EnergyRegistry.sol#125)
+	- require(bool,string)(_periodEnd <= block.timestamp,Future period) (contracts/EnergyRegistry.sol#127)
+EnergyRegistry.suspendFacility(uint256,string) (contracts/EnergyRegistry.sol#144-149) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(f.status == FacilityStatus.Verified,Not verified) (contracts/EnergyRegistry.sol#146)
+EnergyRegistry.deregisterFacility(uint256) (contracts/EnergyRegistry.sol#154-160) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(f.owner == msg.sender,Not owner) (contracts/EnergyRegistry.sol#156)
+	- require(bool,string)(f.status != FacilityStatus.Deregistered,Already deregistered) (contracts/EnergyRegistry.sol#157)
+EnergyRegistry.isActive(uint256) (contracts/EnergyRegistry.sol#172-174) uses timestamp for comparisons
+	Dangerous comparisons:
+	- facilities[_id].status == FacilityStatus.Verified (contracts/EnergyRegistry.sol#173)
+FounderSellLimit.getDailyLimit(uint256) (contracts/FounderSellLimit.sol#82-91) uses timestamp for comparisons
+	Dangerous comparisons:
+	- _day > 0 (contracts/FounderSellLimit.sol#86)
+JOULEFoundersVesting._vestingSchedule(uint256,uint64) (contracts/FoundersVesting.sol#49-64) uses timestamp for comparisons
+	Dangerous comparisons:
+	- timestamp < cliff (contracts/FoundersVesting.sol#58)
+Governance.vote(uint256,bool) (contracts/Governance.sol#98-122) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(p.state == ProposalState.Active,Not active) (contracts/Governance.sol#100)
+	- require(bool,string)(block.timestamp <= p.createdAt + VOTING_PERIOD,Voting ended) (contracts/Governance.sol#101)
+	- require(bool,string)(! p.hasVoted[msg.sender],Already voted) (contracts/Governance.sol#102)
+Governance.finalize(uint256) (contracts/Governance.sol#127-144) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(p.state == ProposalState.Active,Not active) (contracts/Governance.sol#129)
+	- require(bool,string)(block.timestamp > p.createdAt + VOTING_PERIOD,Voting ongoing) (contracts/Governance.sol#130)
+Governance.execute(uint256) (contracts/Governance.sol#149-165) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(p.state == ProposalState.Passed,Not passed) (contracts/Governance.sol#151)
+	- require(bool,string)(block.timestamp >= p.finalizedAt + EXECUTION_DELAY,Timelock not expired) (contracts/Governance.sol#152)
+Governance.cancel(uint256) (contracts/Governance.sol#170-179) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(msg.sender == p.proposer || hasRole(DEFAULT_ADMIN_ROLE,msg.sender),Not authorized) (contracts/Governance.sol#172-175)
+	- require(bool,string)(p.state == ProposalState.Active,Not active) (contracts/Governance.sol#176)
+LiquidityMining.isActive() (contracts/LiquidityMining.sol#76-78) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < programStart + PROGRAM_DURATION (contracts/LiquidityMining.sol#77)
+LiquidityMining.isEarlyBird() (contracts/LiquidityMining.sol#80-82) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < programStart + EARLY_BIRD_PERIOD (contracts/LiquidityMining.sol#81)
+LiquidityMining.currentDay() (contracts/LiquidityMining.sol#84-88) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < programStart (contracts/LiquidityMining.sol#85)
+	- day >= 180 (contracts/LiquidityMining.sol#87)
+LiquidityMining.getMultiplier(uint256,uint256) (contracts/LiquidityMining.sol#93-108) uses timestamp for comparisons
+	Dangerous comparisons:
+	- _from < programStart (contracts/LiquidityMining.sol#97)
+	- _to > progEnd (contracts/LiquidityMining.sol#98)
+	- _to <= _from (contracts/LiquidityMining.sol#99)
+	- _to <= earlyEnd (contracts/LiquidityMining.sol#101)
+	- _from >= earlyEnd (contracts/LiquidityMining.sol#103)
+LiquidityMining.updatePool() (contracts/LiquidityMining.sol#112-131) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp <= lastRewardTime (contracts/LiquidityMining.sol#113)
+	- ! isActive() && lastRewardTime >= programStart + PROGRAM_DURATION (contracts/LiquidityMining.sol#114)
+	- reward > remaining (contracts/LiquidityMining.sol#126)
+LiquidityMining.unstakeLiquidity(uint256) (contracts/LiquidityMining.sol#165-192) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(pos.provider == msg.sender,Not owner) (contracts/LiquidityMining.sol#167)
+	- require(bool,string)(pos.active,Not active) (contracts/LiquidityMining.sol#168)
+	- pending > 0 (contracts/LiquidityMining.sol#173)
+	- pending > 0 (contracts/LiquidityMining.sol#189)
+LiquidityMining.claimRewards(uint256) (contracts/LiquidityMining.sol#196-212) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(pos.provider == msg.sender,Not owner) (contracts/LiquidityMining.sol#198)
+	- require(bool,string)(pos.active,Not active) (contracts/LiquidityMining.sol#199)
+	- require(bool,string)(pending > 0,No rewards) (contracts/LiquidityMining.sol#204)
+LiquidityMining.pendingRewards(uint256) (contracts/LiquidityMining.sol#216-230) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp > lastRewardTime && totalLPStaked > 0 (contracts/LiquidityMining.sol#221)
+	- reward > remaining (contracts/LiquidityMining.sol#225)
+LiquidityMining._distributeReward(address,uint256) (contracts/LiquidityMining.sol#247-250) uses timestamp for comparisons
+	Dangerous comparisons:
+	- _amount == 0 (contracts/LiquidityMining.sol#248)
+MachineRegistry.verifyMachine(uint256) (contracts/MachineRegistry.sol#124-134) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(m.id != 0,Not found) (contracts/MachineRegistry.sol#126)
+	- require(bool,string)(m.status == MachineStatus.Registered,Not in registered state) (contracts/MachineRegistry.sol#127)
+MachineRegistry.updateFirmware(uint256,bytes32) (contracts/MachineRegistry.sol#175-180) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(m.owner == msg.sender,Not owner) (contracts/MachineRegistry.sol#177)
+MachineRegistry.isVerified(address) (contracts/MachineRegistry.sol#192-195) uses timestamp for comparisons
+	Dangerous comparisons:
+	- id != 0 && machines[id].status == MachineStatus.Verified (contracts/MachineRegistry.sol#194)
+MachineRegistry.getDID(uint256) (contracts/MachineRegistry.sol#210-217) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(machines[_id].id != 0,Not found) (contracts/MachineRegistry.sol#211)
+OracleConsensus.joinAsOracle(uint256) (contracts/OracleConsensus.sol#114-135) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! oracles[msg.sender].active,Already active) (contracts/OracleConsensus.sol#116)
+OracleConsensus.exitOracle() (contracts/OracleConsensus.sol#140-154) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(node.active,Not active oracle) (contracts/OracleConsensus.sol#142)
+	- require(bool,string)(block.timestamp > node.joinedAt + 2592000,Lock period 30 days) (contracts/OracleConsensus.sol#143)
+OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32) (contracts/OracleConsensus.sol#171-218) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(oracles[msg.sender].active,Not active oracle) (contracts/OracleConsensus.sol#178)
+	- require(bool,string)(! report.finalized,Already finalized) (contracts/OracleConsensus.sol#196)
+	- require(bool,string)(block.timestamp <= report.createdAt + REPORT_WINDOW,Report window closed) (contracts/OracleConsensus.sol#197)
+	- require(bool,string)(report.voters.length < 20,Max oracles per report) (contracts/OracleConsensus.sol#200)
+	- require(bool,string)(report.voters[i] != msg.sender,Already submitted) (contracts/OracleConsensus.sol#204)
+OracleConsensus._finalizeReport(bytes32) (contracts/OracleConsensus.sol#222-275) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(! report.finalized,Already finalized) (contracts/OracleConsensus.sol#224)
+	- require(bool,string)(report.voters.length >= quorum,No quorum) (contracts/OracleConsensus.sol#225)
+OracleConsensus._stakeWeightedMedian(address[],uint256[]) (contracts/OracleConsensus.sol#305-343) uses timestamp for comparisons
+	Dangerous comparisons:
+	- accumulated > halfStake (contracts/OracleConsensus.sol#336)
+PaymentChannel.closeChannel(uint256,uint256,bytes) (contracts/PaymentChannel.sol#114-154) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(ch.open && ! ch.closed,Channel not open) (contracts/PaymentChannel.sol#120)
+	- require(bool,string)(msg.sender == ch.receiver,Only receiver can close) (contracts/PaymentChannel.sol#121)
+	- require(bool,string)(_amount <= ch.deposit,Amount exceeds deposit) (contracts/PaymentChannel.sol#122)
+	- require(bool,string)(signer == ch.sender,Invalid signature) (contracts/PaymentChannel.sol#132)
+	- require(bool,string)(jolToken.transfer(ch.receiver,_amount),Receiver payment failed) (contracts/PaymentChannel.sol#141)
+	- require(bool,string)(jolToken.transfer(ch.sender,remainder),Sender refund failed) (contracts/PaymentChannel.sol#147)
+PaymentChannel.expireChannel(uint256) (contracts/PaymentChannel.sol#159-173) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(ch.open && ! ch.closed,Channel not open) (contracts/PaymentChannel.sol#161)
+	- require(bool,string)(block.timestamp >= ch.expiration,Not expired yet) (contracts/PaymentChannel.sol#162)
+	- require(bool,string)(msg.sender == ch.sender,Only sender can expire) (contracts/PaymentChannel.sol#163)
+	- require(bool,string)(jolToken.transfer(ch.sender,ch.deposit),Refund failed) (contracts/PaymentChannel.sol#169)
+PaymentChannel.extendChannel(uint256,uint256) (contracts/PaymentChannel.sol#178-183) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(ch.open,Not open) (contracts/PaymentChannel.sol#180)
+	- require(bool,string)(msg.sender == ch.sender,Only sender) (contracts/PaymentChannel.sol#181)
+PaymentChannel.topUpChannel(uint256,uint256) (contracts/PaymentChannel.sol#188-194) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(ch.open,Not open) (contracts/PaymentChannel.sol#190)
+	- require(bool,string)(msg.sender == ch.sender,Only sender) (contracts/PaymentChannel.sol#191)
+PaymentChannel.getChannelsByPair(address,address) (contracts/PaymentChannel.sol#198-212) uses timestamp for comparisons
+	Dangerous comparisons:
+	- channels[senderCh[i]].receiver == _receiver && channels[senderCh[i]].open (contracts/PaymentChannel.sol#202)
+	- channels[senderCh[i_scope_0]].receiver == _receiver && channels[senderCh[i_scope_0]].open (contracts/PaymentChannel.sol#207)
+PoEMining.accrueReward(uint256,uint256) (contracts/PoEMining.sol#77-113) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(dailyProduction[_facilityId][today] <= capacityKW * MAX_DAILY_HOURS,Daily cap exceeded) (contracts/PoEMining.sol#94-97)
+StakeSlash.slash(uint256,string) (contracts/StakeSlash.sol#139-182) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(s.active,Stake not active) (contracts/StakeSlash.sol#147)
+StakeSlash.withdrawStake(uint256) (contracts/StakeSlash.sol#188-206) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(s.staker == msg.sender,Not staker) (contracts/StakeSlash.sol#193)
+	- require(bool,string)(s.active,Stake not active) (contracts/StakeSlash.sol#194)
+StakeSlash.isBanned(address) (contracts/StakeSlash.sol#211-213) uses timestamp for comparisons
+	Dangerous comparisons:
+	- bans[_account].bannedUntil > block.timestamp (contracts/StakeSlash.sol#212)
+StreamingPayments.withdrawFromStream(uint256) (contracts/StreamingPayments.sol#106-136) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(msg.sender == s.receiver,Not receiver) (contracts/StreamingPayments.sol#108)
+	- require(bool,string)(available > 0,Nothing to withdraw) (contracts/StreamingPayments.sol#111)
+	- require(bool,string)(jolToken.transfer(s.receiver,netAmount),Transfer failed) (contracts/StreamingPayments.sol#121)
+	- fee > 0 (contracts/StreamingPayments.sol#123)
+	- s.withdrawn >= s.deposit (contracts/StreamingPayments.sol#131)
+StreamingPayments.stopStream(uint256) (contracts/StreamingPayments.sol#141-173) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(s.active,Not active) (contracts/StreamingPayments.sol#143)
+	- require(bool,string)(msg.sender == s.sender || msg.sender == s.receiver,Not authorized) (contracts/StreamingPayments.sol#144)
+	- receiverOwed > 0 (contracts/StreamingPayments.sol#155)
+	- require(bool,string)(jolToken.transfer(s.receiver,netAmount),Receiver payment failed) (contracts/StreamingPayments.sol#160)
+	- fee > 0 (contracts/StreamingPayments.sol#162)
+	- senderRefund > 0 (contracts/StreamingPayments.sol#168)
+	- require(bool,string)(jolToken.transfer(s.sender,senderRefund),Sender refund failed) (contracts/StreamingPayments.sol#169)
+StreamingPayments.topUpStream(uint256,uint256) (contracts/StreamingPayments.sol#178-187) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(s.active,Not active) (contracts/StreamingPayments.sol#180)
+	- require(bool,string)(msg.sender == s.sender,Not sender) (contracts/StreamingPayments.sol#181)
+StreamingPayments._availableBalance(StreamingPayments.Stream) (contracts/StreamingPayments.sol#191-202) uses timestamp for comparisons
+	Dangerous comparisons:
+	- totalEarned > s.deposit (contracts/StreamingPayments.sol#197)
+	- totalEarned <= s.withdrawn (contracts/StreamingPayments.sol#200)
+StreamingPayments.getRemainingTime(uint256) (contracts/StreamingPayments.sol#216-223) uses timestamp for comparisons
+	Dangerous comparisons:
+	- earned >= s.deposit (contracts/StreamingPayments.sol#221)
+WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256) (contracts/WeatherOracle.sol#80-119) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(_timestamp <= block.timestamp,Future timestamp) (contracts/WeatherOracle.sol#88)
+	- require(bool,string)(_timestamp > block.timestamp - 172800,Data too old) (contracts/WeatherOracle.sol#89)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: assembly
+ERC20Votes._unsafeAccess(ERC20Votes.Checkpoint[],uint256) (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#284-289) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#285-288)
+ERC721._checkOnERC721Received(address,address,uint256,bytes) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#399-421) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#413-415)
+Address._revert(bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#231-243) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/Address.sol#236-239)
+ShortStrings.toString(ShortString) (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#63-73) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#68-71)
+StorageSlot.getAddressSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#62-67) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#64-66)
+StorageSlot.getBooleanSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#72-77) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#74-76)
+StorageSlot.getBytes32Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#82-87) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#84-86)
+StorageSlot.getUint256Slot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#92-97) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#94-96)
+StorageSlot.getStringSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#102-107) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#104-106)
+StorageSlot.getStringSlot(string) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#112-117) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#114-116)
+StorageSlot.getBytesSlot(bytes32) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#122-127) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#124-126)
+StorageSlot.getBytesSlot(bytes) (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#132-137) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#134-136)
+Strings.toString(uint256) (node_modules/@openzeppelin/contracts/utils/Strings.sol#19-39) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/Strings.sol#25-27)
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/Strings.sol#31-33)
+ECDSA.tryRecover(bytes32,bytes) (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#55-72) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#63-67)
+ECDSA.toEthSignedMessageHash(bytes32) (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#165-174) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#169-173)
+ECDSA.toTypedDataHash(bytes32,bytes32) (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#197-206) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#199-205)
+Math.mulDiv(uint256,uint256,uint256) (node_modules/@openzeppelin/contracts/utils/math/Math.sol#55-134) uses assembly
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/math/Math.sol#62-66)
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/math/Math.sol#85-92)
+	- INLINE ASM (node_modules/@openzeppelin/contracts/utils/math/Math.sol#99-108)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage
+INFO:Detectors:
+Detector: pragma
+4 different versions of Solidity are used:
+	- Version constraint ^0.8.0 is used by:
+		-^0.8.0 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#3)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/governance/utils/IVotes.sol#3)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC5267.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC5805.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC6372.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/security/Pausable.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#5)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/Math.sol#4)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/SafeCast.sol#5)
+		-^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol#4)
+	- Version constraint ^0.8.1 is used by:
+		-^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)
+	- Version constraint ^0.8.8 is used by:
+		-^0.8.8 (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#4)
+		-^0.8.8 (node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol#4)
+	- Version constraint ^0.8.24 is used by:
+		-^0.8.24 (contracts/AgentWallet.sol#2)
+		-^0.8.24 (contracts/BridgeLock.sol#2)
+		-^0.8.24 (contracts/CarbonCredit.sol#2)
+		-^0.8.24 (contracts/ConflictScore.sol#2)
+		-^0.8.24 (contracts/DEXLiquidity.sol#2)
+		-^0.8.24 (contracts/EcosystemTreasury.sol#2)
+		-^0.8.24 (contracts/EnergyFloor.sol#2)
+		-^0.8.24 (contracts/EnergyMarketplace.sol#2)
+		-^0.8.24 (contracts/EnergyProofEngine.sol#2)
+		-^0.8.24 (contracts/EnergyRegistry.sol#2)
+		-^0.8.24 (contracts/FounderSellLimit.sol#2)
+		-^0.8.24 (contracts/FoundersVesting.sol#2)
+		-^0.8.24 (contracts/Governance.sol#2)
+		-^0.8.24 (contracts/JOLToken.sol#2)
+		-^0.8.24 (contracts/LiquidityMining.sol#2)
+		-^0.8.24 (contracts/MachineRegistry.sol#2)
+		-^0.8.24 (contracts/OracleConsensus.sol#2)
+		-^0.8.24 (contracts/PaymentChannel.sol#2)
+		-^0.8.24 (contracts/PhysicalCap.sol#2)
+		-^0.8.24 (contracts/PoEMining.sol#2)
+		-^0.8.24 (contracts/SellLimit.sol#2)
+		-^0.8.24 (contracts/StakeSlash.sol#2)
+		-^0.8.24 (contracts/StreamingPayments.sol#2)
+		-^0.8.24 (contracts/WeatherOracle.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used
+INFO:Detectors:
+Detector: costly-loop
+OracleConsensus.cleanupPendingReports(uint256) (contracts/OracleConsensus.sol#390-418) has costly operations inside a loop:
+	- pendingReportIds.pop() (contracts/OracleConsensus.sol#412)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#costly-operations-inside-a-loop
+INFO:Detectors:
+Detector: dead-code
+OracleConsensus._sortArray(uint256[]) (contracts/OracleConsensus.sol#345-357) is never used and should be removed
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code
+INFO:Detectors:
+Detector: solc-version
+Version constraint ^0.8.0 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- DataLocationChangeInInternalOverride
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- SignedImmutables
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching.
+It is used by:
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/access/AccessControl.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/access/IAccessControl.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/finance/VestingWallet.sol#3)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/governance/utils/IVotes.sol#3)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC5267.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC5805.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/interfaces/IERC6372.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/security/Pausable.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Context.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Counters.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/StorageSlot.sol#5)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/Strings.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/Math.sol#4)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/SafeCast.sol#5)
+	- ^0.8.0 (node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol#4)
+Version constraint ^0.8.1 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- DataLocationChangeInInternalOverride
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- SignedImmutables
+	- ABIDecodeTwoDimensionalArrayMemory
+	- KeccakCaching.
+It is used by:
+	- ^0.8.1 (node_modules/@openzeppelin/contracts/utils/Address.sol#4)
+Version constraint ^0.8.8 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- VerbatimInvalidDeduplication
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess
+	- AbiReencodingHeadOverflowWithStaticArrayCleanup
+	- DirtyBytesArrayToStorage
+	- DataLocationChangeInInternalOverride
+	- NestedCalldataArrayAbiReencodingSizeValidation
+	- UserDefinedValueTypesBug
+	- SignedImmutables.
+It is used by:
+	- ^0.8.8 (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#4)
+	- ^0.8.8 (node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol#4)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in SafeERC20._callOptionalReturnBool(IERC20,bytes) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#134-142):
+	- (success,returndata) = address(token).call(data) (node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol#139)
+Low level call in Address.sendValue(address,uint256) (node_modules/@openzeppelin/contracts/utils/Address.sol#64-69):
+	- (success,None) = recipient.call{value: amount}() (node_modules/@openzeppelin/contracts/utils/Address.sol#67)
+Low level call in Address.functionCallWithValue(address,bytes,uint256,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#128-137):
+	- (success,returndata) = target.call{value: value}(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#135)
+Low level call in Address.functionStaticCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#155-162):
+	- (success,returndata) = target.staticcall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#160)
+Low level call in Address.functionDelegateCall(address,bytes,string) (node_modules/@openzeppelin/contracts/utils/Address.sol#180-187):
+	- (success,returndata) = target.delegatecall(data) (node_modules/@openzeppelin/contracts/utils/Address.sol#185)
+Low level call in BridgeLock._executeUnlock(uint256) (contracts/BridgeLock.sol#115-136):
+	- (sent,None) = req.user.call{value: req.amount}() (contracts/BridgeLock.sol#132)
+Low level call in Governance.execute(uint256) (contracts/Governance.sol#149-165):
+	- (success,returnData) = p.targets[i].call(p.calldatas[i]) (contracts/Governance.sol#158)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Detectors:
+Detector: naming-convention
+Function IERC6372.CLOCK_MODE() (node_modules/@openzeppelin/contracts/interfaces/IERC6372.sol#16) is not in mixedCase
+Function ERC20Permit.DOMAIN_SEPARATOR() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#81-83) is not in mixedCase
+Variable ERC20Permit._PERMIT_TYPEHASH_DEPRECATED_SLOT (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#37) is not in mixedCase
+Function ERC20Votes.CLOCK_MODE() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol#51-55) is not in mixedCase
+Function IERC20Permit.DOMAIN_SEPARATOR() (node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol#89) is not in mixedCase
+Function ERC721.__unsafe_increaseBalance(address,uint256) (node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#463-465) is not in mixedCase
+Parameter AgentWallet.createWallet(address,uint256,uint256,uint256)._agent (contracts/AgentWallet.sol#87) is not in mixedCase
+Parameter AgentWallet.createWallet(address,uint256,uint256,uint256)._maxPerTransaction (contracts/AgentWallet.sol#88) is not in mixedCase
+Parameter AgentWallet.createWallet(address,uint256,uint256,uint256)._maxDailySpend (contracts/AgentWallet.sol#89) is not in mixedCase
+Parameter AgentWallet.createWallet(address,uint256,uint256,uint256)._maxMonthlySpend (contracts/AgentWallet.sol#90) is not in mixedCase
+Parameter AgentWallet.fundWallet(uint256,uint256)._walletId (contracts/AgentWallet.sol#126) is not in mixedCase
+Parameter AgentWallet.fundWallet(uint256,uint256)._amount (contracts/AgentWallet.sol#126) is not in mixedCase
+Parameter AgentWallet.freezeWallet(uint256)._walletId (contracts/AgentWallet.sol#137) is not in mixedCase
+Parameter AgentWallet.unfreezeWallet(uint256)._walletId (contracts/AgentWallet.sol#143) is not in mixedCase
+Parameter AgentWallet.updateLimits(uint256,uint256,uint256,uint256)._walletId (contracts/AgentWallet.sol#153) is not in mixedCase
+Parameter AgentWallet.updateLimits(uint256,uint256,uint256,uint256)._maxPerTx (contracts/AgentWallet.sol#154) is not in mixedCase
+Parameter AgentWallet.updateLimits(uint256,uint256,uint256,uint256)._maxDaily (contracts/AgentWallet.sol#155) is not in mixedCase
+Parameter AgentWallet.updateLimits(uint256,uint256,uint256,uint256)._maxMonthly (contracts/AgentWallet.sol#156) is not in mixedCase
+Parameter AgentWallet.setWhitelist(uint256,address,bool)._walletId (contracts/AgentWallet.sol#169) is not in mixedCase
+Parameter AgentWallet.setWhitelist(uint256,address,bool)._recipient (contracts/AgentWallet.sol#169) is not in mixedCase
+Parameter AgentWallet.setWhitelist(uint256,address,bool)._allowed (contracts/AgentWallet.sol#169) is not in mixedCase
+Parameter AgentWallet.setWhitelistEnabled(uint256,bool)._walletId (contracts/AgentWallet.sol#175) is not in mixedCase
+Parameter AgentWallet.setWhitelistEnabled(uint256,bool)._enabled (contracts/AgentWallet.sol#175) is not in mixedCase
+Parameter AgentWallet.withdrawBalance(uint256,uint256)._walletId (contracts/AgentWallet.sol#183) is not in mixedCase
+Parameter AgentWallet.withdrawBalance(uint256,uint256)._amount (contracts/AgentWallet.sol#183) is not in mixedCase
+Parameter AgentWallet.agentSpend(address,uint256,string)._to (contracts/AgentWallet.sol#198) is not in mixedCase
+Parameter AgentWallet.agentSpend(address,uint256,string)._amount (contracts/AgentWallet.sol#199) is not in mixedCase
+Parameter AgentWallet.agentSpend(address,uint256,string)._memo (contracts/AgentWallet.sol#200) is not in mixedCase
+Parameter AgentWallet.getRemainingDailyBudget(uint256)._walletId (contracts/AgentWallet.sol#255) is not in mixedCase
+Parameter AgentWallet.getRemainingMonthlyBudget(uint256)._walletId (contracts/AgentWallet.sol#262) is not in mixedCase
+Parameter AgentWallet.getWalletByAgent(address)._agent (contracts/AgentWallet.sol#269) is not in mixedCase
+Parameter AgentWallet.getOwnerWallets(address)._owner (contracts/AgentWallet.sol#273) is not in mixedCase
+Parameter BridgeLock.confirmUnlock(uint256,address,uint256,bytes32)._unlockId (contracts/BridgeLock.sol#79) is not in mixedCase
+Parameter BridgeLock.confirmUnlock(uint256,address,uint256,bytes32)._user (contracts/BridgeLock.sol#80) is not in mixedCase
+Parameter BridgeLock.confirmUnlock(uint256,address,uint256,bytes32)._amount (contracts/BridgeLock.sol#81) is not in mixedCase
+Parameter BridgeLock.confirmUnlock(uint256,address,uint256,bytes32)._ethTxHash (contracts/BridgeLock.sol#82) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._producer (contracts/CarbonCredit.sol#74) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._energyKWh (contracts/CarbonCredit.sol#75) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._energyType (contracts/CarbonCredit.sol#76) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._country (contracts/CarbonCredit.sol#77) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._periodStart (contracts/CarbonCredit.sol#78) is not in mixedCase
+Parameter CarbonCredit.issueCredit(address,uint256,string,string,uint256,uint256)._periodEnd (contracts/CarbonCredit.sol#79) is not in mixedCase
+Parameter CarbonCredit.retireCredit(uint256,string)._id (contracts/CarbonCredit.sol#118) is not in mixedCase
+Parameter CarbonCredit.retireCredit(uint256,string)._reason (contracts/CarbonCredit.sol#118) is not in mixedCase
+Parameter CarbonCredit.auditCredit(uint256,string)._id (contracts/CarbonCredit.sol#134) is not in mixedCase
+Parameter CarbonCredit.auditCredit(uint256,string)._note (contracts/CarbonCredit.sol#134) is not in mixedCase
+Parameter CarbonCredit.getCreditDetails(uint256)._id (contracts/CarbonCredit.sol#163) is not in mixedCase
+Parameter ConflictScore.reportViolation(address,ConflictScore.ViolationType)._account (contracts/ConflictScore.sol#87) is not in mixedCase
+Parameter ConflictScore.reportViolation(address,ConflictScore.ViolationType)._type (contracts/ConflictScore.sol#88) is not in mixedCase
+Parameter ConflictScore.applyDecay(address)._account (contracts/ConflictScore.sol#118) is not in mixedCase
+Parameter ConflictScore.getPenalty(ConflictScore.ViolationType)._type (contracts/ConflictScore.sol#152) is not in mixedCase
+Parameter ConflictScore.getLevel(address)._account (contracts/ConflictScore.sol#163) is not in mixedCase
+Parameter ConflictScore.getRewardMultiplier(address)._account (contracts/ConflictScore.sol#179) is not in mixedCase
+Parameter ConflictScore.canGovernance(address)._account (contracts/ConflictScore.sol#191) is not in mixedCase
+Parameter ConflictScore.canTrade(address)._account (contracts/ConflictScore.sol#199) is not in mixedCase
+Parameter DEXLiquidity.setPoolAddresses(address,address)._poolJOLUSDC (contracts/DEXLiquidity.sol#87) is not in mixedCase
+Parameter DEXLiquidity.setPoolAddresses(address,address)._poolJOLETH (contracts/DEXLiquidity.sol#88) is not in mixedCase
+Parameter DEXLiquidity.provisionPoolA(address)._recipient (contracts/DEXLiquidity.sol#102) is not in mixedCase
+Parameter DEXLiquidity.provisionPoolB(address)._recipient (contracts/DEXLiquidity.sol#122) is not in mixedCase
+Parameter DEXLiquidity.emergencyWithdraw(address)._to (contracts/DEXLiquidity.sol#141) is not in mixedCase
+Parameter EcosystemTreasury.fundTreasury(uint256)._amount (contracts/EcosystemTreasury.sol#90) is not in mixedCase
+Parameter EcosystemTreasury.createBounty(string,uint256)._description (contracts/EcosystemTreasury.sol#103) is not in mixedCase
+Parameter EcosystemTreasury.createBounty(string,uint256)._reward (contracts/EcosystemTreasury.sol#104) is not in mixedCase
+Parameter EcosystemTreasury.claimBounty(uint256)._bountyId (contracts/EcosystemTreasury.sol#125) is not in mixedCase
+Parameter EcosystemTreasury.payBounty(uint256)._bountyId (contracts/EcosystemTreasury.sol#137) is not in mixedCase
+Parameter EcosystemTreasury.cancelBounty(uint256)._bountyId (contracts/EcosystemTreasury.sol#154) is not in mixedCase
+Parameter EcosystemTreasury.executeSpend(address,uint256,string)._recipient (contracts/EcosystemTreasury.sol#164) is not in mixedCase
+Parameter EcosystemTreasury.executeSpend(address,uint256,string)._amount (contracts/EcosystemTreasury.sol#165) is not in mixedCase
+Parameter EcosystemTreasury.executeSpend(address,uint256,string)._reason (contracts/EcosystemTreasury.sol#166) is not in mixedCase
+Parameter EcosystemTreasury.fundInsurance(uint256)._amount (contracts/EcosystemTreasury.sol#184) is not in mixedCase
+Parameter EcosystemTreasury.requestInsurancePayout(address,uint256,string)._recipient (contracts/EcosystemTreasury.sol#195) is not in mixedCase
+Parameter EcosystemTreasury.requestInsurancePayout(address,uint256,string)._amount (contracts/EcosystemTreasury.sol#196) is not in mixedCase
+Parameter EcosystemTreasury.requestInsurancePayout(address,uint256,string)._reason (contracts/EcosystemTreasury.sol#197) is not in mixedCase
+Parameter EcosystemTreasury.executeInsurancePayout(uint256)._id (contracts/EcosystemTreasury.sol#218) is not in mixedCase
+Parameter EnergyFloor.registerProducer(string,string,string)._name (contracts/EnergyFloor.sol#96) is not in mixedCase
+Parameter EnergyFloor.registerProducer(string,string,string)._country (contracts/EnergyFloor.sol#97) is not in mixedCase
+Parameter EnergyFloor.registerProducer(string,string,string)._energyType (contracts/EnergyFloor.sol#98) is not in mixedCase
+Parameter EnergyFloor.depositEnergy(address,uint256)._producer (contracts/EnergyFloor.sol#127) is not in mixedCase
+Parameter EnergyFloor.depositEnergy(address,uint256)._kWh (contracts/EnergyFloor.sol#128) is not in mixedCase
+Parameter EnergyFloor.redeemForEnergy(address,uint256)._producer (contracts/EnergyFloor.sol#162) is not in mixedCase
+Parameter EnergyFloor.redeemForEnergy(address,uint256)._kWh (contracts/EnergyFloor.sol#163) is not in mixedCase
+Parameter EnergyFloor.fulfillRedemption(uint256)._ticketId (contracts/EnergyFloor.sol#199) is not in mixedCase
+Parameter EnergyFloor.updatePrice(uint256)._priceUSDCents (contracts/EnergyFloor.sol#213) is not in mixedCase
+Parameter EnergyFloor.getUserTickets(address)._user (contracts/EnergyFloor.sol#242) is not in mixedCase
+Parameter EnergyMarketplace.createListing(uint256,uint256,string,string)._kWh (contracts/EnergyMarketplace.sol#59) is not in mixedCase
+Parameter EnergyMarketplace.createListing(uint256,uint256,string,string)._pricePerKWh (contracts/EnergyMarketplace.sol#60) is not in mixedCase
+Parameter EnergyMarketplace.createListing(uint256,uint256,string,string)._energyType (contracts/EnergyMarketplace.sol#61) is not in mixedCase
+Parameter EnergyMarketplace.createListing(uint256,uint256,string,string)._country (contracts/EnergyMarketplace.sol#62) is not in mixedCase
+Parameter EnergyMarketplace.buy(uint256,uint256)._listingId (contracts/EnergyMarketplace.sol#92) is not in mixedCase
+Parameter EnergyMarketplace.buy(uint256,uint256)._kWh (contracts/EnergyMarketplace.sol#92) is not in mixedCase
+Parameter EnergyMarketplace.cancelListing(uint256)._listingId (contracts/EnergyMarketplace.sol#128) is not in mixedCase
+Parameter EnergyMarketplace.getActiveListing(uint256)._id (contracts/EnergyMarketplace.sol#138) is not in mixedCase
+Parameter EnergyProofEngine.processReport(uint256,uint256,uint256)._facilityId (contracts/EnergyProofEngine.sol#118) is not in mixedCase
+Parameter EnergyProofEngine.processReport(uint256,uint256,uint256)._periodStart (contracts/EnergyProofEngine.sol#119) is not in mixedCase
+Parameter EnergyProofEngine.processReport(uint256,uint256,uint256)._periodEnd (contracts/EnergyProofEngine.sol#120) is not in mixedCase
+Parameter EnergyProofEngine.isProcessed(uint256,uint256,uint256)._facilityId (contracts/EnergyProofEngine.sol#274) is not in mixedCase
+Parameter EnergyProofEngine.isProcessed(uint256,uint256,uint256)._periodStart (contracts/EnergyProofEngine.sol#275) is not in mixedCase
+Parameter EnergyProofEngine.isProcessed(uint256,uint256,uint256)._periodEnd (contracts/EnergyProofEngine.sol#276) is not in mixedCase
+Parameter EnergyProofEngine.preflightCheck(uint256)._facilityId (contracts/EnergyProofEngine.sol#288) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._type (contracts/EnergyRegistry.sol#62) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._capacityKW (contracts/EnergyRegistry.sol#63) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._meterId (contracts/EnergyRegistry.sol#64) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._geohash (contracts/EnergyRegistry.sol#65) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._latitudeBand (contracts/EnergyRegistry.sol#66) is not in mixedCase
+Parameter EnergyRegistry.registerFacility(EnergyRegistry.FacilityType,uint256,bytes32,bytes4,uint8,string)._country (contracts/EnergyRegistry.sol#67) is not in mixedCase
+Parameter EnergyRegistry.verifyFacility(uint256)._id (contracts/EnergyRegistry.sol#102) is not in mixedCase
+Parameter EnergyRegistry.recordProduction(uint256,uint256,uint256,uint256)._id (contracts/EnergyRegistry.sol#119) is not in mixedCase
+Parameter EnergyRegistry.recordProduction(uint256,uint256,uint256,uint256)._kWh (contracts/EnergyRegistry.sol#120) is not in mixedCase
+Parameter EnergyRegistry.recordProduction(uint256,uint256,uint256,uint256)._periodStart (contracts/EnergyRegistry.sol#121) is not in mixedCase
+Parameter EnergyRegistry.recordProduction(uint256,uint256,uint256,uint256)._periodEnd (contracts/EnergyRegistry.sol#122) is not in mixedCase
+Parameter EnergyRegistry.suspendFacility(uint256,string)._id (contracts/EnergyRegistry.sol#144) is not in mixedCase
+Parameter EnergyRegistry.suspendFacility(uint256,string)._reason (contracts/EnergyRegistry.sol#144) is not in mixedCase
+Parameter EnergyRegistry.deregisterFacility(uint256)._id (contracts/EnergyRegistry.sol#154) is not in mixedCase
+Parameter EnergyRegistry.getFacilityIds(address)._owner (contracts/EnergyRegistry.sol#165) is not in mixedCase
+Parameter EnergyRegistry.isActive(uint256)._id (contracts/EnergyRegistry.sol#172) is not in mixedCase
+Parameter EnergyRegistry.facilityOwner(uint256)._id (contracts/EnergyRegistry.sol#179) is not in mixedCase
+Parameter FounderSellLimit.updateDailyVolume(uint256)._volume (contracts/FounderSellLimit.sol#45) is not in mixedCase
+Parameter FounderSellLimit.sell(address,uint256)._to (contracts/FounderSellLimit.sol#58) is not in mixedCase
+Parameter FounderSellLimit.sell(address,uint256)._amount (contracts/FounderSellLimit.sol#58) is not in mixedCase
+Parameter FounderSellLimit.getDailyLimit(uint256)._day (contracts/FounderSellLimit.sol#82) is not in mixedCase
+Parameter Governance.propose(string,string,address[],bytes[])._title (contracts/Governance.sol#65) is not in mixedCase
+Parameter Governance.propose(string,string,address[],bytes[])._description (contracts/Governance.sol#66) is not in mixedCase
+Parameter Governance.propose(string,string,address[],bytes[])._targets (contracts/Governance.sol#67) is not in mixedCase
+Parameter Governance.propose(string,string,address[],bytes[])._calldatas (contracts/Governance.sol#68) is not in mixedCase
+Parameter Governance.vote(uint256,bool)._proposalId (contracts/Governance.sol#98) is not in mixedCase
+Parameter Governance.vote(uint256,bool)._support (contracts/Governance.sol#98) is not in mixedCase
+Parameter Governance.finalize(uint256)._proposalId (contracts/Governance.sol#127) is not in mixedCase
+Parameter Governance.execute(uint256)._proposalId (contracts/Governance.sol#149) is not in mixedCase
+Parameter Governance.cancel(uint256)._proposalId (contracts/Governance.sol#170) is not in mixedCase
+Parameter Governance.getProposalVotes(uint256)._id (contracts/Governance.sol#183) is not in mixedCase
+Parameter Governance.hasVoted(uint256,address)._id (contracts/Governance.sol#187) is not in mixedCase
+Parameter Governance.hasVoted(uint256,address)._voter (contracts/Governance.sol#187) is not in mixedCase
+Parameter LiquidityMining.setLPTokens(address,address)._poolA (contracts/LiquidityMining.sol#67) is not in mixedCase
+Parameter LiquidityMining.setLPTokens(address,address)._poolB (contracts/LiquidityMining.sol#67) is not in mixedCase
+Parameter LiquidityMining.getMultiplier(uint256,uint256)._from (contracts/LiquidityMining.sol#93) is not in mixedCase
+Parameter LiquidityMining.getMultiplier(uint256,uint256)._to (contracts/LiquidityMining.sol#93) is not in mixedCase
+Parameter LiquidityMining.stakeLiquidity(uint256,uint256)._amount (contracts/LiquidityMining.sol#135) is not in mixedCase
+Parameter LiquidityMining.stakeLiquidity(uint256,uint256)._pool (contracts/LiquidityMining.sol#135) is not in mixedCase
+Parameter LiquidityMining.unstakeLiquidity(uint256)._positionId (contracts/LiquidityMining.sol#165) is not in mixedCase
+Parameter LiquidityMining.claimRewards(uint256)._positionId (contracts/LiquidityMining.sol#196) is not in mixedCase
+Parameter LiquidityMining.pendingRewards(uint256)._positionId (contracts/LiquidityMining.sol#216) is not in mixedCase
+Parameter LiquidityMining.getPositionIds(address)._provider (contracts/LiquidityMining.sol#232) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._wallet (contracts/MachineRegistry.sol#84) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._type (contracts/MachineRegistry.sol#85) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._manufacturer (contracts/MachineRegistry.sol#86) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._model (contracts/MachineRegistry.sol#87) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._firmwareHash (contracts/MachineRegistry.sol#88) is not in mixedCase
+Parameter MachineRegistry.registerMachine(address,MachineRegistry.MachineType,string,string,bytes32,bytes4)._geohash (contracts/MachineRegistry.sol#89) is not in mixedCase
+Parameter MachineRegistry.verifyMachine(uint256)._id (contracts/MachineRegistry.sol#124) is not in mixedCase
+Parameter MachineRegistry.recordTransaction(address,uint256,bool)._machineWallet (contracts/MachineRegistry.sol#140) is not in mixedCase
+Parameter MachineRegistry.recordTransaction(address,uint256,bool)._amount (contracts/MachineRegistry.sol#141) is not in mixedCase
+Parameter MachineRegistry.recordTransaction(address,uint256,bool)._success (contracts/MachineRegistry.sol#142) is not in mixedCase
+Parameter MachineRegistry.recordEnergy(address,uint256)._machineWallet (contracts/MachineRegistry.sol#166) is not in mixedCase
+Parameter MachineRegistry.recordEnergy(address,uint256)._kWh (contracts/MachineRegistry.sol#166) is not in mixedCase
+Parameter MachineRegistry.updateFirmware(uint256,bytes32)._id (contracts/MachineRegistry.sol#175) is not in mixedCase
+Parameter MachineRegistry.updateFirmware(uint256,bytes32)._newHash (contracts/MachineRegistry.sol#175) is not in mixedCase
+Parameter MachineRegistry.suspendMachine(uint256,string)._id (contracts/MachineRegistry.sol#185) is not in mixedCase
+Parameter MachineRegistry.suspendMachine(uint256,string)._reason (contracts/MachineRegistry.sol#185) is not in mixedCase
+Parameter MachineRegistry.isVerified(address)._wallet (contracts/MachineRegistry.sol#192) is not in mixedCase
+Parameter MachineRegistry.getReputation(address)._wallet (contracts/MachineRegistry.sol#197) is not in mixedCase
+Parameter MachineRegistry.getMachinesByOwner(address)._owner (contracts/MachineRegistry.sol#203) is not in mixedCase
+Parameter MachineRegistry.getDID(uint256)._id (contracts/MachineRegistry.sol#210) is not in mixedCase
+Parameter OracleConsensus.setQuorum(uint256,uint256)._newQuorum (contracts/OracleConsensus.sol#95) is not in mixedCase
+Parameter OracleConsensus.setQuorum(uint256,uint256)._newMinOracles (contracts/OracleConsensus.sol#95) is not in mixedCase
+Parameter OracleConsensus.setPoEMining(address)._poeMining (contracts/OracleConsensus.sol#105) is not in mixedCase
+Parameter OracleConsensus.joinAsOracle(uint256)._stakeAmount (contracts/OracleConsensus.sol#114) is not in mixedCase
+Parameter OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)._facilityId (contracts/OracleConsensus.sol#172) is not in mixedCase
+Parameter OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)._periodStart (contracts/OracleConsensus.sol#173) is not in mixedCase
+Parameter OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)._periodEnd (contracts/OracleConsensus.sol#174) is not in mixedCase
+Parameter OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)._kWhProduced (contracts/OracleConsensus.sol#175) is not in mixedCase
+Parameter OracleConsensus.submitReport(uint256,uint256,uint256,uint256,bytes32)._weatherHash (contracts/OracleConsensus.sol#176) is not in mixedCase
+Parameter OracleConsensus.getReportVoters(bytes32)._reportId (contracts/OracleConsensus.sol#375) is not in mixedCase
+Parameter OracleConsensus.getReportSubmissions(bytes32)._reportId (contracts/OracleConsensus.sol#379) is not in mixedCase
+Parameter OracleConsensus.cleanupPendingReports(uint256)._batchSize (contracts/OracleConsensus.sol#390) is not in mixedCase
+Parameter PaymentChannel.openChannel(address,uint256,uint256)._receiver (contracts/PaymentChannel.sol#73) is not in mixedCase
+Parameter PaymentChannel.openChannel(address,uint256,uint256)._deposit (contracts/PaymentChannel.sol#74) is not in mixedCase
+Parameter PaymentChannel.openChannel(address,uint256,uint256)._duration (contracts/PaymentChannel.sol#75) is not in mixedCase
+Parameter PaymentChannel.closeChannel(uint256,uint256,bytes)._channelId (contracts/PaymentChannel.sol#115) is not in mixedCase
+Parameter PaymentChannel.closeChannel(uint256,uint256,bytes)._amount (contracts/PaymentChannel.sol#116) is not in mixedCase
+Parameter PaymentChannel.closeChannel(uint256,uint256,bytes)._signature (contracts/PaymentChannel.sol#117) is not in mixedCase
+Parameter PaymentChannel.expireChannel(uint256)._channelId (contracts/PaymentChannel.sol#159) is not in mixedCase
+Parameter PaymentChannel.extendChannel(uint256,uint256)._channelId (contracts/PaymentChannel.sol#178) is not in mixedCase
+Parameter PaymentChannel.extendChannel(uint256,uint256)._additionalTime (contracts/PaymentChannel.sol#178) is not in mixedCase
+Parameter PaymentChannel.topUpChannel(uint256,uint256)._channelId (contracts/PaymentChannel.sol#188) is not in mixedCase
+Parameter PaymentChannel.topUpChannel(uint256,uint256)._amount (contracts/PaymentChannel.sol#188) is not in mixedCase
+Parameter PaymentChannel.getChannelsByPair(address,address)._sender (contracts/PaymentChannel.sol#198) is not in mixedCase
+Parameter PaymentChannel.getChannelsByPair(address,address)._receiver (contracts/PaymentChannel.sol#198) is not in mixedCase
+Parameter PaymentChannel.getMessageHash(uint256,uint256)._channelId (contracts/PaymentChannel.sol#217) is not in mixedCase
+Parameter PaymentChannel.getMessageHash(uint256,uint256)._amount (contracts/PaymentChannel.sol#217) is not in mixedCase
+Parameter PhysicalCap.maxDailyOutput(uint256)._facilityId (contracts/PhysicalCap.sol#53) is not in mixedCase
+Parameter PhysicalCap.verifyProduction(uint256,uint256)._facilityId (contracts/PhysicalCap.sol#91) is not in mixedCase
+Parameter PhysicalCap.verifyProduction(uint256,uint256)._claimedKWh (contracts/PhysicalCap.sol#92) is not in mixedCase
+Parameter PhysicalCap.getSolarPeakByBand(uint8)._band (contracts/PhysicalCap.sol#111) is not in mixedCase
+Parameter PhysicalCap.getTechEfficiency(EnergyRegistry.FacilityType)._type (contracts/PhysicalCap.sol#133) is not in mixedCase
+Parameter PoEMining.accrueReward(uint256,uint256)._facilityId (contracts/PoEMining.sol#78) is not in mixedCase
+Parameter PoEMining.accrueReward(uint256,uint256)._verifiedKWh (contracts/PoEMining.sol#79) is not in mixedCase
+Parameter PoEMining.getClaimable(address)._account (contracts/PoEMining.sol#143) is not in mixedCase
+Parameter SellLimit.dailySellLimit(uint256,uint256)._dailyProduction (contracts/SellLimit.sol#45) is not in mixedCase
+Parameter SellLimit.dailySellLimit(uint256,uint256)._marketVolume (contracts/SellLimit.sol#46) is not in mixedCase
+Parameter SellLimit.checkSell(address,uint256,uint256,uint256)._seller (contracts/SellLimit.sol#75) is not in mixedCase
+Parameter SellLimit.checkSell(address,uint256,uint256,uint256)._amount (contracts/SellLimit.sol#76) is not in mixedCase
+Parameter SellLimit.checkSell(address,uint256,uint256,uint256)._dailyProduction (contracts/SellLimit.sol#77) is not in mixedCase
+Parameter SellLimit.checkSell(address,uint256,uint256,uint256)._marketVolume (contracts/SellLimit.sol#78) is not in mixedCase
+Parameter SellLimit.remainingAllowance(address,uint256,uint256)._seller (contracts/SellLimit.sol#97) is not in mixedCase
+Parameter SellLimit.remainingAllowance(address,uint256,uint256)._dailyProduction (contracts/SellLimit.sol#98) is not in mixedCase
+Parameter SellLimit.remainingAllowance(address,uint256,uint256)._marketVolume (contracts/SellLimit.sol#99) is not in mixedCase
+Parameter StakeSlash.requiredStake(uint256)._facilityId (contracts/StakeSlash.sol#88) is not in mixedCase
+Parameter StakeSlash.stake(uint256)._facilityId (contracts/StakeSlash.sol#101) is not in mixedCase
+Parameter StakeSlash.slash(uint256,string)._facilityId (contracts/StakeSlash.sol#140) is not in mixedCase
+Parameter StakeSlash.slash(uint256,string)._reason (contracts/StakeSlash.sol#141) is not in mixedCase
+Parameter StakeSlash.withdrawStake(uint256)._facilityId (contracts/StakeSlash.sol#188) is not in mixedCase
+Parameter StakeSlash.isBanned(address)._account (contracts/StakeSlash.sol#211) is not in mixedCase
+Parameter StakeSlash.isStaked(uint256)._facilityId (contracts/StakeSlash.sol#218) is not in mixedCase
+Parameter StreamingPayments.createStream(address,uint256,uint256)._receiver (contracts/StreamingPayments.sol#70) is not in mixedCase
+Parameter StreamingPayments.createStream(address,uint256,uint256)._ratePerSecond (contracts/StreamingPayments.sol#71) is not in mixedCase
+Parameter StreamingPayments.createStream(address,uint256,uint256)._deposit (contracts/StreamingPayments.sol#72) is not in mixedCase
+Parameter StreamingPayments.withdrawFromStream(uint256)._streamId (contracts/StreamingPayments.sol#106) is not in mixedCase
+Parameter StreamingPayments.stopStream(uint256)._streamId (contracts/StreamingPayments.sol#141) is not in mixedCase
+Parameter StreamingPayments.topUpStream(uint256,uint256)._streamId (contracts/StreamingPayments.sol#178) is not in mixedCase
+Parameter StreamingPayments.topUpStream(uint256,uint256)._amount (contracts/StreamingPayments.sol#178) is not in mixedCase
+Parameter StreamingPayments.getAvailableBalance(uint256)._streamId (contracts/StreamingPayments.sol#209) is not in mixedCase
+Parameter StreamingPayments.getRemainingTime(uint256)._streamId (contracts/StreamingPayments.sol#216) is not in mixedCase
+Parameter StreamingPayments.getFlowRate(address,address)._sender (contracts/StreamingPayments.sol#228) is not in mixedCase
+Parameter StreamingPayments.getFlowRate(address,address)._receiver (contracts/StreamingPayments.sol#228) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._facilityId (contracts/WeatherOracle.sol#81) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._timestamp (contracts/WeatherOracle.sol#82) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._irradiance (contracts/WeatherOracle.sol#83) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._windSpeed (contracts/WeatherOracle.sol#84) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._precipitation (contracts/WeatherOracle.sol#85) is not in mixedCase
+Parameter WeatherOracle.submitWeather(uint256,uint256,uint256,uint256,uint256,uint256)._temperature (contracts/WeatherOracle.sol#86) is not in mixedCase
+Parameter WeatherOracle.verifyWithWeather(uint256,uint256,uint256)._facilityId (contracts/WeatherOracle.sol#131) is not in mixedCase
+Parameter WeatherOracle.verifyWithWeather(uint256,uint256,uint256)._claimedKWh (contracts/WeatherOracle.sol#132) is not in mixedCase
+Parameter WeatherOracle.verifyWithWeather(uint256,uint256,uint256)._day (contracts/WeatherOracle.sol#133) is not in mixedCase
+Parameter WeatherOracle.calcWeatherMax(uint256,uint256)._facilityId (contracts/WeatherOracle.sol#168) is not in mixedCase
+Parameter WeatherOracle.calcWeatherMax(uint256,uint256)._weatherId (contracts/WeatherOracle.sol#169) is not in mixedCase
+Parameter WeatherOracle.calcSolarMax(uint256,uint256,uint256)._capacityKW (contracts/WeatherOracle.sol#199) is not in mixedCase
+Parameter WeatherOracle.calcSolarMax(uint256,uint256,uint256)._peakHours (contracts/WeatherOracle.sol#200) is not in mixedCase
+Parameter WeatherOracle.calcSolarMax(uint256,uint256,uint256)._irradiance (contracts/WeatherOracle.sol#201) is not in mixedCase
+Parameter WeatherOracle.calcWindMax(uint256,uint256)._capacityKW (contracts/WeatherOracle.sol#216) is not in mixedCase
+Parameter WeatherOracle.calcWindMax(uint256,uint256)._windSpeed (contracts/WeatherOracle.sol#217) is not in mixedCase
+Parameter WeatherOracle.calcHydroMax(uint256,uint256,uint256)._capacityKW (contracts/WeatherOracle.sol#243) is not in mixedCase
+Parameter WeatherOracle.calcHydroMax(uint256,uint256,uint256)._peakHours (contracts/WeatherOracle.sol#244) is not in mixedCase
+Parameter WeatherOracle.calcHydroMax(uint256,uint256,uint256)._precipitation (contracts/WeatherOracle.sol#245) is not in mixedCase
+Parameter WeatherOracle.getLatitudeBand(uint256)._facilityId (contracts/WeatherOracle.sol#263) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Detectors:
+Detector: too-many-digits
+ShortStrings.slitherConstructorConstantVariables() (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#40-122) uses literals with too many digits:
+	- _FALLBACK_SENTINEL = 0x00000000000000000000000000000000000000000000000000000000000000FF (node_modules/@openzeppelin/contracts/utils/ShortStrings.sol#42)
+DEXLiquidity.slitherConstructorConstantVariables() (contracts/DEXLiquidity.sol#26-163) uses literals with too many digits:
+	- PRICE_LOWER = 100000 (contracts/DEXLiquidity.sol#43)
+DEXLiquidity.slitherConstructorConstantVariables() (contracts/DEXLiquidity.sol#26-163) uses literals with too many digits:
+	- PRICE_UPPER = 2000000 (contracts/DEXLiquidity.sol#44)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#too-many-digits
+INFO:Detectors:
+Detector: unindexed-event-address
+Event Pausable.Paused(address) (node_modules/@openzeppelin/contracts/security/Pausable.sol#21) has address parameters but no indexed parameters
+Event Pausable.Unpaused(address) (node_modules/@openzeppelin/contracts/security/Pausable.sol#26) has address parameters but no indexed parameters
+Event DEXLiquidity.PoolAddressSet(string,address) (contracts/DEXLiquidity.sol#56) has address parameters but no indexed parameters
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unindexed-event-address-parameters
+INFO:Detectors:
+Detector: cache-array-length
+Loop condition i < oracleList.length (contracts/OracleConsensus.sol#369) should use cached array length instead of referencing `length` member of the storage array.
+ Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#cache-array-length
+INFO:Detectors:
+Detector: constable-states
+BridgeLock.nextUnlockId (contracts/BridgeLock.sol#39) should be constant 
+BridgeLock.requiredConfirmations (contracts/BridgeLock.sol#46) should be constant 
+EIP712._nameFallback (node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol#52) should be constant 
+EIP712._versionFallback (node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol#53) should be constant 
+ERC20Permit._PERMIT_TYPEHASH_DEPRECATED_SLOT (node_modules/@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol#37) should be constant 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#state-variables-that-could-be-declared-constant
+INFO:Detectors:
+Detector: immutable-states
+AgentWallet.jolToken (contracts/AgentWallet.sol#29) should be immutable 
+AgentWallet.machineRegistry (contracts/AgentWallet.sol#30) should be immutable 
+DEXLiquidity.jolToken (contracts/DEXLiquidity.sol#29) should be immutable 
+EcosystemTreasury.jolToken (contracts/EcosystemTreasury.sol#25) should be immutable 
+EnergyFloor.jolToken (contracts/EnergyFloor.sol#30) should be immutable 
+EnergyMarketplace.energyFloor (contracts/EnergyMarketplace.sol#18) should be immutable 
+EnergyMarketplace.jolToken (contracts/EnergyMarketplace.sol#17) should be immutable 
+EnergyProofEngine.conflictScore (contracts/EnergyProofEngine.sol#44) should be immutable 
+EnergyProofEngine.energyFloor (contracts/EnergyProofEngine.sol#46) should be immutable 
+EnergyProofEngine.jolToken (contracts/EnergyProofEngine.sol#38) should be immutable 
+EnergyProofEngine.oracleConsensus (contracts/EnergyProofEngine.sol#42) should be immutable 
+EnergyProofEngine.physicalCap (contracts/EnergyProofEngine.sol#40) should be immutable 
+EnergyProofEngine.poeMining (contracts/EnergyProofEngine.sol#45) should be immutable 
+EnergyProofEngine.registry (contracts/EnergyProofEngine.sol#39) should be immutable 
+EnergyProofEngine.stakeSlash (contracts/EnergyProofEngine.sol#43) should be immutable 
+EnergyProofEngine.weatherOracle (contracts/EnergyProofEngine.sol#41) should be immutable 
+FounderSellLimit.founder (contracts/FounderSellLimit.sol#23) should be immutable 
+FounderSellLimit.jolToken (contracts/FounderSellLimit.sol#17) should be immutable 
+FounderSellLimit.volumeOracle (contracts/FounderSellLimit.sol#30) should be immutable 
+Governance.jolToken (contracts/Governance.sol#18) should be immutable 
+LiquidityMining.jolToken (contracts/LiquidityMining.sol#20) should be immutable 
+LiquidityMining.programStart (contracts/LiquidityMining.sol#33) should be immutable 
+OracleConsensus.jolToken (contracts/OracleConsensus.sol#63) should be immutable 
+OracleConsensus.registry (contracts/OracleConsensus.sol#64) should be immutable 
+OracleConsensus.slashTreasury (contracts/OracleConsensus.sol#66) should be immutable 
+PaymentChannel.jolToken (contracts/PaymentChannel.sol#31) should be immutable 
+PhysicalCap.registry (contracts/PhysicalCap.sol#20) should be immutable 
+PoEMining.jolToken (contracts/PoEMining.sol#29) should be immutable 
+PoEMining.lastAdjustmentBlock (contracts/PoEMining.sol#32) should be immutable 
+PoEMining.registry (contracts/PoEMining.sol#30) should be immutable 
+StakeSlash.conflictScore (contracts/StakeSlash.sol#28) should be immutable 
+StakeSlash.jolToken (contracts/StakeSlash.sol#26) should be immutable 
+StakeSlash.registry (contracts/StakeSlash.sol#27) should be immutable 
+StakeSlash.slashTreasury (contracts/StakeSlash.sol#47) should be immutable 
+StreamingPayments.jolToken (contracts/StreamingPayments.sol#23) should be immutable 
+WeatherOracle.physicalCap (contracts/WeatherOracle.sol#29) should be immutable 
+WeatherOracle.registry (contracts/WeatherOracle.sol#28) should be immutable 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#state-variables-that-could-be-declared-immutable
+INFO:Slither:. analyzed (57 contracts with 101 detectors), 486 result(s) found

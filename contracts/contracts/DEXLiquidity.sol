@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 
 /**
@@ -24,6 +25,8 @@ import "./JOLToken.sol";
  * Multisig (3/5 Gnosis Safe) controls the release.
  */
 contract DEXLiquidity is AccessControl {
+    using SafeERC20 for IERC20;
+
     bytes32 public constant PROVISIONER_ROLE = keccak256("PROVISIONER_ROLE");
 
     JOLToken public jolToken;
@@ -109,7 +112,7 @@ contract DEXLiquidity is AccessControl {
         poolAProvisioned = true;
         provisionedPoolA = amount;
 
-        jolToken.transfer(_recipient, amount);
+        IERC20(address(jolToken)).safeTransfer(_recipient, amount);
 
         emit LiquidityProvisioned("JOL/USDC", amount);
     }
@@ -129,7 +132,7 @@ contract DEXLiquidity is AccessControl {
         poolBProvisioned = true;
         provisionedPoolB = amount;
 
-        jolToken.transfer(_recipient, amount);
+        IERC20(address(jolToken)).safeTransfer(_recipient, amount);
 
         emit LiquidityProvisioned("JOL/ETH", amount);
     }
@@ -143,7 +146,7 @@ contract DEXLiquidity is AccessControl {
         uint256 balance = jolToken.balanceOf(address(this));
         require(balance > 0, "No balance");
 
-        jolToken.transfer(_to, balance);
+        IERC20(address(jolToken)).safeTransfer(_to, balance);
         emit EmergencyWithdraw(_to, balance);
     }
 

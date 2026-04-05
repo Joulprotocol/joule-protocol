@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 
 /**
@@ -14,6 +16,8 @@ import "./JOLToken.sol";
  * This is about proving commitment through code.
  */
 contract FounderSellLimit {
+    using SafeERC20 for IERC20;
+
     JOLToken public jolToken;
 
     // 1% of daily volume
@@ -70,7 +74,7 @@ contract FounderSellLimit {
         dailySold[today] = totalAfter;
 
         // Transfer from founder to buyer
-        jolToken.transferFrom(founder, _to, _amount);
+        IERC20(address(jolToken)).safeTransferFrom(founder, _to, _amount);
 
         emit FounderSell(today, _amount, totalAfter, limit);
     }
