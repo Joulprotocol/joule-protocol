@@ -12,9 +12,9 @@ describe("FoundersVesting — OpenZeppelin + Cliff", function () {
   let vesting, jolToken;
   let owner, founder;
 
-  const CLIFF = 6 * 30 * 86400;      // 6 months in seconds
-  const DURATION = 48 * 30 * 86400;   // 48 months in seconds
-  const FOUNDER_ALLOCATION = ethers.parseEther("21000000"); // 10% of 210M
+  const CLIFF = 365 * 86400;           // 1 year in seconds
+  const DURATION = 1461 * 86400;       // 4 years (1461 days) in seconds
+  const FOUNDER_ALLOCATION = ethers.parseEther("12600000"); // 6% of 210M
 
   let startTime;
 
@@ -101,14 +101,14 @@ describe("FoundersVesting — OpenZeppelin + Cliff", function () {
 
   describe("Linear Vesting After Cliff", function () {
     it("vests proportionally at cliff + time", async function () {
-      // At exactly cliff (6 months = 12.5% of 48 months)
+      // At exactly cliff (1 year = 365/1461 ≈ 25% of 4 years)
       const atCliff = startTime + CLIFF;
       const vested = await vesting["vestedAmount(address,uint64)"](jolToken.target, atCliff);
 
-      // 6/48 = 12.5% of allocation
-      const expected = FOUNDER_ALLOCATION * 6n / 48n;
-      // Allow small rounding (within 1 JOL)
-      expect(vested).to.be.closeTo(expected, ethers.parseEther("1"));
+      // 365/1461 ≈ 25% of allocation
+      const expected = FOUNDER_ALLOCATION * 365n / 1461n;
+      // Allow small rounding (within 10 JOL)
+      expect(vested).to.be.closeTo(expected, ethers.parseEther("10"));
     });
 
     it("releases tokens after cliff", async function () {
@@ -121,8 +121,8 @@ describe("FoundersVesting — OpenZeppelin + Cliff", function () {
       expect(balance).to.be.gt(0);
     });
 
-    it("50% vested at 24 months", async function () {
-      const halfWay = startTime + 24 * 30 * 86400;
+    it("50% vested at 2 years", async function () {
+      const halfWay = startTime + (DURATION / 2);
       const vested = await vesting["vestedAmount(address,uint64)"](jolToken.target, halfWay);
 
       const expected = FOUNDER_ALLOCATION / 2n;
@@ -160,22 +160,22 @@ describe("FoundersVesting — OpenZeppelin + Cliff", function () {
     });
 
     it("multiple claims over time accumulate correctly", async function () {
-      // Claim at 12 months
-      await ethers.provider.send("evm_increaseTime", [12 * 30 * 86400]);
+      // Claim at 1.5 years (past 1yr cliff)
+      await ethers.provider.send("evm_increaseTime", [547 * 86400]); // ~1.5 years
       await ethers.provider.send("evm_mine");
       await vesting["release(address)"](jolToken.target);
-      const bal12 = await jolToken.balanceOf(founder.address);
-      expect(bal12).to.be.gt(0);
+      const bal1 = await jolToken.balanceOf(founder.address);
+      expect(bal1).to.be.gt(0);
 
-      // Claim at 24 months
-      await ethers.provider.send("evm_increaseTime", [12 * 30 * 86400]);
+      // Claim at 2.5 years
+      await ethers.provider.send("evm_increaseTime", [365 * 86400]);
       await ethers.provider.send("evm_mine");
       await vesting["release(address)"](jolToken.target);
-      const bal24 = await jolToken.balanceOf(founder.address);
-      expect(bal24).to.be.gt(bal12);
+      const bal2 = await jolToken.balanceOf(founder.address);
+      expect(bal2).to.be.gt(bal1);
 
-      // Claim at 48 months (end)
-      await ethers.provider.send("evm_increaseTime", [24 * 30 * 86400]);
+      // Claim at 4+ years (end)
+      await ethers.provider.send("evm_increaseTime", [730 * 86400]);
       await ethers.provider.send("evm_mine");
       await vesting["release(address)"](jolToken.target);
       const balFinal = await jolToken.balanceOf(founder.address);

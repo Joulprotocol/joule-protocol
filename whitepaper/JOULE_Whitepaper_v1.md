@@ -147,10 +147,10 @@ EtHash-J Parameters:
 | Parameter | Value |
 |-----------|-------|
 | **Max supply** | 210,000,000 JOL |
-| **PoW allocation** | 60% (126M JOL) — standard GPU mining |
-| **PoE allocation** | 25% (52.5M JOL) — energy producer mining |
-| **Development fund** | 10% (21M JOL) — vested over 4 years |
-| **Community/ecosystem** | 5% (10.5M JOL) — grants, liquidity, partnerships |
+| **Mining (PoW + PoE)** | 69% (144.9M JOL) — GPU miners + energy producers |
+| **Energy Reserve** | 20% (42M JOL) — backs the 1 JOL = 1 kWh peg |
+| **Founder** | 6% (12.6M JOL) — 1-year cliff, 4-year vesting |
+| **Ecosystem** | 5% (10.5M JOL) — bounties, developers, audits, DEX liquidity |
 
 ### 4.2 Emission Schedule
 
@@ -170,23 +170,21 @@ JOL has built-in deflationary pressure:
 - **Oracle slashing:** Slashed stakes are burned (not redistributed)
 - **Smart contract deployment:** 10 JOL burned per contract deploy
 
-### 4.4 Revenue Model (Founder — 33% allocation)
+### 4.4 Founder Revenue Model (6% allocation)
 
-The 33% founder share comes from the Development Fund (10% of supply), vested linearly over 4 years:
+12.6M JOL locked in OpenZeppelin VestingWallet:
 
-| Source | Mechanism | Est. Annual Value |
-|--------|-----------|-------------------|
-| Development fund vest | 5.25M JOL over 4 years | Depends on JOL price |
-| Network transaction fees | 5% of all tx fees to founder wallet | Grows with adoption |
-| Marketplace commission | 0.5% of energy credit trades | Grows with energy producers |
-| Oracle staking rewards | Founder runs oracle nodes | Proportional to stake |
+| Source | Mechanism |
+|--------|-----------|
+| Vesting allocation | 12.6M JOL over 4 years (linear after 1-year cliff) |
+| Early mining | First miner, low difficulty — fair launch participation |
+| Oracle node | 2% of PoE rewards for running verification infrastructure |
+| DAO bounties | Compensation for development, voted by community |
+| Energy production | Hydroelectric (Vosges 2029) → PoE mining |
 
 **Founder vesting schedule:**
-- Month 1-6: 0% (cliff)
-- Month 7-12: 15% unlocked
-- Month 13-24: 25% unlocked
-- Month 25-36: 30% unlocked
-- Month 37-48: 30% unlocked
+- Year 1: 0% (cliff — nothing released)
+- Year 2-4: Linear release (~3.15M JOL/year)
 
 This is transparent and on-chain — anyone can verify.
 

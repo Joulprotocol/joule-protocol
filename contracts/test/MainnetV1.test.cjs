@@ -86,13 +86,13 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
     });
   });
 
-  // ─── Mining Pool (60% = 126M) ────────────────────────────────
+  // ─── Mining Pool (69% = 144.9M) ──────────────────────────────
 
-  describe("Mining Pool (60% of supply)", function () {
-    it("126M JOL = 60% of 210M", function () {
+  describe("Mining Pool (69% of supply)", function () {
+    it("144.9M JOL = 69% of 210M", function () {
       const maxSupply = 210_000_000n;
-      const miningPool = maxSupply * 60n / 100n;
-      expect(miningPool).to.equal(126_000_000n);
+      const miningPool = maxSupply * 69n / 100n;
+      expect(miningPool).to.equal(144_900_000n);
     });
 
     it("block reward × blocks = ~105M in year 1", function () {

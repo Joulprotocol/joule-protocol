@@ -4,15 +4,17 @@
 
 ```
 Total Max Supply: 210,000,000 JOL
-├── Mining (PoW + PoE):  157,500,000 JOL (75%) — community miners & energy producers
+├── Mining (PoW + PoE):  144,900,000 JOL (69%) — GPU miners & energy producers
 ├── Energy Reserve:       42,000,000 JOL (20%) — backs 1 JOL = 1 kWh peg
-└── Ecosystem:            10,500,000 JOL  (5%) — grants, DEX liquidity, bug bounties
+├── Founder:              12,600,000 JOL  (6%) — 1-year cliff, 4-year vesting
+└── Ecosystem:            10,500,000 JOL  (5%) — bounties, developers, audits, DEX liquidity
 ```
 
-## Founder Allocation: 0%
+## Founder Allocation: 6%
 
-No premine. No founder allocation. No team tokens. No vesting.
-Same model as Bitcoin — first miners earn their share.
+12,600,000 JOL locked in OpenZeppelin VestingWallet.
+1-year cliff (nothing released). 4-year linear vesting after cliff.
+Founder earns through participation, not extraction.
 
 ## Emission Model
 

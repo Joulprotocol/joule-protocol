@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.0] - 2026-04-05
+
+### Tokenomics Overhaul
+- Distribution: 69% Mining, 20% Energy Reserve, 6% Founder, 5% Ecosystem
+- FoundersVesting: 12.6M JOL (6%), 1-year cliff, 4-year linear vesting
+- All contracts, docs, whitepaper, README aligned to 210M model
+
+### New Contracts
+- **EnergyProofEngine**: 5-layer verification gateway (Physics + Weather + Oracle + Stake + Reputation)
+- No energy-based minting without ALL layers passing simultaneously
+
+### Governance Hardening
+- JOLToken: ERC20Votes + ERC20Permit for flashloan-resistant snapshots
+- Governance: getPastVotes() snapshot at proposal creation block
+- Governance: 2-day timelock, permissionless execute after timelock
+
+### Oracle Consensus
+- Staged quorum: starts 2/3, scalable to 3/5+ via setQuorum()
+- Constants → configurable parameters with safety bounds
+
 ## [0.5.0] - 2026-04-05
 
 ### Security Fixes (Critical)

@@ -28,10 +28,12 @@ import "./PoEMining.sol";
  * to tamper), registered GPS location, and weather cross-check.
  */
 contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
-    uint256 public constant MIN_ORACLES = 5;                // minimum oracle network size
+    uint256 public quorum = 2;                              // starts 2/3, scales to 3/5+
+    uint256 public minOracles = 3;                          // starts 3, scales to 5+
     uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
-    uint256 public constant QUORUM = 3;                    // 3-of-5 consensus required
     uint256 public constant SLASH_PERCENT = 50;            // 50% slash for fraud
+
+    event QuorumUpdated(uint256 newQuorum, uint256 newMinOracles);
     uint256 public constant REPORT_WINDOW = 1 hours;       // time to submit reports
     uint256 public constant MAX_DEVIATION_BPS = 500;       // 5% max deviation from median
 
@@ -89,6 +91,16 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
 
     function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
     function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+
+    function setQuorum(uint256 _newQuorum, uint256 _newMinOracles) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_newQuorum >= 2, "Min quorum is 2");
+        require(_newMinOracles >= 3, "Min oracles is 3");
+        require(_newQuorum * 2 > _newMinOracles, "Quorum must be >50%");
+        require(_newQuorum <= _newMinOracles, "Quorum cant exceed total");
+        quorum = _newQuorum;
+        minOracles = _newMinOracles;
+        emit QuorumUpdated(_newQuorum, _newMinOracles);
+    }
 
     function setPoEMining(address _poeMining) external onlyRole(DEFAULT_ADMIN_ROLE) {
         poeMining = PoEMining(_poeMining);
@@ -197,7 +209,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         emit ReportSubmitted(reportId, msg.sender, _kWhProduced);
 
         // Auto-finalize if quorum reached
-        if (report.voters.length >= QUORUM) {
+        if (report.voters.length >= quorum) {
             _finalizeReport(reportId);
         }
     }
@@ -207,7 +219,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
     function _finalizeReport(bytes32 _reportId) internal {
         EnergyReport storage report = reports[_reportId];
         require(!report.finalized, "Already finalized");
-        require(report.voters.length >= QUORUM, "No quorum");
+        require(report.voters.length >= quorum, "No quorum");
 
         // Calculate median
         uint256[] memory sorted = _sortArray(report.submissions);

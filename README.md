@@ -83,14 +83,12 @@ All three must agree. Physics is the judge. Weather is the witness. Economics is
 ```
 Max Supply:     210,000,000 JOL (210M — hard cap, forever)
 
-Mining (PoW+PoE):  60%  = 126.0M   Block reward: 50 JOL, halving every 2,100,000 blocks
-Ecosystem:         15%  =  31.5B   DAO-governed treasury
-Founders:          10%  =  21.0B   6-month cliff, 48-month linear vesting (OpenZeppelin)
-Development:       10%  =  21.0B   Multisig controlled
-DEX Liquidity:      3%  =   6.3B   JOL/USDC (60%) + JOL/ETH (40%), Uniswap v3
-LP Mining:          2%  =   4.2B   180-day program, 2× early bird first 30 days
+Mining (PoW+PoE):  69%  = 144.9M   Block reward: 50 JOL, halving every 2,100,000 blocks
+Energy Reserve:    20%  =  42.0M   Backs the 1 JOL = 1 kWh peg
+Founder:            6%  =  12.6M   1-year cliff, 4-year linear vesting (OpenZeppelin)
+Ecosystem:          5%  =  10.5M   Bounties, developers, audits, DEX liquidity
                   ────
-                  100%  = 210.0B
+                  100%  = 210.0M
 ```
 
 Block reward halves every ~1 year: 50 → 25 → 12.5 → 6.25 → ... → 0

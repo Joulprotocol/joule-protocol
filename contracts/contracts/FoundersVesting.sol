@@ -10,9 +10,10 @@ import "@openzeppelin/contracts/finance/VestingWallet.sol";
  * "Don't write vesting code yourself. OpenZeppelin is audited. Use it."
  *
  * Parameters:
- *   - Cliff: 6 months (nothing released before)
- *   - Linear vesting: 48 months total (from start)
- *   - Beneficiary: founder wallet
+ *   - Allocation: 12,600,000 JOL (6% of 210M)
+ *   - Cliff: 1 year (365 days — nothing released before)
+ *   - Linear vesting: 4 years total (1461 days from start)
+ *   - Beneficiary: founder wallet (set in constructor)
  *   - Start: mainnet launch timestamp
  *
  * VestingWallet address goes into genesis alloc, NOT founder wallet.
@@ -27,8 +28,8 @@ contract JOULEFoundersVesting is VestingWallet {
     /**
      * @param beneficiary Founder wallet address
      * @param startTimestamp Mainnet launch timestamp
-     * @param cliffSeconds 6 months = 15,552,000 seconds
-     * @param durationSeconds 48 months = 126,230,400 seconds
+     * @param cliffSeconds 1 year = 31,536,000 seconds
+     * @param durationSeconds 4 years = 126,230,400 seconds
      */
     constructor(
         address beneficiary,

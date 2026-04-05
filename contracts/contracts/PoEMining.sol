@@ -9,7 +9,7 @@ import "./EnergyRegistry.sol";
  * @title PoEMining
  * @notice Proof-of-Energy mining with fixed 3× reward multiplier.
  *
- * PoW and PoE share the same 126M JOL mining pool (60% of 210M supply).
+ * 69% total mining = PoW blocks + PoE rewards = 144,900,000 JOL
  * PoE producers get 3× the reward per kWh vs base PoW block reward.
  * Supply cap enforced by JOLToken (210M MAX_SUPPLY).
  *
@@ -84,7 +84,7 @@ contract PoEMining is AccessControl {
         uint256 jolPerKWh = getJolPerKWh();
         uint256 grossReward = _verifiedKWh * jolPerKWh;
 
-        // Supply cap enforced by JOLToken.mint (MAX_SUPPLY = 210B)
+        // Supply cap enforced by JOLToken.mint (MAX_SUPPLY = 210M)
 
         // Daily cap check
         uint256 today = block.timestamp / 1 days;

@@ -9,6 +9,10 @@ import "./JOLToken.sol";
  * @title Governance
  * @notice On-chain governance for JOULE protocol upgrades.
  * 1 JOL = 1 vote. Simple majority with quorum requirement.
+ *
+ * Uses ERC20Votes snapshots — voting power is locked at proposal creation block.
+ * Flashloan attacks are impossible: buying tokens after proposal doesn't grant votes.
+ * Holders must call jolToken.delegate(self) to activate voting power.
  */
 contract Governance is AccessControl, ReentrancyGuard {
     JOLToken public jolToken;
@@ -27,15 +31,15 @@ contract Governance is AccessControl, ReentrancyGuard {
         string title;
         string description;
         uint256 createdAt;
+        uint256 snapshotBlock;      // block number for voting power snapshot
         uint256 finalizedAt;        // when voting ended and passed
-        uint256 snapshotSupply;     // total supply at proposal creation (for quorum)
+        uint256 snapshotSupply;     // total supply at snapshot (for quorum)
         uint256 votesFor;
         uint256 votesAgainst;
         ProposalState state;
         address[] targets;
         bytes[] calldatas;
         mapping(address => bool) hasVoted;
-        mapping(address => uint256) voteSnapshot; // snapshot balance at vote time
     }
 
     uint256 public nextProposalId = 1;
@@ -62,8 +66,8 @@ contract Governance is AccessControl, ReentrancyGuard {
         bytes[] memory _calldatas
     ) external returns (uint256) {
         require(
-            jolToken.balanceOf(msg.sender) >= PROPOSAL_THRESHOLD,
-            "Insufficient JOL to propose"
+            jolToken.getVotes(msg.sender) >= PROPOSAL_THRESHOLD,
+            "Insufficient voting power to propose (delegate first)"
         );
         require(_targets.length == _calldatas.length, "Length mismatch");
 
@@ -74,7 +78,9 @@ contract Governance is AccessControl, ReentrancyGuard {
         p.title = _title;
         p.description = _description;
         p.createdAt = block.timestamp;
-        p.snapshotSupply = jolToken.totalSupply();
+        // Snapshot at previous block — prevents manipulation in same tx
+        p.snapshotBlock = block.number - 1;
+        p.snapshotSupply = jolToken.getPastTotalSupply(p.snapshotBlock);
         p.state = ProposalState.Active;
         p.targets = _targets;
         p.calldatas = _calldatas;
@@ -92,11 +98,13 @@ contract Governance is AccessControl, ReentrancyGuard {
         require(block.timestamp <= p.createdAt + VOTING_PERIOD, "Voting ended");
         require(!p.hasVoted[msg.sender], "Already voted");
 
-        uint256 weight = jolToken.balanceOf(msg.sender);
-        require(weight > 0, "No voting power");
+        // Use snapshot voting power — flashloan resistant
+        // Tokens bought after proposal creation have zero voting power
+        uint256 weight = jolToken.getPastVotes(msg.sender, p.snapshotBlock);
+        require(weight > 0, "No voting power at snapshot (delegate before proposing)");
 
-        // Cap individual voting power at 5% of circulating supply
-        uint256 maxWeight = (jolToken.totalSupply() * MAX_WALLET_VOTE_BPS) / 10000;
+        // Cap individual voting power at 5% of snapshot supply
+        uint256 maxWeight = (p.snapshotSupply * MAX_WALLET_VOTE_BPS) / 10000;
         if (weight > maxWeight) weight = maxWeight;
 
         p.hasVoted[msg.sender] = true;
