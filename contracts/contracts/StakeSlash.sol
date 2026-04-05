@@ -4,6 +4,7 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
+import "./ConflictScore.sol";
 
 /**
  * @title StakeSlash
@@ -24,6 +25,7 @@ contract StakeSlash is AccessControl {
 
     JOLToken public jolToken;
     EnergyRegistry public registry;
+    ConflictScore public conflictScore;
 
     // Stake = 3 days × expected daily output × JOL per kWh
     uint256 public constant STAKE_DAYS = 3;
@@ -71,11 +73,12 @@ contract StakeSlash is AccessControl {
     event StakeWithdrawn(uint256 indexed stakeId, address indexed staker, uint256 amount);
     event Banned(address indexed staker, uint256 until, uint256 banCount);
 
-    constructor(address admin, address _jolToken, address _registry, address _slashTreasury) {
+    constructor(address admin, address _jolToken, address _registry, address _slashTreasury, address _conflictScore) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
         registry = EnergyRegistry(_registry);
         slashTreasury = _slashTreasury;
+        conflictScore = ConflictScore(_conflictScore);
     }
 
     /**
@@ -97,6 +100,10 @@ contract StakeSlash is AccessControl {
      */
     function stake(uint256 _facilityId) external returns (uint256 stakeId) {
         require(!isBanned(msg.sender), "Account banned");
+        // ConflictScore Level 3+ cannot stake (suspended/expelled)
+        if (address(conflictScore) != address(0)) {
+            require(conflictScore.canTrade(msg.sender), "Conflict score too high");
+        }
         require(facilityStake[_facilityId] == 0, "Already staked");
 
         address facilityOwner = registry.facilityOwner(_facilityId);
@@ -163,6 +170,11 @@ contract StakeSlash is AccessControl {
             ban.bannedUntil = block.timestamp + BAN_MAJOR;
         } else {
             ban.bannedUntil = block.timestamp + BAN_PERMANENT;
+        }
+
+        // Report to ConflictScore — false oracle data = +100 points
+        if (address(conflictScore) != address(0)) {
+            conflictScore.reportViolation(staker, ConflictScore.ViolationType.FalseOracle);
         }
 
         emit Slashed(stakeId, _facilityId, staker, amount, _reason);

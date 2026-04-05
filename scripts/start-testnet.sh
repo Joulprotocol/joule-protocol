@@ -37,19 +37,20 @@ MINER_ADDR="0x$MINER_ADDR"
 
 echo "Starting JOULE testnet..."
 echo "  Miner: $MINER_ADDR"
-echo "  RPC:   http://127.0.0.1:8547"
+echo "  RPC:   http://0.0.0.0:8547"
 echo "  Chain: 707070"
 
 $GJOULE \
     --datadir "$DATADIR" \
     --networkid 707070 \
     --port 30307 \
-    --http --http.port 8547 --http.addr "127.0.0.1" \
+    --http --http.port 8547 --http.addr "0.0.0.0" \
     --http.api "eth,net,web3,personal,miner,admin,txpool" \
     --http.corsdomain "*" \
     --mine --miner.etherbase "$MINER_ADDR" \
     --miner.threads 2 \
-    --nodiscover \
+    --allow-insecure-unlock \
+    --bootnodes "enode://369ca3173dbbdbcff271c45a920012f30dc92c6b93d60f95c0695877014d9459cb3fba7754210f0318372877656037082d78f7a0a9d83b59633aa050bb4d7ef3@bootnode.joule.energy:30307" \
     --maxpeers 50 \
     --verbosity 3 \
     >> "$LOGFILE" 2>&1 &

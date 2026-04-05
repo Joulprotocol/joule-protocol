@@ -8,7 +8,7 @@ const { ethers } = require("hardhat");
  * Stake = 3 days expected output. Cheating always costs more than it pays.
  */
 describe("StakeSlash — Economics Layer", function () {
-  let stakeSlash, jolToken, registry;
+  let stakeSlash, jolToken, registry, conflictScore;
   let owner, producer, slasher, treasury;
 
   const TALLINN_LAT = 58381000;
@@ -33,16 +33,22 @@ describe("StakeSlash — Economics Layer", function () {
     const EnergyRegistry = await ethers.getContractFactory("EnergyRegistry");
     registry = await EnergyRegistry.deploy(owner.address);
 
+    const ConflictScore = await ethers.getContractFactory("ConflictScore");
+    conflictScore = await ConflictScore.deploy(owner.address);
+
     const StakeSlash = await ethers.getContractFactory("StakeSlash");
-    stakeSlash = await StakeSlash.deploy(owner.address, jolToken.target, registry.target, treasury.address);
+    stakeSlash = await StakeSlash.deploy(owner.address, jolToken.target, registry.target, treasury.address, conflictScore.target);
 
     // Roles
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     const VERIFIER_ROLE = await registry.VERIFIER_ROLE();
     const SLASHER_ROLE = await stakeSlash.SLASHER_ROLE();
+    const REPORTER_ROLE = await conflictScore.REPORTER_ROLE();
     await jolToken.grantRole(MINTER_ROLE, owner.address);
     await registry.grantRole(VERIFIER_ROLE, owner.address);
     await stakeSlash.grantRole(SLASHER_ROLE, slasher.address);
+    // StakeSlash can report violations to ConflictScore
+    await conflictScore.grantRole(REPORTER_ROLE, stakeSlash.target);
 
     // Give producer tokens for staking
     await jolToken.mint(producer.address, ethers.parseEther("100000"));
@@ -285,6 +291,85 @@ describe("StakeSlash — Economics Layer", function () {
       const stakeLoss = dailyBase * 3;   // 3 days × base
       expect(cheatProfit).to.be.lte(stakeLoss);
       // Plus ban = additional lost future income
+    });
+  });
+
+  // ─── ConflictScore Integration ──────────────────────────────
+
+  describe("ConflictScore Integration", function () {
+    let facilityId;
+
+    beforeEach(async function () {
+      facilityId = await registerAndVerify(0, 50);
+      const stakeAmount = await stakeSlash.requiredStake(facilityId);
+      await jolToken.connect(producer).approve(stakeSlash.target, stakeAmount);
+      await stakeSlash.connect(producer).stake(facilityId);
+    });
+
+    it("slash reports FalseOracle violation to ConflictScore", async function () {
+      await stakeSlash.connect(slasher).slash(facilityId, "False data detected");
+
+      const score = await conflictScore.scores(producer.address);
+      expect(score.score).to.equal(100); // PENALTY_FALSE_ORACLE = 100
+      expect(score.violationCount).to.equal(1);
+    });
+
+    it("slash raises ConflictScore to Level 1", async function () {
+      await stakeSlash.connect(slasher).slash(facilityId, "False data");
+
+      expect(await conflictScore.getLevel(producer.address)).to.equal(1);
+      expect(await conflictScore.getRewardMultiplier(producer.address)).to.equal(7500); // 75%
+    });
+
+    it("multiple slashes escalate ConflictScore level", async function () {
+      // First slash → score 100 → Level 1
+      await stakeSlash.connect(slasher).slash(facilityId, "First");
+      expect(await conflictScore.getLevel(producer.address)).to.equal(1);
+
+      // Second slash — need to wait out 7-day ban, re-stake
+      await ethers.provider.send("evm_increaseTime", [7 * 86400 + 1]);
+      await ethers.provider.send("evm_mine");
+
+      const id2 = await registerAndVerify(0, 50);
+      const req2 = await stakeSlash.requiredStake(id2);
+      await jolToken.connect(producer).approve(stakeSlash.target, req2);
+      await stakeSlash.connect(producer).stake(id2);
+      await stakeSlash.connect(slasher).slash(id2, "Second");
+      // Score: 100 + 100 = 200 (no decay — 7 days < 30 day period)
+      expect(await conflictScore.getLevel(producer.address)).to.equal(1); // 200 < 300
+
+      // Third slash via direct ConflictScore reporter (to bypass ban wait + decay)
+      const REPORTER_ROLE = await conflictScore.REPORTER_ROLE();
+      await conflictScore.grantRole(REPORTER_ROLE, owner.address);
+      await conflictScore.reportViolation(producer.address, 1); // +100 = 300
+
+      // 300 → Level 2
+      expect(await conflictScore.getLevel(producer.address)).to.equal(2);
+      expect(await conflictScore.getRewardMultiplier(producer.address)).to.equal(5000);
+      expect(await conflictScore.canGovernance(producer.address)).to.be.false;
+    });
+
+    it("Level 3 ConflictScore blocks staking", async function () {
+      // Directly set high conflict score via reporter
+      const REPORTER_ROLE = await conflictScore.REPORTER_ROLE();
+      await conflictScore.grantRole(REPORTER_ROLE, owner.address);
+
+      // Infrastructure attack = 500 → Level 3
+      await conflictScore.reportViolation(producer.address, 3);
+
+      await stakeSlash.connect(slasher).slash(facilityId, "Slash before block");
+
+      // Wait out ban
+      await ethers.provider.send("evm_increaseTime", [7 * 86400 + 1]);
+      await ethers.provider.send("evm_mine");
+
+      const id2 = await registerAndVerify(0, 50);
+      const req2 = await stakeSlash.requiredStake(id2);
+      await jolToken.connect(producer).approve(stakeSlash.target, req2);
+
+      // ConflictScore Level 3 → canTrade = false → cannot stake
+      await expect(stakeSlash.connect(producer).stake(id2))
+        .to.be.revertedWith("Conflict score too high");
     });
   });
 });
