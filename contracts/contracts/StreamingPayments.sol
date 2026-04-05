@@ -69,8 +69,6 @@ contract StreamingPayments is ReentrancyGuard {
         require(_ratePerSecond > 0, "Zero rate");
         require(_deposit >= _ratePerSecond, "Deposit too small");
 
-        require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
-
         uint256 id = nextStreamId++;
         streams[id] = Stream({
             id: id,
@@ -89,6 +87,8 @@ contract StreamingPayments is ReentrancyGuard {
         incomingStreams[_receiver].push(id);
         totalStreams++;
         activeStreams++;
+
+        require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
 
         emit StreamCreated(id, msg.sender, _receiver, _ratePerSecond, _deposit);
         return id;
@@ -145,13 +145,13 @@ contract StreamingPayments is ReentrancyGuard {
         uint256 receiverOwed = _availableBalance(s);
         uint256 senderRefund = s.deposit - s.withdrawn - receiverOwed;
 
-        // Pay receiver
+        // Pay receiver (effects before interactions)
         if (receiverOwed > 0) {
             uint256 fee = (receiverOwed * FEE_BPS) / 10000;
             uint256 netAmount = receiverOwed - fee;
-            require(jolToken.transfer(s.receiver, netAmount), "Receiver payment failed");
             s.withdrawn += receiverOwed;
             totalStreamedVolume += receiverOwed;
+            require(jolToken.transfer(s.receiver, netAmount), "Receiver payment failed");
         }
 
         // Refund sender
@@ -165,13 +165,13 @@ contract StreamingPayments is ReentrancyGuard {
     /**
      * @notice Top up a stream with more JOL (extends duration)
      */
-    function topUpStream(uint256 _streamId, uint256 _amount) external {
+    function topUpStream(uint256 _streamId, uint256 _amount) external nonReentrant {
         Stream storage s = streams[_streamId];
         require(s.active, "Not active");
         require(msg.sender == s.sender, "Not sender");
 
-        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
         s.deposit += _amount;
+        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
 
         emit StreamToppedUp(_streamId, _amount);
     }
@@ -206,7 +206,6 @@ contract StreamingPayments is ReentrancyGuard {
     function getRemainingTime(uint256 _streamId) external view returns (uint256) {
         Stream storage s = streams[_streamId];
         if (!s.active) return 0;
-        uint256 remaining = s.deposit - s.withdrawn;
         uint256 elapsed = block.timestamp - s.startTime;
         uint256 earned = elapsed * s.ratePerSecond;
         if (earned >= s.deposit) return 0;
