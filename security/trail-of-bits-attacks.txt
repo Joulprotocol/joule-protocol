@@ -1,0 +1,61 @@
+
+
+  Trail of Bits — Attack Scenarios
+    ATTACK 1: Infinite Mint
+      ✔ ATTACK: mint through JOLToken.mint() without MINTER_ROLE
+      ✔ ATTACK: mint through JOLToken.mintFor() without MINTER_ROLE
+      ✔ ATTACK: mint through EnergyFloor.depositEnergy() without ORACLE_ROLE
+      ✔ ATTACK: mint through PoEMining.accrueReward() without ORACLE_ROLE
+      ✔ ATTACK: mint through EcosystemTreasury.fundTreasury() over MAX_TREASURY
+      ✔ ATTACK: mint beyond MAX_SUPPLY (210M)
+      ✔ ATTACK: total mint across ALL paths still respects 210M
+    ATTACK 2: Steal Tokens
+      ✔ ATTACK: protocolBurn someone else's tokens without BURNER_ROLE
+      ✔ ATTACK: transferFrom without approval
+      ✔ ATTACK: drain EcosystemTreasury without GOVERNANCE_ROLE
+      ✔ ATTACK: drain insurance fund without timelock
+      ✔ ATTACK: claim someone else's PoE rewards
+      ✔ ATTACK: claim someone else's LP rewards
+      ✔ ATTACK: steal from payment channel with forged signature
+      ✔ ATTACK: drain stream payment as non-receiver
+    ATTACK 3: Governance Takeover
+      ✔ ATTACK: flashloan vote — buy→vote→sell same block
+      ✔ ATTACK: vote recycling — vote→transfer→vote again from new address
+      ✔ ATTACK: execute proposal before timelock
+      ✔ ATTACK: execute failed/cancelled proposal
+      ✔ ATTACK: create proposal without enough voting power
+    ATTACK 4: Oracle Manipulation
+      ✔ ATTACK: submit fake energy report without oracle role (no stake)
+      ✔ ATTACK: submit same report twice (duplicate)
+      ✔ ATTACK: oracle exits before slashing (30-day lock)
+      ✔ ATTACK: manipulate median with extreme outlier (>5% slashed)
+    ATTACK 5: Bridge Exploit
+      ✔ ATTACK: unlock without any lock (no validator role)
+      ✔ ATTACK: replay same ethTxHash
+      ✔ ATTACK: confirm with different payload (parameter mismatch)
+      ✔ ATTACK: unlock before required confirmations
+      ✔ ATTACK: lock 0 amount
+      ✔ ATTACK: unlock more than locked total
+    ATTACK 6: Economic Attacks
+      ✔ ATTACK: LP fabrication without real tokens
+      ✔ ATTACK: sell limit bypass via direct transfer (not via SellLimit)
+      ✔ ATTACK: EnergyFloor deposit exceeds MAX_FLOOR_MINT
+      ✔ ATTACK: LP reward timing manipulation (stake just before claim)
+    ATTACK 7: Denial of Service
+      ✔ ATTACK: block governance execute with reverting target
+      ✔ ATTACK: oracle voter cap prevents unbounded gas
+    ATTACK 8: Reentrancy Protection
+      ✔ ATTACK: all critical functions have nonReentrant
+    ATTACK 9: Integer Edge Cases
+      ✔ ATTACK: mint with amount = type(uint256).max
+      ✔ ATTACK: stream with rate = 0
+      ✔ ATTACK: oracle report with kWh = type(uint256).max
+      ✔ ATTACK: EnergyFloor deposit with kWh = 0
+    ATTACK 10: Privacy & Identity
+      ✔ ATTACK: register machine with someone else's address
+      ✔ ATTACK: register facility at same geohash (no conflict)
+      ✔ ATTACK: duplicate meter ID blocked
+
+
+  44 passing (4s)
+
