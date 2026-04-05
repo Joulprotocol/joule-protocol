@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/SellLimit.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> SellLimit.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>26/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">92.86% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>13/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>5/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>28/28</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">1038×</span>
+<span class="cline-any cline-yes">1038×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+&nbsp;
+/**
+ * @title SellLimit
+ * @notice Square root harmony sell limiter.
+ *
+ * Energy production is extra income for producers. The sell limit
+ * is not a blockade — it's investment discipline.
+ *
+ * Square root ensures larger producers protect the price longer.
+ * Small producers get min 0.5% daily. Max cap 5%.
+ *
+ * Formula: sqrt(dailyProduction) × marketVolume / 1,000,000
+ * Clamped between 0.5% minimum and 5% maximum of daily production.
+ */
+contract SellLimit is AccessControl {
+    bytes32 public constant EXCHANGE_ROLE = keccak256("EXCHANGE_ROLE");
+&nbsp;
+    // Min 0.5% of daily production
+    uint256 public constant MIN_SELL_BPS = 50;    // 0.5% in BPS (base 10000)
+    // Max 5% of daily production
+    uint256 public constant MAX_SELL_BPS = 500;   // 5% in BPS
+    uint256 public constant BPS_BASE = 10000;
+    uint256 public constant SQRT_DIVISOR = 1_000_000;
+&nbsp;
+    // Daily sell tracking
+    mapping(address =&gt; mapping(uint256 =&gt; uint256)) public dailySold; // address → day → amount
+&nbsp;
+    event SellLimitChecked(address indexed seller, uint256 amount, uint256 limit, bool allowed);
+&nbsp;
+    constructor(address admin) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+    }
+&nbsp;
+    /**
+     * @notice Calculate daily sell limit for a producer.
+     * @param _dailyProduction Producer's daily energy output (in JOL, wei)
+     * @param _marketVolume Current daily market volume (in JOL, wei)
+     * @return limit Maximum JOL that can be sold today
+     */
+    function dailySellLimit(
+        uint256 _dailyProduction,
+        uint256 _marketVolume
+    ) public pure returns (uint256 limit) {
+        if (_dailyProduction == 0) return 0;
+&nbsp;
+        // sqrt(dailyProduction) × marketVolume / 1,000,000
+        uint256 sqrtProd = sqrt(_dailyProduction);
+        uint256 sqrtLimit = sqrtProd * _marketVolume / SQRT_DIVISOR;
+&nbsp;
+        // Minimum guarantee: 0.5% of daily production
+        uint256 minGuarantee = _dailyProduction * MIN_SELL_BPS / BPS_BASE;
+&nbsp;
+        // Maximum cap: 5% of daily production
+        uint256 maxCap = _dailyProduction * MAX_SELL_BPS / BPS_BASE;
+&nbsp;
+        // Clamp
+        limit = sqrtLimit;
+        if (limit &lt; minGuarantee) limit = minGuarantee;
+        if (limit &gt; maxCap) limit = maxCap;
+    }
+&nbsp;
+    /**
+     * @notice Check and record a sell against the daily limit.
+     * @param _seller The seller's address
+     * @param _amount Amount being sold (in JOL, wei)
+     * @param _dailyProduction Producer's daily output
+     * @param _marketVolume Current daily market volume
+     * @return allowed Whether the sell is within limits
+     */
+    function checkSell(
+        address _seller,
+        uint256 _amount,
+        uint256 _dailyProduction,
+        uint256 _marketVolume
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(EXCHANGE_ROLE) returns (bool allowed) {
+        uint256 today = block.timestamp / 1 days;
+        uint256 limit = dailySellLimit(_dailyProduction, _marketVolume);
+        uint256 alreadySold = dailySold[_seller][today];
+&nbsp;
+        allowed = alreadySold + _amount &lt;= limit;
+&nbsp;
+        if (allowed) {
+            dailySold[_seller][today] += _amount;
+        }
+&nbsp;
+        emit SellLimitChecked(_seller, _amount, limit, allowed);
+    }
+&nbsp;
+    /**
+     * @notice Get remaining sell allowance for today.
+     */
+    function remainingAllowance(
+        address _seller,
+        uint256 _dailyProduction,
+        uint256 _marketVolume
+    ) external view returns (uint256) {
+        uint256 today = block.timestamp / 1 days;
+        uint256 limit = dailySellLimit(_dailyProduction, _marketVolume);
+        uint256 sold = dailySold[_seller][today];
+        if (sold &gt;= limit) return 0;
+        return limit - sold;
+    }
+&nbsp;
+    /**
+     * @notice Integer square root (Babylonian method).
+     */
+    function sqrt(uint256 x) public pure returns (uint256) {
+        if (x == 0) return 0;
+        uint256 z = (x + 1) / 2;
+        uint256 y = x;
+        while (z &lt; y) {
+            y = z;
+            z = (x / z + z) / 2;
+        }
+        return y;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

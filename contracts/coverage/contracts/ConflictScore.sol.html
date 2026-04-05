@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/ConflictScore.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> ConflictScore.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.08% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>51/52</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">95% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>38/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>10/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">97.87% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>46/47</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">87×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">124×</span>
+<span class="cline-any cline-yes">124×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">95×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">94×</span>
+<span class="cline-any cline-yes">94×</span>
+<span class="cline-any cline-yes">94×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">122×</span>
+<span class="cline-any cline-yes">112×</span>
+<span class="cline-any cline-yes">107×</span>
+<span class="cline-any cline-yes">83×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">190×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">196×</span>
+<span class="cline-any cline-yes">193×</span>
+<span class="cline-any cline-yes">179×</span>
+<span class="cline-any cline-yes">114×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+&nbsp;
+/**
+ * @title ConflictScore
+ * @notice Automatic, proportional consequence system.
+ *
+ * The system doesn't punish people — it protects the ecosystem.
+ * Consequences are proportional and automatic. No human decides.
+ *
+ * Score penalties:
+ *   +500  Energy infrastructure attack
+ *   +200  Attacking another JOULE node
+ *   +100  Confirmed false oracle data
+ *   +20   Sell limit violation
+ *
+ * Score decay:
+ *   -20/month for Level 1-2
+ *   -10/month for Level 3
+ *
+ * Levels:
+ *   0 (0-99)     Clean — full access
+ *   1 (100-299)  Warning — reduced rewards (75%)
+ *   2 (300-499)  Restricted — reduced rewards (50%), no governance
+ *   3 (500-999)  Suspended — no rewards, no trading
+ *   4 (1000+)    Expelled — permanent ban (only infrastructure attacks)
+ *
+ * Level 4 only for infrastructure attacks. Sell limit = max Level 2.
+ * Proportionality is fairness.
+ */
+contract ConflictScore is AccessControl {
+    bytes32 public constant REPORTER_ROLE = keccak256("REPORTER_ROLE");
+&nbsp;
+    // Violation types and their penalties
+    uint256 public constant PENALTY_INFRASTRUCTURE = 500;
+    uint256 public constant PENALTY_NODE_ATTACK = 200;
+    uint256 public constant PENALTY_FALSE_ORACLE = 100;
+    uint256 public constant PENALTY_SELL_LIMIT = 20;
+&nbsp;
+    // Decay rates per 30-day period
+    uint256 public constant DECAY_LOW = 20;   // Level 1-2
+    uint256 public constant DECAY_HIGH = 10;  // Level 3
+    uint256 public constant DECAY_PERIOD = 30 days;
+&nbsp;
+    // Level thresholds
+    uint256 public constant LEVEL_1_THRESHOLD = 100;
+    uint256 public constant LEVEL_2_THRESHOLD = 300;
+    uint256 public constant LEVEL_3_THRESHOLD = 500;
+    uint256 public constant LEVEL_4_THRESHOLD = 1000;
+&nbsp;
+    // Reward multipliers by level (in BPS, 10000 = 100%)
+    uint256 public constant REWARD_LEVEL_0 = 10000; // 100%
+    uint256 public constant REWARD_LEVEL_1 = 7500;  // 75%
+    uint256 public constant REWARD_LEVEL_2 = 5000;  // 50%
+    // Level 3+: 0%
+&nbsp;
+    enum ViolationType {
+        SellLimit,          // 0 — +20, max Level 2
+        FalseOracle,        // 1 — +100
+        NodeAttack,         // 2 — +200
+        Infrastructure      // 3 — +500, can reach Level 4
+    }
+&nbsp;
+    struct AccountScore {
+        uint256 score;
+        uint256 lastDecayApplied;  // timestamp of last decay
+        uint256 violationCount;
+        uint256 lastViolation;     // timestamp
+    }
+&nbsp;
+    mapping(address =&gt; AccountScore) public scores;
+&nbsp;
+    event ViolationRecorded(address indexed account, ViolationType violationType, uint256 penalty, uint256 newScore, uint256 level);
+    event DecayApplied(address indexed account, uint256 decayed, uint256 newScore);
+&nbsp;
+    constructor(address admin) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+    }
+&nbsp;
+    /**
+     * @notice Report a violation. Score increases, level may change.
+     * Sell limit violations are capped at Level 2 (score 499 max from sell limits alone).
+     */
+    function reportViolation(
+        address _account,
+        ViolationType _type
+    ) external onlyRole(REPORTER_ROLE) {
+        // Apply pending decay first
+        _applyDecay(_account);
+&nbsp;
+        uint256 penalty = getPenalty(_type);
+        AccountScore storage s = scores[_account];
+&nbsp;
+        uint256 newScore = s.score + penalty;
+&nbsp;
+        // Sell limit violations capped at Level 2
+        if (_type == ViolationType.SellLimit &amp;&amp; newScore &gt;= LEVEL_3_THRESHOLD) {
+            newScore = LEVEL_3_THRESHOLD - 1; // 499 max
+        }
+&nbsp;
+        s.score = newScore;
+        s.violationCount++;
+        s.lastViolation = block.timestamp;
+&nbsp;
+        if (s.lastDecayApplied == 0) {
+            s.lastDecayApplied = block.timestamp;
+        }
+&nbsp;
+        emit ViolationRecorded(_account, _type, penalty, newScore, getLevel(_account));
+    }
+&nbsp;
+    /**
+     * @notice Apply time-based score decay.
+     * Called automatically on violation, or manually by anyone.
+     */
+    function applyDecay(address _account) external {
+        _applyDecay(_account);
+    }
+&nbsp;
+    function _applyDecay(address _account) internal {
+        AccountScore storage s = scores[_account];
+        if (s.score == 0 || <span class="branch-1 cbranch-no" title="branch not covered" >s.lastDecayApplied == 0</span>) return;
+&nbsp;
+        // Level 4 (expelled) — no decay
+        if (s.score &gt;= LEVEL_4_THRESHOLD) return;
+&nbsp;
+        uint256 elapsed = block.timestamp - s.lastDecayApplied;
+        uint256 periods = elapsed / DECAY_PERIOD;
+        if (periods == 0) return;
+&nbsp;
+        uint256 level = _getLevel(s.score);
+        uint256 decayRate = level &gt;= 3 ? DECAY_HIGH : DECAY_LOW;
+        uint256 totalDecay = periods * decayRate;
+&nbsp;
+        if (totalDecay &gt;= s.score) {
+            totalDecay = s.score;
+            s.score = 0;
+        } else {
+            s.score -= totalDecay;
+        }
+&nbsp;
+        s.lastDecayApplied += periods * DECAY_PERIOD;
+&nbsp;
+        emit DecayApplied(_account, totalDecay, s.score);
+    }
+&nbsp;
+    /**
+     * @notice Get the penalty for a violation type.
+     */
+    function getPenalty(ViolationType _type) public pure returns (uint256) {
+        if (_type == ViolationType.Infrastructure) return PENALTY_INFRASTRUCTURE;
+        if (_type == ViolationType.NodeAttack) return PENALTY_NODE_ATTACK;
+        if (_type == ViolationType.FalseOracle) return PENALTY_FALSE_ORACLE;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (_type == ViolationType.SellLimit) return PENALTY_SELL_LIMIT;
+<span class="cstat-no" title="statement not covered" >        return 0;</span>
+    }
+&nbsp;
+    /**
+     * @notice Get current level for an account (applies pending decay).
+     */
+    function getLevel(address _account) public view returns (uint256) {
+        return _getLevel(scores[_account].score);
+    }
+&nbsp;
+    function _getLevel(uint256 _score) internal pure returns (uint256) {
+        if (_score &gt;= LEVEL_4_THRESHOLD) return 4;
+        if (_score &gt;= LEVEL_3_THRESHOLD) return 3;
+        if (_score &gt;= LEVEL_2_THRESHOLD) return 2;
+        if (_score &gt;= LEVEL_1_THRESHOLD) return 1;
+        return 0;
+    }
+&nbsp;
+    /**
+     * @notice Get reward multiplier for an account (in BPS).
+     * Level 0: 100%, Level 1: 75%, Level 2: 50%, Level 3+: 0%
+     */
+    function getRewardMultiplier(address _account) external view returns (uint256) {
+        uint256 level = getLevel(_account);
+        if (level == 0) return REWARD_LEVEL_0;
+        if (level == 1) return REWARD_LEVEL_1;
+        if (level == 2) return REWARD_LEVEL_2;
+        return 0; // Level 3+ gets nothing
+    }
+&nbsp;
+    /**
+     * @notice Check if account can participate in governance.
+     * Level 2+ cannot vote.
+     */
+    function canGovernance(address _account) external view returns (bool) {
+        return getLevel(_account) &lt; 2;
+    }
+&nbsp;
+    /**
+     * @notice Check if account can trade.
+     * Level 3+ cannot trade.
+     */
+    function canTrade(address _account) external view returns (bool) {
+        return getLevel(_account) &lt; 3;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

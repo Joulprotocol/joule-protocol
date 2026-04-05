@@ -177,7 +177,7 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         uint256 _periodEnd,
         uint256 _kWhProduced,
         bytes32 _weatherHash
-    ) external whenNotPaused {
+    ) external nonReentrant whenNotPaused {
         require(oracles[msg.sender].active, "Not active oracle");
         require(registry.isActive(_facilityId), "Facility not active");
 

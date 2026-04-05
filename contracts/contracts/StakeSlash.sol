@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
@@ -21,7 +22,7 @@ import "./ConflictScore.sol";
  *
  * Slashed stakes go to the ecosystem treasury (burned or redistributed).
  */
-contract StakeSlash is AccessControl {
+contract StakeSlash is AccessControl, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     bytes32 public constant SLASHER_ROLE = keccak256("SLASHER_ROLE");
@@ -101,7 +102,7 @@ contract StakeSlash is AccessControl {
      * @notice Stake JOL to activate a facility for PoE mining.
      * Must be the facility owner. Facility must be verified.
      */
-    function stake(uint256 _facilityId) external returns (uint256 stakeId) {
+    function stake(uint256 _facilityId) external nonReentrant returns (uint256 stakeId) {
         require(!isBanned(msg.sender), "Account banned");
         // ConflictScore Level 3+ cannot stake (suspended/expelled)
         if (address(conflictScore) != address(0)) {
@@ -142,7 +143,7 @@ contract StakeSlash is AccessControl {
     function slash(
         uint256 _facilityId,
         string calldata _reason
-    ) external onlyRole(SLASHER_ROLE) {
+    ) external nonReentrant onlyRole(SLASHER_ROLE) {
         uint256 stakeId = facilityStake[_facilityId];
         require(stakeId != 0, "No stake");
 
@@ -188,7 +189,7 @@ contract StakeSlash is AccessControl {
      * @notice Withdraw stake when deregistering facility.
      * Only facility owner, only if not slashed.
      */
-    function withdrawStake(uint256 _facilityId) external {
+    function withdrawStake(uint256 _facilityId) external nonReentrant {
         uint256 stakeId = facilityStake[_facilityId];
         require(stakeId != 0, "No stake");
 

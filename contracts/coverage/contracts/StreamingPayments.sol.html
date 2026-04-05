@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/StreamingPayments.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> StreamingPayments.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">65.63% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>42/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">37.5% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>24/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">54.55% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.05% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>54/76</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./JOLToken.sol";
+&nbsp;
+/**
+ * @title StreamingPayments
+ * @notice Real-time, per-second money streaming for machine economy.
+ *
+ * Use cases:
+ * - EV charges at station: 0.05 JOL/second while plugged in
+ * - AI agent rents GPU: 0.001 JOL/second of compute
+ * - Smart home pays solar neighbor: 0.02 JOL/second of power
+ * - Factory pays grid: streaming payment for industrial power
+ *
+ * Money flows continuously. No invoices, no billing cycles, no disputes.
+ * Machines pay EXACTLY for what they use, per-second.
+ */
+contract StreamingPayments is ReentrancyGuard, Pausable, AccessControl {
+    JOLToken public jolToken;
+&nbsp;
+    uint256 public constant FEE_BPS = 10; // 0.1% protocol fee — 100% burned
+&nbsp;
+    struct Stream {
+        uint256 id;
+        address sender;         // who pays
+        address receiver;       // who gets paid
+        uint256 ratePerSecond;  // JOL per second (in wei)
+        uint256 deposit;        // total JOL locked
+        uint256 startTime;
+        uint256 stopTime;       // 0 = still running
+        uint256 lastWithdrawTime;
+        uint256 withdrawn;      // total withdrawn by receiver
+        bool active;
+    }
+&nbsp;
+    uint256 public nextStreamId = 1;
+    mapping(uint256 =&gt; Stream) public streams;
+    mapping(address =&gt; uint256[]) public outgoingStreams;
+    mapping(address =&gt; uint256[]) public incomingStreams;
+&nbsp;
+    // Stats
+    uint256 public totalStreams;
+    uint256 public activeStreams;
+    uint256 public totalStreamedVolume;
+&nbsp;
+    event StreamCreated(uint256 indexed id, address sender, address receiver, uint256 ratePerSecond, uint256 deposit);
+    event StreamWithdrawn(uint256 indexed id, address receiver, uint256 amount);
+    event StreamStopped(uint256 indexed id, uint256 senderRefund, uint256 receiverPaid);
+    event StreamToppedUp(uint256 indexed id, uint256 amount);
+&nbsp;
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_pause()</span>; }</span>
+<span class="fstat-no" title="function not covered" >    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_unpause()</span>; }</span>
+&nbsp;
+    /**
+     * @notice Start a payment stream
+     * @param _receiver Who gets paid
+     * @param _ratePerSecond JOL per second (in wei, e.g., 1e15 = 0.001 JOL/sec)
+     * @param _deposit Total JOL to lock (determines max stream duration)
+     */
+    function createStream(
+        address _receiver,
+        uint256 _ratePerSecond,
+        uint256 _deposit
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>whenNotPaused returns (uint256) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_receiver != address(0) &amp;&amp; _receiver != msg.sender, "Invalid receiver");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_ratePerSecond &gt; 0, "Zero rate");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_deposit &gt;= _ratePerSecond, "Deposit too small");
+&nbsp;
+        uint256 id = nextStreamId++;
+        streams[id] = Stream({
+            id: id,
+            sender: msg.sender,
+            receiver: _receiver,
+            ratePerSecond: _ratePerSecond,
+            deposit: _deposit,
+            startTime: block.timestamp,
+            stopTime: 0,
+            lastWithdrawTime: block.timestamp,
+            withdrawn: 0,
+            active: true
+        });
+&nbsp;
+        outgoingStreams[msg.sender].push(id);
+        incomingStreams[_receiver].push(id);
+        totalStreams++;
+        activeStreams++;
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
+&nbsp;
+        emit StreamCreated(id, msg.sender, _receiver, _ratePerSecond, _deposit);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Withdraw earned JOL from a stream (receiver calls this)
+     */
+    function withdrawFromStream(uint256 _streamId) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        Stream storage s = streams[_streamId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(msg.sender == s.receiver, "Not receiver");
+&nbsp;
+        uint256 available = _availableBalance(s);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(available &gt; 0, "Nothing to withdraw");
+&nbsp;
+        // Calculate fee — 100% of protocol fee is burned (deflationary)
+        uint256 fee = (available * FEE_BPS) / 10000;
+        uint256 netAmount = available - fee;
+&nbsp;
+        s.withdrawn += available;
+        s.lastWithdrawTime = block.timestamp;
+&nbsp;
+        // Transfer to receiver
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(s.receiver, netAmount), "Transfer failed");
+        // Burn fee (deflationary)
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (fee &gt; 0) {
+            jolToken.burn(fee);
+        }
+&nbsp;
+        totalStreamedVolume += available;
+        emit StreamWithdrawn(_streamId, s.receiver, netAmount);
+&nbsp;
+        // Auto-stop if deposit depleted
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (s.withdrawn &gt;= s.deposit) {
+            s.active = false;
+            s.stopTime = block.timestamp;
+            activeStreams--;
+        }
+    }
+&nbsp;
+    /**
+     * @notice Stop a stream (sender or receiver can stop)
+     */
+    function stopStream(uint256 _streamId) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        Stream storage s = streams[_streamId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(s.active, "Not active");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(msg.sender == s.sender || <span class="branch-1 cbranch-no" title="branch not covered" >msg.sender == s.receiver</span>, "Not authorized");
+&nbsp;
+        s.active = false;
+        s.stopTime = block.timestamp;
+        activeStreams--;
+&nbsp;
+        // Calculate final amounts
+        uint256 receiverOwed = _availableBalance(s);
+        uint256 senderRefund = s.deposit - s.withdrawn - receiverOwed;
+&nbsp;
+        // Pay receiver (effects before interactions)
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (receiverOwed &gt; 0) {
+            uint256 fee = (receiverOwed * FEE_BPS) / 10000;
+            uint256 netAmount = receiverOwed - fee;
+            s.withdrawn += receiverOwed;
+            totalStreamedVolume += receiverOwed;
+            <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(s.receiver, netAmount), "Receiver payment failed");
+            // Burn protocol fee (deflationary)
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (fee &gt; 0) {
+                jolToken.burn(fee);
+            }
+        }
+&nbsp;
+        // Refund sender
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (senderRefund &gt; 0) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(s.sender, senderRefund), "Sender refund failed");
+        }
+&nbsp;
+        emit StreamStopped(_streamId, senderRefund, receiverOwed);
+    }
+&nbsp;
+    /**
+     * @notice Top up a stream with more JOL (extends duration)
+     */
+<span class="fstat-no" title="function not covered" >    function topUpStream(uint256 _streamId, uint256 _amount) external nonReentrant {</span>
+<span class="cstat-no" title="statement not covered" >        Stream storage s = streams[_streamId];</span>
+<span class="cstat-no" title="statement not covered" >        require(s.active, "Not active")</span>;
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == s.sender, "Not sender")</span>;
+&nbsp;
+        s.deposit += _amount;
+<span class="cstat-no" title="statement not covered" >        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed")</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit StreamToppedUp(_streamId, _amount);</span>
+    }
+&nbsp;
+    // ─── Internal ──────────────────────────────────────────────────
+&nbsp;
+    function _availableBalance(Stream storage s) internal view returns (uint256) {
+        uint256 endTime = s.active ? block.timestamp : s.stopTime;
+        uint256 elapsed = endTime - s.startTime;
+        uint256 totalEarned = elapsed * s.ratePerSecond;
+&nbsp;
+        // Cap at deposit
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (totalEarned &gt; s.deposit) totalEarned = s.deposit;
+&nbsp;
+        // Subtract already withdrawn
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (totalEarned &lt;= s.withdrawn) <span class="cstat-no" title="statement not covered" >return 0;</span>
+        return totalEarned - s.withdrawn;
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice How much the receiver can withdraw right now
+     */
+    function getAvailableBalance(uint256 _streamId) external view returns (uint256) {
+        return _availableBalance(streams[_streamId]);
+    }
+&nbsp;
+    /**
+     * @notice Remaining time until stream deposit runs out
+     */
+<span class="fstat-no" title="function not covered" >    function getRemainingTime(uint256 _streamId) external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        Stream storage s = streams[_streamId];</span>
+<span class="cstat-no" title="statement not covered" >        if (!s.active) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >        uint256 elapsed = block.timestamp - s.startTime;</span>
+<span class="cstat-no" title="statement not covered" >        uint256 earned = elapsed * s.ratePerSecond;</span>
+<span class="cstat-no" title="statement not covered" >        if (earned &gt;= s.deposit) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >        return (s.deposit - earned) / s.ratePerSecond;</span>
+    }
+&nbsp;
+    /**
+     * @notice Current flow rate between two addresses
+     */
+<span class="fstat-no" title="function not covered" >    function getFlowRate(address _sender, address _receiver) external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256[] storage streamIds = outgoingStreams[_sender];</span>
+<span class="cstat-no" title="statement not covered" >        uint256 totalRate;</span>
+<span class="cstat-no" title="statement not covered" >        for (uint256 i = 0; i &lt; streamIds.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            Stream storage s = streams[streamIds[i]];</span>
+<span class="cstat-no" title="statement not covered" >            if (s.receiver == _receiver &amp;&amp; s.active) {</span>
+                totalRate += s.ratePerSecond;
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return totalRate;</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

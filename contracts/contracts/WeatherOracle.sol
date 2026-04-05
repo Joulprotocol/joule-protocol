@@ -131,7 +131,7 @@ contract WeatherOracle is AccessControl {
         uint256 _facilityId,
         uint256 _claimedKWh,
         uint256 _day
-    ) external returns (bool passed) {
+    ) external onlyRole(ORACLE_ROLE) returns (bool passed) {
         // Kiht 1: PhysicalCap must pass first
         bool physicsPassed = physicalCap.verifyProduction(_facilityId, _claimedKWh);
         if (!physicsPassed) {

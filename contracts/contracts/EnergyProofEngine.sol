@@ -216,7 +216,15 @@ contract EnergyProofEngine is AccessControl, ReentrancyGuard, Pausable {
         uint256 baseReward = finalKWh * jolPerKWh;
         uint256 adjustedReward = (baseReward * rewardMultiplier) / 10000;
 
-        // Accrue in PoEMining (it handles minting)
+        // ─── DUAL ALLOCATION (not double-minting) ─────────────────
+        // PoE minting (from 70% mining pool) + Energy floor backing
+        // (from 19% reserve) are SEPARATE allocations from DIFFERENT
+        // token pools. poeMining.accrueReward() draws from the 147M
+        // mining allocation; energyFloor.depositEnergy() draws from
+        // the 39.9M reserve allocation. Same kWh, different pools.
+        // ──────────────────────────────────────────────────────────────
+
+        // Accrue in PoEMining (it handles minting from 70% mining pool)
         poeMining.accrueReward(_facilityId, finalKWh);
 
         // Deposit energy in floor (1 JOL per kWh backing)

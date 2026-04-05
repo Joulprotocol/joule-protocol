@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/BridgeLock.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> BridgeLock.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>24/24</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>24/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>5/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>35/35</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">64×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+&nbsp;
+/**
+ * @title BridgeLock
+ * @notice JOULE chain side of the Ethereum bridge.
+ * Users lock native JOL here → bridge mints wJOL on Ethereum.
+ * Users burn wJOL on Ethereum → bridge unlocks JOL here.
+ *
+ * Security: 3/5 multisig validators, timelock on large amounts.
+ */
+contract BridgeLock is AccessControl, ReentrancyGuard {
+    bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+&nbsp;
+    uint256 public constant LARGE_AMOUNT = 100_000 ether; // 100k JOL
+    uint256 public constant TIMELOCK_DURATION = 24 hours;
+&nbsp;
+    struct LockRequest {
+        address user;
+        uint256 amount;
+        uint256 timestamp;
+        bool processed;
+    }
+&nbsp;
+    struct UnlockRequest {
+        address user;
+        uint256 amount;
+        bytes32 ethTxHash;
+        uint256 confirmations;
+        uint256 createdAt;
+        bool executed;
+        mapping(address =&gt; bool) hasConfirmed;
+    }
+&nbsp;
+    uint256 public nextLockId = 1;
+    uint256 public nextUnlockId = 1;
+    mapping(uint256 =&gt; LockRequest) public lockRequests;
+    mapping(uint256 =&gt; UnlockRequest) public unlockRequests;
+    mapping(bytes32 =&gt; bool) public processedEthTxHashes;
+&nbsp;
+    uint256 public totalLocked;
+    uint256 public totalUnlocked;
+    uint256 public requiredConfirmations = 3;
+&nbsp;
+    event JOLLocked(uint256 indexed lockId, address user, uint256 amount);
+    event JOLUnlocked(uint256 indexed unlockId, address user, uint256 amount);
+    event UnlockConfirmed(uint256 indexed unlockId, address validator);
+&nbsp;
+    constructor(address admin) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+    }
+&nbsp;
+    /**
+     * @notice Lock JOL for bridging to Ethereum
+     */
+    function lockJOL() external payable <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        require(msg.value &gt; 0, "Zero amount");
+&nbsp;
+        uint256 lockId = nextLockId++;
+        lockRequests[lockId] = LockRequest({
+            user: msg.sender,
+            amount: msg.value,
+            timestamp: block.timestamp,
+            processed: false
+        });
+&nbsp;
+        totalLocked += msg.value;
+&nbsp;
+        emit JOLLocked(lockId, msg.sender, msg.value);
+    }
+&nbsp;
+    /**
+     * @notice Validator confirms unlock (from Ethereum burn)
+     */
+    function confirmUnlock(
+        uint256 _unlockId,
+        address _user,
+        uint256 _amount,
+        bytes32 _ethTxHash
+    ) external onlyRole(VALIDATOR_ROLE) {
+        require(!processedEthTxHashes[_ethTxHash], "Already processed");
+&nbsp;
+        UnlockRequest storage req = unlockRequests[_unlockId];
+&nbsp;
+        // Initialize if first confirmation
+        if (req.user == address(0)) {
+            req.user = _user;
+            req.amount = _amount;
+            req.ethTxHash = _ethTxHash;
+            req.createdAt = block.timestamp;
+        } else {
+            // Subsequent confirmations must match the first — prevents parameter manipulation
+            bytes32 expected = keccak256(abi.encodePacked(_unlockId, req.user, req.amount, req.ethTxHash));
+            bytes32 submitted = keccak256(abi.encodePacked(_unlockId, _user, _amount, _ethTxHash));
+            require(expected == submitted, "Parameters mismatch with first confirmation");
+        }
+&nbsp;
+        require(!req.hasConfirmed[msg.sender], "Already confirmed");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!req.executed, "Already executed");
+&nbsp;
+        req.hasConfirmed[msg.sender] = true;
+        req.confirmations++;
+&nbsp;
+        emit UnlockConfirmed(_unlockId, msg.sender);
+&nbsp;
+        // Execute if enough confirmations
+        if (req.confirmations &gt;= requiredConfirmations) {
+            _executeUnlock(_unlockId);
+        }
+    }
+&nbsp;
+    function _executeUnlock(uint256 _unlockId) internal {
+        UnlockRequest storage req = unlockRequests[_unlockId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!req.executed, "Already executed");
+        require(address(this).balance &gt;= req.amount, "Insufficient bridge balance");
+&nbsp;
+        // Timelock for large amounts
+        if (req.amount &gt;= LARGE_AMOUNT) {
+            require(
+                block.timestamp &gt;= req.createdAt + TIMELOCK_DURATION,
+                "Timelock not expired for large amount"
+            );
+        }
+&nbsp;
+        req.executed = true;
+        processedEthTxHashes[req.ethTxHash] = true;
+        totalUnlocked += req.amount;
+&nbsp;
+        (bool sent, ) = req.user.call{value: req.amount}("");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(sent, "Transfer failed");
+&nbsp;
+        emit JOLUnlocked(_unlockId, req.user, req.amount);
+    }
+&nbsp;
+    /**
+     * @notice Current bridge TVL
+     */
+    function bridgeTVL() external view returns (uint256) {
+        return address(this).balance;
+    }
+&nbsp;
+    receive() external payable {}
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

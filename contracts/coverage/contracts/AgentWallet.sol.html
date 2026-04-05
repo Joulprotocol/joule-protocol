@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/AgentWallet.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> AgentWallet.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50.91% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>28/55</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">32.26% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>20/62</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">55.26% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>42/76</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./JOLToken.sol";
+import "./MachineRegistry.sol";
+&nbsp;
+/**
+ * @title AgentWallet
+ * @notice Autonomous wallets for AI agents and machines.
+ *
+ * AI agents need to spend money WITHOUT human approval for every transaction.
+ * But humans need GUARDRAILS to prevent runaway spending.
+ *
+ * AgentWallet solves this:
+ * - Human sets spending limits (per-tx, daily, monthly)
+ * - Human whitelists allowed recipients
+ * - Agent spends autonomously within limits
+ * - Emergency kill switch (human can freeze instantly)
+ * - Full audit trail on-chain
+ *
+ * Use cases:
+ * - Claude/GPT agent buys compute on JOULE network
+ * - Trading bot executes within daily limit
+ * - IoT device pays for energy autonomously
+ * - Fleet of EVs each has own wallet with fuel budget
+ */
+contract AgentWallet is ReentrancyGuard {
+    JOLToken public jolToken;
+    MachineRegistry public machineRegistry;
+&nbsp;
+    struct Wallet {
+        uint256 id;
+        address owner;          // human controller
+        address agent;          // AI/machine address that can spend
+        uint256 balance;
+        // Limits
+        uint256 maxPerTransaction;
+        uint256 maxDailySpend;
+        uint256 maxMonthlySpend;
+        // Tracking
+        uint256 dailySpent;
+        uint256 monthlySpent;
+        uint256 lastDayReset;
+        uint256 lastMonthReset;
+        uint256 totalSpent;
+        uint256 totalTransactions;
+        // State
+        bool active;
+        bool frozen;            // emergency kill switch
+    }
+&nbsp;
+    uint256 public nextWalletId = 1;
+    mapping(uint256 =&gt; Wallet) public wallets;
+    mapping(address =&gt; uint256) public agentToWallet;
+    mapping(address =&gt; uint256[]) public ownerWallets;
+&nbsp;
+    // Whitelist: wallet ID → allowed recipient → allowed
+    mapping(uint256 =&gt; mapping(address =&gt; bool)) public whitelist;
+    // If true, only whitelisted recipients allowed
+    mapping(uint256 =&gt; bool) public whitelistEnabled;
+&nbsp;
+    // Stats
+    uint256 public totalWallets;
+    uint256 public totalAgentTransactions;
+    uint256 public totalAgentVolume;
+&nbsp;
+    event WalletCreated(uint256 indexed id, address owner, address agent);
+    event AgentSpent(uint256 indexed walletId, address to, uint256 amount, string memo);
+    event WalletFunded(uint256 indexed walletId, uint256 amount);
+    event WalletFrozen(uint256 indexed walletId);
+    event WalletUnfrozen(uint256 indexed walletId);
+    event LimitsUpdated(uint256 indexed walletId, uint256 perTx, uint256 daily, uint256 monthly);
+    event WhitelistUpdated(uint256 indexed walletId, address recipient, bool allowed);
+&nbsp;
+    constructor(address _jolToken, address _machineRegistry) {
+        jolToken = JOLToken(_jolToken);
+        machineRegistry = MachineRegistry(_machineRegistry);
+    }
+&nbsp;
+    // ─── Wallet Management (human owner) ───────────────────────────
+&nbsp;
+    /**
+     * @notice Create an agent wallet with spending limits
+     */
+    function createWallet(
+        address _agent,
+        uint256 _maxPerTransaction,
+        uint256 _maxDailySpend,
+        uint256 _maxMonthlySpend
+    ) external returns (uint256) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_agent != address(0), "Invalid agent");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(agentToWallet[_agent] == 0, "Agent already has wallet");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_maxPerTransaction &gt; 0, "Zero per-tx limit");
+&nbsp;
+        uint256 id = nextWalletId++;
+        wallets[id] = Wallet({
+            id: id,
+            owner: msg.sender,
+            agent: _agent,
+            balance: 0,
+            maxPerTransaction: _maxPerTransaction,
+            maxDailySpend: _maxDailySpend,
+            maxMonthlySpend: _maxMonthlySpend,
+            dailySpent: 0,
+            monthlySpent: 0,
+            lastDayReset: block.timestamp,
+            lastMonthReset: block.timestamp,
+            totalSpent: 0,
+            totalTransactions: 0,
+            active: true,
+            frozen: false
+        });
+&nbsp;
+        agentToWallet[_agent] = id;
+        ownerWallets[msg.sender].push(id);
+        totalWallets++;
+&nbsp;
+        emit WalletCreated(id, msg.sender, _agent);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Fund an agent wallet
+     */
+    function fundWallet(uint256 _walletId, uint256 _amount) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        Wallet storage w = wallets[_walletId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(w.active, "Not active");
+        w.balance += _amount;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
+        emit WalletFunded(_walletId, _amount);
+    }
+&nbsp;
+    /**
+     * @notice Emergency freeze (human can stop agent instantly)
+     */
+    function freezeWallet(uint256 _walletId) external {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(wallets[_walletId].owner == msg.sender, "Not owner");
+        wallets[_walletId].frozen = true;
+        emit WalletFrozen(_walletId);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function unfreezeWallet(uint256 _walletId) external {</span>
+<span class="cstat-no" title="statement not covered" >        require(wallets[_walletId].owner == msg.sender, "Not owner")</span>;
+        wallets[_walletId].frozen = false;
+<span class="cstat-no" title="statement not covered" >        emit WalletUnfrozen(_walletId);</span>
+    }
+&nbsp;
+    /**
+     * @notice Update spending limits
+     */
+<span class="fstat-no" title="function not covered" >    function updateLimits(</span>
+        uint256 _walletId,
+        uint256 _maxPerTx,
+        uint256 _maxDaily,
+        uint256 _maxMonthly
+    ) external {
+<span class="cstat-no" title="statement not covered" >        require(wallets[_walletId].owner == msg.sender, "Not owner")</span>;
+<span class="cstat-no" title="statement not covered" >        Wallet storage w = wallets[_walletId];</span>
+        w.maxPerTransaction = _maxPerTx;
+        w.maxDailySpend = _maxDaily;
+        w.maxMonthlySpend = _maxMonthly;
+<span class="cstat-no" title="statement not covered" >        emit LimitsUpdated(_walletId, _maxPerTx, _maxDaily, _maxMonthly);</span>
+    }
+&nbsp;
+    /**
+     * @notice Manage whitelist
+     */
+<span class="fstat-no" title="function not covered" >    function setWhitelist(uint256 _walletId, address _recipient, bool _allowed) external {</span>
+<span class="cstat-no" title="statement not covered" >        require(wallets[_walletId].owner == msg.sender, "Not owner")</span>;
+        whitelist[_walletId][_recipient] = _allowed;
+<span class="cstat-no" title="statement not covered" >        emit WhitelistUpdated(_walletId, _recipient, _allowed);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setWhitelistEnabled(uint256 _walletId, bool _enabled) external {</span>
+<span class="cstat-no" title="statement not covered" >        require(wallets[_walletId].owner == msg.sender, "Not owner")</span>;
+        whitelistEnabled[_walletId] = _enabled;
+    }
+&nbsp;
+    /**
+     * @notice Withdraw remaining balance (human owner only)
+     */
+<span class="fstat-no" title="function not covered" >    function withdrawBalance(uint256 _walletId, uint256 _amount) external nonReentrant {</span>
+<span class="cstat-no" title="statement not covered" >        Wallet storage w = wallets[_walletId];</span>
+<span class="cstat-no" title="statement not covered" >        require(w.owner == msg.sender, "Not owner")</span>;
+<span class="cstat-no" title="statement not covered" >        require(_amount &lt;= w.balance, "Insufficient balance")</span>;
+        w.balance -= _amount;
+<span class="cstat-no" title="statement not covered" >        require(jolToken.transfer(msg.sender, _amount), "Transfer failed")</span>;
+    }
+&nbsp;
+    // ─── Agent Spending (AI/machine calls this) ────────────────────
+&nbsp;
+    /**
+     * @notice Agent spends JOL autonomously within limits.
+     * This is the KEY function — AI agents call this to pay for services.
+     */
+    function agentSpend(
+        address _to,
+        uint256 _amount,
+        string calldata _memo
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        uint256 walletId = agentToWallet[msg.sender];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(walletId != 0, "No wallet for this agent");
+&nbsp;
+        Wallet storage w = wallets[walletId];
+        require(w.active &amp;&amp; !w.frozen, "Wallet frozen or inactive");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_amount &lt;= w.balance, "Insufficient balance");
+        require(_amount &lt;= w.maxPerTransaction, "Exceeds per-tx limit");
+&nbsp;
+        // Whitelist check
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (whitelistEnabled[walletId]) {
+<span class="cstat-no" title="statement not covered" >            require(whitelist[walletId][_to], "Recipient not whitelisted")</span>;
+        }
+&nbsp;
+        // Reset daily/monthly counters if needed
+        _resetCounters(w);
+&nbsp;
+        // Daily limit check
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(w.dailySpent + _amount &lt;= w.maxDailySpend, "Exceeds daily limit");
+        // Monthly limit check
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(w.monthlySpent + _amount &lt;= w.maxMonthlySpend, "Exceeds monthly limit");
+&nbsp;
+        // Execute spend
+        w.balance -= _amount;
+        w.dailySpent += _amount;
+        w.monthlySpent += _amount;
+        w.totalSpent += _amount;
+        w.totalTransactions++;
+        totalAgentTransactions++;
+        totalAgentVolume += _amount;
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(_to, _amount), "Transfer failed");
+&nbsp;
+        // Record in machine registry if applicable
+        machineRegistry.recordTransaction(msg.sender, _amount, true);
+&nbsp;
+        emit AgentSpent(walletId, _to, _amount, _memo);
+    }
+&nbsp;
+    function _resetCounters(Wallet storage w) internal {
+        // Reset daily counter
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (block.timestamp - w.lastDayReset &gt;= 1 days) {
+            w.dailySpent = 0;
+            w.lastDayReset = block.timestamp;
+        }
+        // Reset monthly counter
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (block.timestamp - w.lastMonthReset &gt;= 30 days) {
+            w.monthlySpent = 0;
+            w.lastMonthReset = block.timestamp;
+        }
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getRemainingDailyBudget(uint256 _walletId) external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        Wallet storage w = wallets[_walletId];</span>
+<span class="cstat-no" title="statement not covered" >        if (block.timestamp - w.lastDayReset &gt;= 1 days) <span class="cstat-no" title="statement not covered" >return w.maxDailySpend;</span></span>
+<span class="cstat-no" title="statement not covered" >        if (w.dailySpent &gt;= w.maxDailySpend) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >        return w.maxDailySpend - w.dailySpent;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getRemainingMonthlyBudget(uint256 _walletId) external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        Wallet storage w = wallets[_walletId];</span>
+<span class="cstat-no" title="statement not covered" >        if (block.timestamp - w.lastMonthReset &gt;= 30 days) <span class="cstat-no" title="statement not covered" >return w.maxMonthlySpend;</span></span>
+<span class="cstat-no" title="statement not covered" >        if (w.monthlySpent &gt;= w.maxMonthlySpend) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >        return w.maxMonthlySpend - w.monthlySpent;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getWalletByAgent(address _agent) external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return agentToWallet[_agent];</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getOwnerWallets(address _owner) external view returns (uint256[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return ownerWallets[_owner];</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

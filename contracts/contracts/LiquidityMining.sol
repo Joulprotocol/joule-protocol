@@ -136,7 +136,7 @@ contract LiquidityMining is AccessControl, ReentrancyGuard {
 
     // ─── Staking ──────────────────────────────────────────────────
 
-    function stakeLiquidity(uint256 _amount, uint256 _pool) external returns (uint256 positionId) {
+    function stakeLiquidity(uint256 _amount, uint256 _pool) external nonReentrant returns (uint256 positionId) {
         require(isActive(), "Program ended");
         require(_amount > 0, "Zero amount");
         require(_pool <= 1, "Invalid pool");

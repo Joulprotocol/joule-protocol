@@ -48,6 +48,7 @@ describe("WeatherOracle — Weather Layer", function () {
     const ORACLE_ROLE = await weatherOracle.ORACLE_ROLE();
     await registry.grantRole(VERIFIER_ROLE, owner.address);
     await weatherOracle.grantRole(ORACLE_ROLE, oracleNode.address);
+    await weatherOracle.grantRole(ORACLE_ROLE, owner.address); // for verifyWithWeather tests
 
     now = (await ethers.provider.getBlock("latest")).timestamp;
   });

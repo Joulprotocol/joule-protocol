@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/MachineRegistry.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> MachineRegistry.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">47.5% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>19/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">26.67% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>8/30</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">44.44% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>24/54</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+&nbsp;
+/**
+ * @title MachineRegistry
+ * @notice On-chain identity for machines: IoT devices, AI agents, EVs,
+ * smart meters, solar inverters, wind turbines.
+ *
+ * Every machine that transacts on JOULE has a decentralized identity (DID).
+ * This enables:
+ * - Machine-to-machine payments (EV pays charger, AI pays compute)
+ * - Reputation system (reliable machines get better rates)
+ * - Access control (only verified machines can access services)
+ * - Audit trail (every machine action is traceable)
+ *
+ * DID format: did:joule:&lt;chainId&gt;:&lt;address&gt;
+ */
+contract MachineRegistry is AccessControl {
+    bytes32 public constant VERIFIER_ROLE = keccak256("VERIFIER_ROLE");
+    bytes32 public constant RECORDER_ROLE = keccak256("RECORDER_ROLE");
+&nbsp;
+    enum MachineType {
+        IoTSensor,          // 0: temperature, humidity, etc.
+        SmartMeter,         // 1: energy meter
+        SolarInverter,      // 2: solar panel controller
+        WindTurbine,        // 3: wind turbine controller
+        EVCharger,          // 4: EV charging station
+        ElectricVehicle,    // 5: EV itself
+        AIAgent,            // 6: autonomous AI agent
+        ComputeNode,        // 7: GPU/CPU compute provider
+        StorageBattery,     // 8: energy storage
+        SmartHome,          // 9: home automation hub
+        IndustrialDevice    // 10: factory equipment
+    }
+&nbsp;
+    enum MachineStatus { Registered, Verified, Suspended, Retired }
+&nbsp;
+    struct Machine {
+        uint256 id;
+        address owner;         // human or organization that owns the machine
+        address wallet;        // machine's own wallet for autonomous payments
+        MachineType machineType;
+        MachineStatus status;
+        string manufacturer;
+        string model;
+        bytes32 firmwareHash;  // hash of current firmware (integrity check)
+        int64 latitude;
+        int64 longitude;
+        uint256 registeredAt;
+        uint256 verifiedAt;
+        // Reputation
+        uint256 totalTransactions;
+        uint256 successfulTransactions;
+        uint256 totalEnergyKWh;    // energy produced or consumed
+        uint256 reputationScore;   // 0-10000 (basis points, 10000 = perfect)
+    }
+&nbsp;
+    uint256 public nextMachineId = 1;
+    mapping(uint256 =&gt; Machine) public machines;
+    mapping(address =&gt; uint256) public walletToMachine; // machine wallet → machine ID
+    mapping(address =&gt; uint256[]) public ownerMachines;
+&nbsp;
+    // Stats
+    uint256 public totalMachines;
+    uint256 public verifiedMachines;
+    uint256 public totalMachineTransactions;
+&nbsp;
+    event MachineRegistered(uint256 indexed id, address owner, address wallet, MachineType machineType);
+    event MachineVerified(uint256 indexed id);
+    event MachineSuspended(uint256 indexed id, string reason);
+    event MachineTransactionRecorded(uint256 indexed id, uint256 amount, bool success);
+    event ReputationUpdated(uint256 indexed id, uint256 newScore);
+    event FirmwareUpdated(uint256 indexed id, bytes32 newHash);
+&nbsp;
+    constructor(address admin) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+    }
+&nbsp;
+    /**
+     * @notice Register a machine with its own wallet
+     */
+    function registerMachine(
+        address _wallet,
+        MachineType _type,
+        string calldata _manufacturer,
+        string calldata _model,
+        bytes32 _firmwareHash,
+        int64 _lat,
+        int64 _lon
+    ) external returns (uint256) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_wallet != address(0), "Invalid wallet");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(walletToMachine[_wallet] == 0, "Wallet already registered");
+&nbsp;
+        uint256 id = nextMachineId++;
+        machines[id] = Machine({
+            id: id,
+            owner: msg.sender,
+            wallet: _wallet,
+            machineType: _type,
+            status: MachineStatus.Registered,
+            manufacturer: _manufacturer,
+            model: _model,
+            firmwareHash: _firmwareHash,
+            latitude: _lat,
+            longitude: _lon,
+            registeredAt: block.timestamp,
+            verifiedAt: 0,
+            totalTransactions: 0,
+            successfulTransactions: 0,
+            totalEnergyKWh: 0,
+            reputationScore: 5000 // start at 50%
+        });
+&nbsp;
+        walletToMachine[_wallet] = id;
+        ownerMachines[msg.sender].push(id);
+        totalMachines++;
+&nbsp;
+        emit MachineRegistered(id, msg.sender, _wallet, _type);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Verify a machine (verifier only — confirms physical existence)
+     */
+    function verifyMachine(uint256 _id) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(VERIFIER_ROLE) {
+        Machine storage m = machines[_id];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(m.id != 0, "Not found");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(m.status == MachineStatus.Registered, "Not in registered state");
+&nbsp;
+        m.status = MachineStatus.Verified;
+        m.verifiedAt = block.timestamp;
+        verifiedMachines++;
+&nbsp;
+        emit MachineVerified(_id);
+    }
+&nbsp;
+    /**
+     * @notice Record a transaction by a machine (called by payment contracts)
+     */
+    function recordTransaction(
+        address _machineWallet,
+        uint256 _amount,
+        bool _success
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(RECORDER_ROLE) {
+        uint256 id = walletToMachine[_machineWallet];
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (id == 0) return; // unregistered machine, skip
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        Machine storage m = machines[id];</span>
+        m.totalTransactions++;
+<span class="cstat-no" title="statement not covered" >        if (_success) {</span>
+            m.successfulTransactions++;
+        }
+        totalMachineTransactions++;
+&nbsp;
+        // Update reputation: success rate as basis points
+<span class="cstat-no" title="statement not covered" >        if (m.totalTransactions &gt; 0) {</span>
+            m.reputationScore = (m.successfulTransactions * 10000) / m.totalTransactions;
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit MachineTransactionRecorded(id, _amount, _success);</span>
+<span class="cstat-no" title="statement not covered" >        emit ReputationUpdated(id, m.reputationScore);</span>
+    }
+&nbsp;
+    /**
+     * @notice Record energy production/consumption by a machine
+     */
+<span class="fstat-no" title="function not covered" >    function recordEnergy(address _machineWallet, uint256 _kWh) external onlyRole(RECORDER_ROLE) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 id = walletToMachine[_machineWallet];</span>
+<span class="cstat-no" title="statement not covered" >        if (id == 0) <span class="cstat-no" title="statement not covered" >return;</span></span>
+        machines[id].totalEnergyKWh += _kWh;
+    }
+&nbsp;
+    /**
+     * @notice Update firmware hash (owner only)
+     */
+<span class="fstat-no" title="function not covered" >    function updateFirmware(uint256 _id, bytes32 _newHash) external {</span>
+<span class="cstat-no" title="statement not covered" >        Machine storage m = machines[_id];</span>
+<span class="cstat-no" title="statement not covered" >        require(m.owner == msg.sender, "Not owner")</span>;
+        m.firmwareHash = _newHash;
+<span class="cstat-no" title="statement not covered" >        emit FirmwareUpdated(_id, _newHash);</span>
+    }
+&nbsp;
+    /**
+     * @notice Suspend a machine (verifier)
+     */
+<span class="fstat-no" title="function not covered" >    function suspendMachine(uint256 _id, string calldata _reason) external onlyRole(VERIFIER_ROLE) {</span>
+        machines[_id].status = MachineStatus.Suspended;
+<span class="cstat-no" title="statement not covered" >        emit MachineSuspended(_id, _reason);</span>
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+    function isVerified(address _wallet) external view returns (bool) {
+        uint256 id = walletToMachine[_wallet];
+        return id != 0 &amp;&amp; machines[id].status == MachineStatus.Verified;
+    }
+&nbsp;
+    function getReputation(address _wallet) external view returns (uint256) {
+        uint256 id = walletToMachine[_wallet];
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (id == 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
+        return machines[id].reputationScore;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getMachinesByOwner(address _owner) external view returns (uint256[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return ownerMachines[_owner];</span>
+    }
+&nbsp;
+    /**
+     * @notice Get machine DID string
+     */
+<span class="fstat-no" title="function not covered" >    function getDID(uint256 _id) external view returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        require(machines[_id].id != 0, "Not found")</span>;
+        // Returns format: did:joule:707070:&lt;wallet_address&gt;
+<span class="cstat-no" title="statement not covered" >        return string(abi.encodePacked(</span>
+            "did:joule:707070:",
+            _toHexString(machines[_id].wallet)
+        ));
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function _toHexString(address addr) internal pure returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        bytes memory data = abi.encodePacked(addr);</span>
+<span class="cstat-no" title="statement not covered" >        bytes memory alphabet = "0123456789abcdef";</span>
+<span class="cstat-no" title="statement not covered" >        bytes memory str = new bytes(42);</span>
+        str[0] = "0";
+        str[1] = "x";
+<span class="cstat-no" title="statement not covered" >        for (uint256 i = 0; i &lt; 20; i++) {</span>
+            str[2 + i * 2] = alphabet[uint8(data[i] &gt;&gt; 4)];
+            str[3 + i * 2] = alphabet[uint8(data[i] &amp; 0x0f)];
+        }
+<span class="cstat-no" title="statement not covered" >        return string(str);</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

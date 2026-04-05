@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/StakeSlash.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> StakeSlash.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>44/44</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">77.78% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>28/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>64/64</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./JOLToken.sol";
+import "./EnergyRegistry.sol";
+import "./ConflictScore.sol";
+&nbsp;
+/**
+ * @title StakeSlash
+ * @notice Proof of Energy Kiht 3 — economics enforces honesty.
+ *
+ * Stake = 3 days of expected production value.
+ * False data = lose entire stake + temporary ban.
+ *
+ * The math forbids cheating:
+ *   - Stake pays for itself in half a day of honest production
+ *   - Cheating profit is ALWAYS less than the loss
+ *   - Ban period scales with violation severity
+ *
+ * Slashed stakes go to the ecosystem treasury (burned or redistributed).
+ */
+contract StakeSlash is AccessControl {
+    bytes32 public constant SLASHER_ROLE = keccak256("SLASHER_ROLE");
+&nbsp;
+    JOLToken public jolToken;
+    EnergyRegistry public registry;
+    ConflictScore public conflictScore;
+&nbsp;
+    // Stake = 3 days × expected daily output × JOL per kWh
+    uint256 public constant STAKE_DAYS = 3;
+    uint256 public constant JOL_PER_KWH = 1; // base rate for stake calculation
+&nbsp;
+    // Average peak hours estimate for stake calculation (4h — global average)
+    uint256 public constant AVG_PEAK_HOURS = 4;
+&nbsp;
+    // Average capacity factor for stake calculation (30% — conservative blend)
+    uint256 public constant AVG_CAPACITY_FACTOR = 3000; // 30% in BPS
+    uint256 public constant BPS_BASE = 10000;
+&nbsp;
+    // Ban periods
+    uint256 public constant BAN_MINOR = 7 days;      // first offense
+    uint256 public constant BAN_MAJOR = 30 days;      // repeated offense
+    uint256 public constant BAN_PERMANENT = 365 days;  // severe fraud
+&nbsp;
+    // Slash treasury — where slashed stakes go
+    address public slashTreasury;
+&nbsp;
+    struct StakeInfo {
+        uint256 facilityId;
+        address staker;
+        uint256 amount;
+        uint256 stakedAt;
+        bool active;
+    }
+&nbsp;
+    struct BanInfo {
+        uint256 banCount;
+        uint256 bannedUntil;
+        uint256 totalSlashed;
+    }
+&nbsp;
+    uint256 public nextStakeId = 1;
+    mapping(uint256 =&gt; StakeInfo) public stakes;           // stakeId → StakeInfo
+    mapping(uint256 =&gt; uint256) public facilityStake;      // facilityId → stakeId
+    mapping(address =&gt; BanInfo) public bans;
+&nbsp;
+    uint256 public totalStaked;
+    uint256 public totalSlashed;
+&nbsp;
+    event Staked(uint256 indexed stakeId, uint256 indexed facilityId, address indexed staker, uint256 amount);
+    event Slashed(uint256 indexed stakeId, uint256 indexed facilityId, address indexed staker, uint256 amount, string reason);
+    event StakeWithdrawn(uint256 indexed stakeId, address indexed staker, uint256 amount);
+    event Banned(address indexed staker, uint256 until, uint256 banCount);
+&nbsp;
+    constructor(address admin, address _jolToken, address _registry, address _slashTreasury, address _conflictScore) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+        registry = EnergyRegistry(_registry);
+        slashTreasury = _slashTreasury;
+        conflictScore = ConflictScore(_conflictScore);
+    }
+&nbsp;
+    /**
+     * @notice Calculate required stake for a facility.
+     * Stake = 3 days × capacityKW × avgPeakHours × avgCapacityFactor × JOL_PER_KWH
+     */
+    function requiredStake(uint256 _facilityId) public view returns (uint256) {
+        (, , , uint256 capacityKW, , , , , , , , , ) = registry.facilities(_facilityId);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(capacityKW &gt; 0, "Facility not found");
+&nbsp;
+        // 3 days × capacity × 4h peak × 30% CF × 1 JOL/kWh
+        uint256 dailyExpected = capacityKW * AVG_PEAK_HOURS * AVG_CAPACITY_FACTOR / BPS_BASE;
+        return dailyExpected * STAKE_DAYS * JOL_PER_KWH * 1 ether;
+    }
+&nbsp;
+    /**
+     * @notice Stake JOL to activate a facility for PoE mining.
+     * Must be the facility owner. Facility must be verified.
+     */
+    function stake(uint256 _facilityId) external returns (uint256 stakeId) {
+        require(!isBanned(msg.sender), "Account banned");
+        // ConflictScore Level 3+ cannot stake (suspended/expelled)
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (address(conflictScore) != address(0)) {
+            require(conflictScore.canTrade(msg.sender), "Conflict score too high");
+        }
+        require(facilityStake[_facilityId] == 0, "Already staked");
+&nbsp;
+        address facilityOwner = registry.facilityOwner(_facilityId);
+        require(facilityOwner == msg.sender, "Not facility owner");
+&nbsp;
+        (, , , , , , , , , , EnergyRegistry.FacilityStatus status, , ) = registry.facilities(_facilityId);
+        require(status == EnergyRegistry.FacilityStatus.Verified, "Facility not verified");
+&nbsp;
+        uint256 amount = requiredStake(_facilityId);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &gt; 0, "Zero stake");
+&nbsp;
+        jolToken.transferFrom(msg.sender, address(this), amount);
+&nbsp;
+        stakeId = nextStakeId++;
+        stakes[stakeId] = StakeInfo({
+            facilityId: _facilityId,
+            staker: msg.sender,
+            amount: amount,
+            stakedAt: block.timestamp,
+            active: true
+        });
+&nbsp;
+        facilityStake[_facilityId] = stakeId;
+        totalStaked += amount;
+&nbsp;
+        emit Staked(stakeId, _facilityId, msg.sender, amount);
+    }
+&nbsp;
+    /**
+     * @notice Slash a facility's stake for false data.
+     * Full stake is forfeited. Staker is banned.
+     */
+    function slash(
+        uint256 _facilityId,
+        string calldata _reason
+    ) external onlyRole(SLASHER_ROLE) {
+        uint256 stakeId = facilityStake[_facilityId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(stakeId != 0, "No stake");
+&nbsp;
+        StakeInfo storage s = stakes[stakeId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(s.active, "Stake not active");
+&nbsp;
+        uint256 amount = s.amount;
+        address staker = s.staker;
+&nbsp;
+        // Deactivate stake
+        s.active = false;
+        s.amount = 0;
+        facilityStake[_facilityId] = 0;
+        totalStaked -= amount;
+        totalSlashed += amount;
+&nbsp;
+        // Transfer slashed amount to treasury
+        jolToken.transfer(slashTreasury, amount);
+&nbsp;
+        // Ban the staker
+        BanInfo storage ban = bans[staker];
+        ban.banCount++;
+        ban.totalSlashed += amount;
+&nbsp;
+        if (ban.banCount == 1) {
+            ban.bannedUntil = block.timestamp + BAN_MINOR;
+        } else if (ban.banCount == 2) {
+            ban.bannedUntil = block.timestamp + BAN_MAJOR;
+        } else {
+            ban.bannedUntil = block.timestamp + BAN_PERMANENT;
+        }
+&nbsp;
+        // Report to ConflictScore — false oracle data = +100 points
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (address(conflictScore) != address(0)) {
+            conflictScore.reportViolation(staker, ConflictScore.ViolationType.FalseOracle);
+        }
+&nbsp;
+        emit Slashed(stakeId, _facilityId, staker, amount, _reason);
+        emit Banned(staker, ban.bannedUntil, ban.banCount);
+    }
+&nbsp;
+    /**
+     * @notice Withdraw stake when deregistering facility.
+     * Only facility owner, only if not slashed.
+     */
+    function withdrawStake(uint256 _facilityId) external {
+        uint256 stakeId = facilityStake[_facilityId];
+        require(stakeId != 0, "No stake");
+&nbsp;
+        StakeInfo storage s = stakes[stakeId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(s.staker == msg.sender, "Not staker");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(s.active, "Stake not active");
+&nbsp;
+        uint256 amount = s.amount;
+&nbsp;
+        s.active = false;
+        s.amount = 0;
+        facilityStake[_facilityId] = 0;
+        totalStaked -= amount;
+&nbsp;
+        jolToken.transfer(msg.sender, amount);
+&nbsp;
+        emit StakeWithdrawn(stakeId, msg.sender, amount);
+    }
+&nbsp;
+    /**
+     * @notice Check if an account is currently banned.
+     */
+    function isBanned(address _account) public view returns (bool) {
+        return bans[_account].bannedUntil &gt; block.timestamp;
+    }
+&nbsp;
+    /**
+     * @notice Check if a facility has an active stake.
+     */
+    function isStaked(uint256 _facilityId) external view returns (bool) {
+        uint256 stakeId = facilityStake[_facilityId];
+        if (stakeId == 0) return false;
+        return stakes[stakeId].active;
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

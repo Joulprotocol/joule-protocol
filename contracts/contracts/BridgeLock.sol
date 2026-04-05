@@ -45,9 +45,13 @@ contract BridgeLock is AccessControl, ReentrancyGuard {
     uint256 public totalUnlocked;
     uint256 public requiredConfirmations = 3;
 
+    // Pull-pattern: claimable balances for failed push transfers
+    mapping(address => uint256) public claimable;
+
     event JOLLocked(uint256 indexed lockId, address user, uint256 amount);
     event JOLUnlocked(uint256 indexed unlockId, address user, uint256 amount);
     event UnlockConfirmed(uint256 indexed unlockId, address validator);
+    event UnlockClaimable(uint256 indexed unlockId, address user, uint256 amount);
 
     constructor(address admin) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
@@ -80,7 +84,7 @@ contract BridgeLock is AccessControl, ReentrancyGuard {
         address _user,
         uint256 _amount,
         bytes32 _ethTxHash
-    ) external onlyRole(VALIDATOR_ROLE) {
+    ) external onlyRole(VALIDATOR_ROLE) nonReentrant {
         require(!processedEthTxHashes[_ethTxHash], "Already processed");
 
         UnlockRequest storage req = unlockRequests[_unlockId];
@@ -129,10 +133,25 @@ contract BridgeLock is AccessControl, ReentrancyGuard {
         processedEthTxHashes[req.ethTxHash] = true;
         totalUnlocked += req.amount;
 
+        // Push with pull fallback: if recipient reverts, funds become claimable
         (bool sent, ) = req.user.call{value: req.amount}("");
-        require(sent, "Transfer failed");
+        if (sent) {
+            emit JOLUnlocked(_unlockId, req.user, req.amount);
+        } else {
+            claimable[req.user] += req.amount;
+            emit UnlockClaimable(_unlockId, req.user, req.amount);
+        }
+    }
 
-        emit JOLUnlocked(_unlockId, req.user, req.amount);
+    /**
+     * @notice Pull-pattern: claim funds that failed to push-transfer.
+     */
+    function claimUnlock() external nonReentrant {
+        uint256 amount = claimable[msg.sender];
+        require(amount > 0, "Nothing to claim");
+        claimable[msg.sender] = 0;
+        (bool sent, ) = msg.sender.call{value: amount}("");
+        require(sent, "Claim failed");
     }
 
     /**

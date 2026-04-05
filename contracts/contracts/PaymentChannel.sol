@@ -156,10 +156,13 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
     /**
      * @notice Expire channel (sender can reclaim after expiration)
      */
+    // Grace period: receiver has 1 hour after expiration to submit closeChannel
+    uint256 public constant EXPIRE_GRACE_PERIOD = 1 hours;
+
     function expireChannel(uint256 _channelId) external nonReentrant {
         Channel storage ch = channels[_channelId];
         require(ch.open && !ch.closed, "Channel not open");
-        require(block.timestamp >= ch.expiration, "Not expired yet");
+        require(block.timestamp >= ch.expiration + EXPIRE_GRACE_PERIOD, "Grace period active");
         require(msg.sender == ch.sender, "Only sender can expire");
 
         ch.open = false;

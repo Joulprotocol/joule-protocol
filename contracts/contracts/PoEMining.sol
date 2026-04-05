@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
 
@@ -16,7 +17,7 @@ import "./EnergyRegistry.sol";
  * ONLY renewable energy: Solar, Wind, Hydro, Geothermal.
  * No biomass, no nuclear, no fossil. Period.
  */
-contract PoEMining is AccessControl {
+contract PoEMining is AccessControl, ReentrancyGuard {
     bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
 
     uint256 public constant ORACLE_FEE_BPS = 200;              // 2%
@@ -115,7 +116,7 @@ contract PoEMining is AccessControl {
     /**
      * @notice Claim accrued PoE mining rewards
      */
-    function claimRewards() external {
+    function claimRewards() external nonReentrant {
         uint256 amount = pendingRewards[msg.sender];
         require(amount > 0, "No pending rewards");
 
@@ -129,7 +130,7 @@ contract PoEMining is AccessControl {
     /**
      * @notice Claim oracle earnings
      */
-    function claimOracleEarnings() external {
+    function claimOracleEarnings() external nonReentrant {
         uint256 amount = oracleEarnings[msg.sender];
         require(amount > 0, "No oracle earnings");
 

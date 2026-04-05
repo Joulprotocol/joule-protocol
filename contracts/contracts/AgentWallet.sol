@@ -231,8 +231,8 @@ contract AgentWallet is ReentrancyGuard {
 
         require(jolToken.transfer(_to, _amount), "Transfer failed");
 
-        // Record in machine registry if applicable
-        machineRegistry.recordTransaction(msg.sender, _amount, true);
+        // Record in machine registry if applicable (wrapped to prevent DoS)
+        try machineRegistry.recordTransaction(msg.sender, _amount, true) {} catch {}
 
         emit AgentSpent(walletId, _to, _amount, _memo);
     }

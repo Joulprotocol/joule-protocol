@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/OracleConsensus.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> OracleConsensus.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">83.7% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>77/92</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">72.73% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>64/88</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">82.35% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>14/17</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.47% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>100/117</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">108×</span>
+<span class="cline-any cline-yes">108×</span>
+<span class="cline-any cline-yes">108×</span>
+<span class="cline-any cline-yes">108×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">91×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">147×</span>
+<span class="cline-any cline-yes">146×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145×</span>
+<span class="cline-any cline-yes">145×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">80×</span>
+<span class="cline-any cline-yes">72×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">71×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">71×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">71×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">71×</span>
+<span class="cline-any cline-yes">68×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">39×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "./JOLToken.sol";
+import "./EnergyRegistry.sol";
+import "./PoEMining.sol";
+&nbsp;
+/**
+ * @title OracleConsensus
+ * @notice Byzantine Fault Tolerant oracle network for verifying energy production.
+ *
+ * Three-layer verification:
+ *   Layer 1 — Hardware: MID-certified smart meters (EU Directive 2014/32/EU)
+ *   Layer 2 — Oracle network: 3/5 BFT consensus, staked operators, slash for fraud
+ *   Layer 3 — Cross-check: weather correlation, capacity limits, anomaly detection
+ *
+ * Oracle nodes submit energy reports with weather data hash.
+ * Anomaly flags are raised when production doesn't match conditions:
+ *   - Solar production at night → reject
+ *   - Wind production in calm weather → flag
+ *   - Production exceeds facility nameplate capacity → reject
+ *   - 10x spike vs previous period → flag for manual review
+ *
+ * Weakest link: hardware manipulation. Mitigated by MID certification (criminal offense
+ * to tamper), registered GPS location, and weather cross-check.
+ */
+contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
+    uint256 public quorum = 2;                              // starts 2/3, scales to 3/5+
+    uint256 public minOracles = 3;                          // starts 3, scales to 5+
+    uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
+    uint256 public constant SLASH_PERCENT = 50;            // 50% slash for fraud
+&nbsp;
+    event QuorumUpdated(uint256 newQuorum, uint256 newMinOracles);
+    uint256 public constant REPORT_WINDOW = 1 hours;       // time to submit reports
+    uint256 public constant MAX_DEVIATION_BPS = 500;       // 5% max deviation from median
+&nbsp;
+    struct OracleNode {
+        address operator;
+        uint256 stake;
+        uint256 reportsSubmitted;
+        uint256 reportsAccepted;
+        uint256 slashCount;
+        uint256 joinedAt;
+        bool active;
+    }
+&nbsp;
+    struct EnergyReport {
+        uint256 facilityId;
+        uint256 periodStart;
+        uint256 periodEnd;
+        uint256 createdAt;
+        bool finalized;
+        uint256 finalKWh;
+        address[] voters;
+        uint256[] submissions;      // kWh values submitted by each voter
+        bytes32[] weatherHashes;    // hash of weather data per oracle (cross-check)
+        bool anomalyFlagged;        // true if cross-check found suspicious data
+    }
+&nbsp;
+    JOLToken public jolToken;
+    EnergyRegistry public registry;
+    PoEMining public poeMining;
+    address public slashTreasury; // where slashed funds go
+&nbsp;
+    mapping(address =&gt; OracleNode) public oracles;
+    address[] public oracleList;
+    mapping(bytes32 =&gt; EnergyReport) public reports;
+    bytes32[] public pendingReportIds;
+    uint256 public pendingReportCleanupIndex; // tracks cleanup progress
+&nbsp;
+    uint256 public totalStaked;
+    uint256 public totalSlashed;
+    uint256 public reportsFinalized;
+&nbsp;
+    event OracleJoined(address indexed operator, uint256 stake);
+    event OracleExited(address indexed operator, uint256 stakeReturned);
+    event OracleSlashed(address indexed operator, uint256 amount, bytes32 reportId);
+    event ReportSubmitted(bytes32 indexed reportId, address indexed oracle, uint256 kWh);
+    event ReportFinalized(bytes32 indexed reportId, uint256 facilityId, uint256 kWh);
+    event AnomalyFlagged(bytes32 indexed reportId, uint256 facilityId, string reason);
+&nbsp;
+    constructor(address admin, address _jolToken, address _registry, address _slashTreasury) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+        registry = EnergyRegistry(_registry);
+        slashTreasury = _slashTreasury;
+    }
+&nbsp;
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+&nbsp;
+    function setQuorum(uint256 _newQuorum, uint256 _newMinOracles) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_newQuorum &gt;= 2, "Min quorum is 2");
+        require(_newMinOracles &gt;= 3, "Min oracles is 3");
+        require(_newQuorum * 2 &gt; _newMinOracles, "Quorum must be &gt;50%");
+        require(_newQuorum &lt;= _newMinOracles, "Quorum cant exceed total");
+        quorum = _newQuorum;
+        minOracles = _newMinOracles;
+        emit QuorumUpdated(_newQuorum, _newMinOracles);
+    }
+&nbsp;
+    function setPoEMining(address _poeMining) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        poeMining = PoEMining(_poeMining);
+    }
+&nbsp;
+    // ─── Oracle Management ─────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Stake JOL to become an oracle node
+     */
+    function joinAsOracle(uint256 _stakeAmount) external whenNotPaused {
+        require(_stakeAmount &gt;= MIN_STAKE, "Insufficient stake");
+        require(!oracles[msg.sender].active, "Already active");
+&nbsp;
+        // Transfer JOL stake from oracle to this contract
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transferFrom(msg.sender, address(this), _stakeAmount), "Stake transfer failed");
+&nbsp;
+        oracles[msg.sender] = OracleNode({
+            operator: msg.sender,
+            stake: _stakeAmount,
+            reportsSubmitted: 0,
+            reportsAccepted: 0,
+            slashCount: 0,
+            joinedAt: block.timestamp,
+            active: true
+        });
+&nbsp;
+        oracleList.push(msg.sender);
+        totalStaked += _stakeAmount;
+&nbsp;
+        emit OracleJoined(msg.sender, _stakeAmount);
+    }
+&nbsp;
+    /**
+     * @notice Exit oracle network and reclaim stake (minus any slashing)
+     */
+    function exitOracle() external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        OracleNode storage node = oracles[msg.sender];
+        require(node.active, "Not active oracle");
+        require(block.timestamp &gt; node.joinedAt + 30 days, "Lock period 30 days");
+&nbsp;
+        node.active = false;
+        uint256 stakeReturn = node.stake;
+        node.stake = 0;
+        totalStaked -= stakeReturn;
+&nbsp;
+        // Return JOL stake
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(msg.sender, stakeReturn), "Stake return failed");
+&nbsp;
+        emit OracleExited(msg.sender, stakeReturn);
+    }
+&nbsp;
+    // ─── Report Submission ─────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Submit an energy production report with weather cross-check.
+     * @param _weatherHash Hash of weather data for the period (oracle fetches from NASA POWER / OpenWeatherMap)
+     *
+     * Off-chain, each oracle independently:
+     * 1. Reads smart meter data (kWh produced)
+     * 2. Fetches weather data for facility location + time period
+     * 3. Checks: is production plausible given weather? (solar + cloudy = low production)
+     * 4. Submits kWh + weather hash on-chain
+     *
+     * If weather hashes from different oracles don't match → anomaly flag.
+     * If production is impossible given weather → oracle should submit 0 kWh.
+     */
+    function submitReport(
+        uint256 _facilityId,
+        uint256 _periodStart,
+        uint256 _periodEnd,
+        uint256 _kWhProduced,
+        bytes32 _weatherHash
+    ) external whenNotPaused {
+        require(oracles[msg.sender].active, "Not active oracle");
+        require(registry.isActive(_facilityId), "Facility not active");
+&nbsp;
+        bytes32 reportId = keccak256(
+            abi.encodePacked(_facilityId, _periodStart, _periodEnd)
+        );
+&nbsp;
+        EnergyReport storage report = reports[reportId];
+&nbsp;
+        // Initialize report if first submission
+        if (report.facilityId == 0) {
+            report.facilityId = _facilityId;
+            report.periodStart = _periodStart;
+            report.periodEnd = _periodEnd;
+            report.createdAt = block.timestamp;
+            pendingReportIds.push(reportId);
+        }
+&nbsp;
+        require(!report.finalized, "Already finalized");
+        require(block.timestamp &lt;= report.createdAt + REPORT_WINDOW, "Report window closed");
+&nbsp;
+        // Check oracle hasn't already voted
+        for (uint256 i = 0; i &lt; report.voters.length; i++) {
+            require(report.voters[i] != msg.sender, "Already submitted");
+        }
+&nbsp;
+        report.voters.push(msg.sender);
+        report.submissions.push(_kWhProduced);
+        report.weatherHashes.push(_weatherHash);
+        oracles[msg.sender].reportsSubmitted++;
+&nbsp;
+        emit ReportSubmitted(reportId, msg.sender, _kWhProduced);
+&nbsp;
+        // Auto-finalize if quorum reached
+        if (report.voters.length &gt;= quorum) {
+            _finalizeReport(reportId);
+        }
+    }
+&nbsp;
+    // ─── Finalization ──────────────────────────────────────────────
+&nbsp;
+    function _finalizeReport(bytes32 _reportId) internal {
+        EnergyReport storage report = reports[_reportId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!report.finalized, "Already finalized");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(report.voters.length &gt;= quorum, "No quorum");
+&nbsp;
+        // Calculate median
+        uint256[] memory sorted = _sortArray(report.submissions);
+        uint256 median = sorted[sorted.length / 2];
+&nbsp;
+        report.finalKWh = median;
+        report.finalized = true;
+        reportsFinalized++;
+&nbsp;
+        // Cross-check: do weather hashes agree?
+        // If majority of weather hashes differ, flag anomaly
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (report.weatherHashes.length &gt;= 2) {
+            uint256 matches = 0;
+            bytes32 refHash = report.weatherHashes[0];
+            for (uint256 w = 0; w &lt; report.weatherHashes.length; w++) {
+                if (report.weatherHashes[w] == refHash) matches++;
+            }
+            if (matches &lt; report.weatherHashes.length / 2 + 1) {
+                report.anomalyFlagged = true;
+                emit AnomalyFlagged(_reportId, report.facilityId, "Weather hash mismatch");
+            }
+        }
+&nbsp;
+        // Slash outliers and reward accurate reporters
+        for (uint256 i = 0; i &lt; report.voters.length; i++) {
+            uint256 submitted = report.submissions[i];
+            uint256 deviation = _percentDeviation(submitted, median);
+&nbsp;
+            if (deviation &gt; MAX_DEVIATION_BPS) {
+                // Slash for inaccurate report
+                _slashOracle(report.voters[i], _reportId);
+            } else {
+                oracles[report.voters[i]].reportsAccepted++;
+            }
+        }
+&nbsp;
+        // Record production in registry
+        registry.recordProduction(
+            report.facilityId,
+            median,
+            report.periodStart,
+            report.periodEnd
+        );
+&nbsp;
+        // Trigger PoE reward
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (address(poeMining) != address(0)) {
+            poeMining.accrueReward(report.facilityId, median);
+        }
+&nbsp;
+        emit ReportFinalized(_reportId, report.facilityId, median);
+    }
+&nbsp;
+    function _slashOracle(address _oracle, bytes32 _reportId) internal {
+        OracleNode storage node = oracles[_oracle];
+        uint256 slashAmount = (node.stake * SLASH_PERCENT) / 100;
+&nbsp;
+        node.stake -= slashAmount;
+        node.slashCount++;
+        totalSlashed += slashAmount;
+&nbsp;
+        // Transfer slashed JOL to treasury (not stuck in contract)
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (slashTreasury != address(0)) {
+            jolToken.transfer(slashTreasury, slashAmount);
+        }
+&nbsp;
+        emit OracleSlashed(_oracle, slashAmount, _reportId);
+&nbsp;
+        // Deactivate if stake falls below minimum
+        if (node.stake &lt; MIN_STAKE) {
+            node.active = false;
+        }
+    }
+&nbsp;
+    // ─── Utilities ─────────────────────────────────────────────────
+&nbsp;
+    function _sortArray(uint256[] memory arr) internal pure returns (uint256[] memory) {
+        uint256[] memory sorted = new uint256[](arr.length);
+        for (uint256 i = 0; i &lt; arr.length; i++) sorted[i] = arr[i];
+&nbsp;
+        for (uint256 i = 0; i &lt; sorted.length; i++) {
+            for (uint256 j = i + 1; j &lt; sorted.length; j++) {
+                if (sorted[j] &lt; sorted[i]) {
+                    (sorted[i], sorted[j]) = (sorted[j], sorted[i]);
+                }
+            }
+        }
+        return sorted;
+    }
+&nbsp;
+    function _percentDeviation(uint256 a, uint256 b) internal pure returns (uint256) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (b == 0) <span class="cstat-no" title="statement not covered" >return a &gt; 0 ? 10000 : 0;</span>
+        if (a &gt; b) return ((a - b) * 10000) / b;
+        return ((b - a) * 10000) / b;
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+    function getActiveOracleCount() external view returns (uint256) {
+        uint256 count;
+        for (uint256 i = 0; i &lt; oracleList.length; i++) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (oracles[oracleList[i]].active) count++;
+        }
+        return count;
+    }
+&nbsp;
+    function getReportVoters(bytes32 _reportId) external view returns (address[] memory) {
+        return reports[_reportId].voters;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getReportSubmissions(bytes32 _reportId) external view returns (uint256[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return reports[_reportId].submissions;</span>
+    }
+&nbsp;
+    // ─── Cleanup ───────────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Remove finalized reports from pendingReportIds.
+     * Prevents unbounded array growth. Anyone can call.
+     * Processes up to `_batchSize` entries per call (gas limit friendly).
+     */
+<span class="fstat-no" title="function not covered" >    function cleanupPendingReports(uint256 _batchSize) external {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 len = pendingReportIds.length;</span>
+<span class="cstat-no" title="statement not covered" >        if (len == 0 || pendingReportCleanupIndex &gt;= len) <span class="cstat-no" title="statement not covered" >return;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint256 end = pendingReportCleanupIndex + _batchSize;</span>
+<span class="cstat-no" title="statement not covered" >        if (end &gt; len) end = len;</span>
+&nbsp;
+        // Compact: move non-finalized to front
+<span class="cstat-no" title="statement not covered" >        uint256 writeIdx = pendingReportCleanupIndex;</span>
+<span class="cstat-no" title="statement not covered" >        for (uint256 i = pendingReportCleanupIndex; i &lt; end; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (!reports[pendingReportIds[i]].finalized) {</span>
+<span class="cstat-no" title="statement not covered" >                if (i != writeIdx) {</span>
+                    pendingReportIds[writeIdx] = pendingReportIds[i];
+                }
+                writeIdx++;
+            }
+        }
+&nbsp;
+        // If we processed the entire array, truncate
+<span class="cstat-no" title="statement not covered" >        if (end == len) {</span>
+            // Remove finalized entries from the end
+<span class="cstat-no" title="statement not covered" >            while (pendingReportIds.length &gt; writeIdx) {</span>
+<span class="cstat-no" title="statement not covered" >                pendingReportIds.pop()</span>;
+            }
+            pendingReportCleanupIndex = 0; // reset for next cycle
+        } else {
+            pendingReportCleanupIndex = end;
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getPendingReportCount() external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return pendingReportIds.length;</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/PaymentChannel.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> PaymentChannel.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">51.02% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>25/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>15/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">54.1% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>33/61</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "./JOLToken.sol";
+&nbsp;
+/**
+ * @title PaymentChannel
+ * @notice Bidirectional payment channels for machine-to-machine micropayments.
+ *
+ * Why this matters:
+ * - EV pays charger 0.001 JOL per second of charging
+ * - AI agent pays compute node 0.0001 JOL per inference
+ * - Smart home pays grid 0.01 JOL per kWh consumed
+ *
+ * On-chain transactions cost gas. Micropayments need to be INSTANT and FREE.
+ * Payment channels move transactions off-chain, settle on-chain only at close.
+ *
+ * Flow:
+ * 1. Open channel (deposit JOL)
+ * 2. Exchange signed payment messages off-chain (instant, free)
+ * 3. Close channel (settle final balance on-chain)
+ */
+contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
+    using ECDSA for bytes32;
+    
+&nbsp;
+    JOLToken public jolToken;
+&nbsp;
+    struct Channel {
+        uint256 id;
+        address sender;      // e.g., EV
+        address receiver;    // e.g., charger
+        uint256 deposit;     // JOL locked by sender
+        uint256 expiration;  // auto-close time
+        uint256 paid;        // total paid (updated on close)
+        bool open;
+        bool closed;
+    }
+&nbsp;
+    uint256 public nextChannelId = 1;
+    mapping(uint256 =&gt; Channel) public channels;
+    mapping(address =&gt; uint256[]) public senderChannels;
+    mapping(address =&gt; uint256[]) public receiverChannels;
+&nbsp;
+    // Stats
+    uint256 public totalChannelsOpened;
+    uint256 public totalChannelsClosed;
+    uint256 public totalVolume;
+&nbsp;
+    event ChannelOpened(uint256 indexed id, address sender, address receiver, uint256 deposit, uint256 expiration);
+    event ChannelClosed(uint256 indexed id, uint256 senderAmount, uint256 receiverAmount);
+    event ChannelExpired(uint256 indexed id, uint256 refunded);
+&nbsp;
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_pause()</span>; }</span>
+<span class="fstat-no" title="function not covered" >    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_unpause()</span>; }</span>
+&nbsp;
+    /**
+     * @notice Open a payment channel by depositing JOL
+     * @param _receiver The counterparty (machine receiving payments)
+     * @param _deposit Amount of JOL to lock
+     * @param _duration How long the channel stays open (seconds)
+     */
+    function openChannel(
+        address _receiver,
+        uint256 _deposit,
+        uint256 _duration
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant <span class="missing-if-branch" title="else path not taken" >E</span>whenNotPaused returns (uint256) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_receiver != address(0) &amp;&amp; _receiver != msg.sender, "Invalid receiver");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_deposit &gt; 0, "Zero deposit");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_duration &gt;= 60 &amp;&amp; _duration &lt;= 365 days, "Invalid duration");
+&nbsp;
+        // Effects (state changes BEFORE external calls)
+        uint256 id = nextChannelId++;
+        channels[id] = Channel({
+            id: id,
+            sender: msg.sender,
+            receiver: _receiver,
+            deposit: _deposit,
+            expiration: block.timestamp + _duration,
+            paid: 0,
+            open: true,
+            closed: false
+        });
+&nbsp;
+        senderChannels[msg.sender].push(id);
+        receiverChannels[_receiver].push(id);
+        totalChannelsOpened++;
+&nbsp;
+        // Interaction (external call AFTER state changes)
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
+&nbsp;
+        emit ChannelOpened(id, msg.sender, _receiver, _deposit, block.timestamp + _duration);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Close channel with signed payment proof.
+     * Receiver submits the latest signed message from sender.
+     *
+     * Off-chain, sender signs messages like:
+     *   "I authorize payment of X JOL on channel Y"
+     * Each new message has a higher amount (cumulative).
+     * Only the FINAL message matters for settlement.
+     */
+    function closeChannel(
+        uint256 _channelId,
+        uint256 _amount,
+        bytes memory _signature
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        Channel storage ch = channels[_channelId];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(ch.open &amp;&amp; !ch.closed, "Channel not open");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(msg.sender == ch.receiver, "Only receiver can close");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_amount &lt;= ch.deposit, "Amount exceeds deposit");
+&nbsp;
+        // Verify sender's signature
+        bytes32 message = keccak256(abi.encodePacked(
+            address(this),
+            _channelId,
+            _amount
+        ));
+        bytes32 ethSignedMessage = ECDSA.toEthSignedMessageHash(message);
+        address signer = ethSignedMessage.recover(_signature);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(signer == ch.sender, "Invalid signature");
+&nbsp;
+        // Close and settle
+        ch.open = false;
+        ch.closed = true;
+        ch.paid = _amount;
+&nbsp;
+        // Pay receiver
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (_amount &gt; 0) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(ch.receiver, _amount), "Receiver payment failed");
+        }
+&nbsp;
+        // Refund remainder to sender
+        uint256 remainder = ch.deposit - _amount;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (remainder &gt; 0) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(ch.sender, remainder), "Sender refund failed");
+        }
+&nbsp;
+        totalChannelsClosed++;
+        totalVolume += _amount;
+&nbsp;
+        emit ChannelClosed(_channelId, remainder, _amount);
+    }
+&nbsp;
+    /**
+     * @notice Expire channel (sender can reclaim after expiration)
+     */
+<span class="fstat-no" title="function not covered" >    function expireChannel(uint256 _channelId) external nonReentrant {</span>
+<span class="cstat-no" title="statement not covered" >        Channel storage ch = channels[_channelId];</span>
+<span class="cstat-no" title="statement not covered" >        require(ch.open &amp;&amp; !ch.closed, "Channel not open")</span>;
+<span class="cstat-no" title="statement not covered" >        require(block.timestamp &gt;= ch.expiration, "Not expired yet")</span>;
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == ch.sender, "Only sender can expire")</span>;
+&nbsp;
+        ch.open = false;
+        ch.closed = true;
+&nbsp;
+        // Refund full deposit to sender
+<span class="cstat-no" title="statement not covered" >        require(jolToken.transfer(ch.sender, ch.deposit), "Refund failed")</span>;
+&nbsp;
+        totalChannelsClosed++;
+<span class="cstat-no" title="statement not covered" >        emit ChannelExpired(_channelId, ch.deposit);</span>
+    }
+&nbsp;
+    /**
+     * @notice Extend channel expiration (sender only)
+     */
+<span class="fstat-no" title="function not covered" >    function extendChannel(uint256 _channelId, uint256 _additionalTime) external {</span>
+<span class="cstat-no" title="statement not covered" >        Channel storage ch = channels[_channelId];</span>
+<span class="cstat-no" title="statement not covered" >        require(ch.open, "Not open")</span>;
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == ch.sender, "Only sender")</span>;
+        ch.expiration += _additionalTime;
+    }
+&nbsp;
+    /**
+     * @notice Top up channel deposit (sender only)
+     */
+<span class="fstat-no" title="function not covered" >    function topUpChannel(uint256 _channelId, uint256 _amount) external nonReentrant {</span>
+<span class="cstat-no" title="statement not covered" >        Channel storage ch = channels[_channelId];</span>
+<span class="cstat-no" title="statement not covered" >        require(ch.open, "Not open")</span>;
+<span class="cstat-no" title="statement not covered" >        require(msg.sender == ch.sender, "Only sender")</span>;
+        ch.deposit += _amount;
+<span class="cstat-no" title="statement not covered" >        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed")</span>;
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getChannelsByPair(address _sender, address _receiver) external view returns (uint256[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256[] memory senderCh = senderChannels[_sender];</span>
+<span class="cstat-no" title="statement not covered" >        uint256 count;</span>
+<span class="cstat-no" title="statement not covered" >        for (uint256 i = 0; i &lt; senderCh.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (channels[senderCh[i]].receiver == _receiver &amp;&amp; channels[senderCh[i]].open) count++;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        uint256[] memory result = new uint256[](count);</span>
+<span class="cstat-no" title="statement not covered" >        uint256 idx;</span>
+<span class="cstat-no" title="statement not covered" >        for (uint256 i = 0; i &lt; senderCh.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (channels[senderCh[i]].receiver == _receiver &amp;&amp; channels[senderCh[i]].open) {</span>
+                result[idx++] = senderCh[i];
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return result;</span>
+    }
+&nbsp;
+    /**
+     * @notice Helper to create the message hash for off-chain signing
+     */
+    function getMessageHash(uint256 _channelId, uint256 _amount) external view returns (bytes32) {
+        return keccak256(abi.encodePacked(address(this), _channelId, _amount));
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

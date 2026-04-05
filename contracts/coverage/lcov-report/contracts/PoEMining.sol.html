@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/PoEMining.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> PoEMining.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">80.95% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>17/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">40% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">83.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>5/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">84.38% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>27/32</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">159×</span>
+<span class="cline-any cline-yes">159×</span>
+<span class="cline-any cline-yes">159×</span>
+<span class="cline-any cline-yes">159×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./JOLToken.sol";
+import "./EnergyRegistry.sol";
+&nbsp;
+/**
+ * @title PoEMining
+ * @notice Proof-of-Energy mining with fixed 3× reward multiplier.
+ *
+ * 69% total mining = PoW blocks + PoE rewards = 144,900,000 JOL
+ * PoE producers get 3× the reward per kWh vs base PoW block reward.
+ * Supply cap enforced by JOLToken (210M MAX_SUPPLY).
+ *
+ * ONLY renewable energy: Solar, Wind, Hydro, Geothermal.
+ * No biomass, no nuclear, no fossil. Period.
+ */
+contract PoEMining is AccessControl {
+    bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
+&nbsp;
+    uint256 public constant ORACLE_FEE_BPS = 200;              // 2%
+    uint256 public constant POE_REWARD_MULTIPLIER = 3;          // PoE gets 3× vs PoW from same pool
+    uint256 public constant ADJUSTMENT_INTERVAL = 10_000;       // blocks between adjustments (~42h)
+    uint256 public constant MULTIPLIER_STEP = 100;              // 0.1x in basis points (1000 = 1x)
+    uint256 public constant BASE_MULTIPLIER = 1000;             // 1.0x = 1000 basis points
+    uint256 public constant HARMONIC_EPOCH = 432;               // blocks between harmonic checks
+&nbsp;
+    JOLToken public jolToken;
+    EnergyRegistry public registry;
+&nbsp;
+    uint256 public lastAdjustmentBlock;
+&nbsp;
+    // ─── Core State ────────────────────────────────────────────
+    uint256 public totalPoEMinted;
+    uint256 public totalKWhRewarded;
+&nbsp;
+    mapping(address =&gt; uint256) public pendingRewards;
+    mapping(address =&gt; uint256) public totalClaimed;
+    mapping(address =&gt; uint256) public oracleEarnings;
+&nbsp;
+    // Daily caps
+    mapping(uint256 =&gt; mapping(uint256 =&gt; uint256)) public dailyProduction;
+    uint256 public constant MAX_DAILY_HOURS = 24;
+&nbsp;
+    // ─── Events ────────────────────────────────────────────────
+    event RewardAccrued(address indexed producer, uint256 facilityId, uint256 kWh, uint256 jolReward, uint256 multiplier);
+    event RewardClaimed(address indexed producer, uint256 amount);
+    event OracleFeePaid(address indexed oracle, uint256 amount);
+&nbsp;
+    constructor(
+        address admin,
+        address _jolToken,
+        address _registry
+    ) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+        registry = EnergyRegistry(_registry);
+        lastAdjustmentBlock = block.number;
+    }
+&nbsp;
+    /**
+     * @notice Get current JOL reward per kWh.
+     * PoE gets 3× the base PoW reward from the same 126B mining pool.
+     * Base: 1 JOL per kWh × POE_REWARD_MULTIPLIER (3×)
+     */
+    function getJolPerKWh() public pure returns (uint256) {
+        return POE_REWARD_MULTIPLIER * 1 ether;
+    }
+&nbsp;
+    // ─── Core Mining Logic ─────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Accrue PoE reward for verified energy production.
+     * Reward = kWh × dynamic multiplier × (1 - oracle fee).
+     */
+    function accrueReward(
+        uint256 _facilityId,
+        uint256 _verifiedKWh
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(ORACLE_ROLE) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_verifiedKWh &gt; 0, "Zero production");
+&nbsp;
+        // Calculate reward: kWh × 3× multiplier (from same 126B mining pool)
+        uint256 jolPerKWh = getJolPerKWh();
+        uint256 grossReward = _verifiedKWh * jolPerKWh;
+&nbsp;
+        // Supply cap enforced by JOLToken.mint (MAX_SUPPLY = 210M)
+&nbsp;
+        // Daily cap check
+        uint256 today = block.timestamp / 1 days;
+        dailyProduction[_facilityId][today] += _verifiedKWh;
+&nbsp;
+        (, , , uint256 capacityKW, , , , , , , , , ) = registry.facilities(_facilityId);
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            dailyProduction[_facilityId][today] &lt;= capacityKW * MAX_DAILY_HOURS,
+            "Daily cap exceeded"
+        );
+&nbsp;
+        address producer = registry.facilityOwner(_facilityId);
+&nbsp;
+        // Calculate distributions
+        uint256 oracleFee = (grossReward * ORACLE_FEE_BPS) / 10000;
+        uint256 producerReward = grossReward - oracleFee;
+&nbsp;
+        // Accrue rewards
+        pendingRewards[producer] += producerReward;
+        oracleEarnings[msg.sender] += oracleFee;
+&nbsp;
+        totalPoEMinted += grossReward;
+        totalKWhRewarded += _verifiedKWh;
+&nbsp;
+        emit RewardAccrued(producer, _facilityId, _verifiedKWh, producerReward, POE_REWARD_MULTIPLIER);
+    }
+&nbsp;
+    /**
+     * @notice Claim accrued PoE mining rewards
+     */
+    function claimRewards() external {
+        uint256 amount = pendingRewards[msg.sender];
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(amount &gt; 0, "No pending rewards");
+&nbsp;
+        pendingRewards[msg.sender] = 0;
+        totalClaimed[msg.sender] += amount;
+&nbsp;
+        jolToken.mint(msg.sender, amount);
+        emit RewardClaimed(msg.sender, amount);
+    }
+&nbsp;
+    /**
+     * @notice Claim oracle earnings
+     */
+<span class="fstat-no" title="function not covered" >    function claimOracleEarnings() external {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 amount = oracleEarnings[msg.sender];</span>
+<span class="cstat-no" title="statement not covered" >        require(amount &gt; 0, "No oracle earnings")</span>;
+&nbsp;
+        oracleEarnings[msg.sender] = 0;
+<span class="cstat-no" title="statement not covered" >        jolToken.mint(msg.sender, amount)</span>;
+<span class="cstat-no" title="statement not covered" >        emit OracleFeePaid(msg.sender, amount);</span>
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────
+&nbsp;
+    function getClaimable(address _account) external view returns (uint256) {
+        return pendingRewards[_account];
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

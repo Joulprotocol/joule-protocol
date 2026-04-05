@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/DEXLiquidity.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> DEXLiquidity.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>26/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">80.77% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>21/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>33/33</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./JOLToken.sol";
+&nbsp;
+/**
+ * @title DEXLiquidity
+ * @notice Launch-day DEX liquidity provisioning for Uniswap v3.
+ *
+ * Energy producers must be able to sell from day one.
+ * Without liquidity, joining is pointless. This ensures the ring is complete.
+ *
+ * Allocation: 3% of total supply = 6,300,000 JOL
+ *   Pool A: JOL/USDC — 60% (3,780,000 JOL)
+ *   Pool B: JOL/ETH  — 40% (2,520,000 JOL)
+ *
+ * Uniswap v3 concentrated liquidity:
+ *   Fee tier: 0.3% (3000) — standard tier, deepest liquidity
+ *   Price range: 0.10 – 2.00 USDC per JOL
+ *
+ * This contract holds the DEX allocation and provisions it
+ * to Uniswap v3 pools via admin-controlled deployment.
+ * Multisig (3/5 Gnosis Safe) controls the release.
+ */
+contract DEXLiquidity is AccessControl {
+    bytes32 public constant PROVISIONER_ROLE = keccak256("PROVISIONER_ROLE");
+&nbsp;
+    JOLToken public jolToken;
+&nbsp;
+    // 3% of 210M = 6.3M JOL total DEX allocation
+    uint256 public constant TOTAL_DEX_ALLOCATION = 6_300_000 ether;
+&nbsp;
+    // Pool split
+    uint256 public constant POOL_A_BPS = 6000;  // 60% → JOL/USDC
+    uint256 public constant POOL_B_BPS = 4000;  // 40% → JOL/ETH
+    uint256 public constant BPS_BASE = 10000;
+&nbsp;
+    // Uniswap v3 fee tier
+    uint24 public constant FEE_TIER = 3000;     // 0.3%
+&nbsp;
+    // Price range in USDC (scaled by 1e6 for USDC decimals)
+    uint256 public constant PRICE_LOWER = 100000;   // 0.10 USDC
+    uint256 public constant PRICE_UPPER = 2000000;   // 2.00 USDC
+&nbsp;
+    // Pool addresses (set after Uniswap pool creation)
+    address public poolJOLUSDC;
+    address public poolJOLETH;
+&nbsp;
+    // Provisioning state
+    uint256 public provisionedPoolA;
+    uint256 public provisionedPoolB;
+    bool public poolAProvisioned;
+    bool public poolBProvisioned;
+&nbsp;
+    event PoolAddressSet(string pool, address poolAddress);
+    event LiquidityProvisioned(string pool, uint256 jolAmount);
+    event EmergencyWithdraw(address indexed to, uint256 amount);
+&nbsp;
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        _grantRole(PROVISIONER_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+    }
+&nbsp;
+    /**
+     * @notice Get JOL allocation for Pool A (JOL/USDC).
+     * 60% of 6.3B = 3,780,000,000 JOL
+     */
+    function poolAAllocation() public pure returns (uint256) {
+        return TOTAL_DEX_ALLOCATION * POOL_A_BPS / BPS_BASE;
+    }
+&nbsp;
+    /**
+     * @notice Get JOL allocation for Pool B (JOL/ETH).
+     * 40% of 6.3B = 2,520,000,000 JOL
+     */
+    function poolBAllocation() public pure returns (uint256) {
+        return TOTAL_DEX_ALLOCATION * POOL_B_BPS / BPS_BASE;
+    }
+&nbsp;
+    /**
+     * @notice Set Uniswap v3 pool addresses after creation.
+     * Called by multisig after pools are deployed on Uniswap.
+     */
+    function setPoolAddresses(
+        address _poolJOLUSDC,
+        address _poolJOLETH
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_poolJOLUSDC != address(0) &amp;&amp; _poolJOLETH != address(0), "Zero address");
+        poolJOLUSDC = _poolJOLUSDC;
+        poolJOLETH = _poolJOLETH;
+        emit PoolAddressSet("JOL/USDC", _poolJOLUSDC);
+        emit PoolAddressSet("JOL/ETH", _poolJOLETH);
+    }
+&nbsp;
+    /**
+     * @notice Provision JOL to Pool A (JOL/USDC).
+     * Transfers 60% of DEX allocation to the pool router/position manager.
+     * @param _recipient Address to receive JOL (Uniswap position manager or router)
+     */
+    function provisionPoolA(address _recipient) external onlyRole(PROVISIONER_ROLE) {
+        require(!poolAProvisioned, "Pool A already provisioned");
+        require(_recipient != address(0), "Zero recipient");
+&nbsp;
+        uint256 amount = poolAAllocation();
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.balanceOf(address(this)) &gt;= amount, "Insufficient balance");
+&nbsp;
+        poolAProvisioned = true;
+        provisionedPoolA = amount;
+&nbsp;
+        jolToken.transfer(_recipient, amount);
+&nbsp;
+        emit LiquidityProvisioned("JOL/USDC", amount);
+    }
+&nbsp;
+    /**
+     * @notice Provision JOL to Pool B (JOL/ETH).
+     * Transfers 40% of DEX allocation to the pool router/position manager.
+     * @param _recipient Address to receive JOL (Uniswap position manager or router)
+     */
+    function provisionPoolB(address _recipient) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(PROVISIONER_ROLE) {
+        require(!poolBProvisioned, "Pool B already provisioned");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_recipient != address(0), "Zero recipient");
+&nbsp;
+        uint256 amount = poolBAllocation();
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.balanceOf(address(this)) &gt;= amount, "Insufficient balance");
+&nbsp;
+        poolBProvisioned = true;
+        provisionedPoolB = amount;
+&nbsp;
+        jolToken.transfer(_recipient, amount);
+&nbsp;
+        emit LiquidityProvisioned("JOL/ETH", amount);
+    }
+&nbsp;
+    /**
+     * @notice Emergency withdraw — multisig only.
+     * Only usable if pools haven't been provisioned yet.
+     */
+    function emergencyWithdraw(address _to) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(!poolAProvisioned &amp;&amp; !poolBProvisioned, "Already provisioned");
+        uint256 balance = jolToken.balanceOf(address(this));
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(balance &gt; 0, "No balance");
+&nbsp;
+        jolToken.transfer(_to, balance);
+        emit EmergencyWithdraw(_to, balance);
+    }
+&nbsp;
+    /**
+     * @notice Check if both pools are fully provisioned.
+     */
+    function fullyProvisioned() external view returns (bool) {
+        return poolAProvisioned &amp;&amp; poolBProvisioned;
+    }
+&nbsp;
+    /**
+     * @notice Remaining JOL in this contract.
+     */
+    function remainingBalance() external view returns (uint256) {
+        return jolToken.balanceOf(address(this));
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/EcosystemTreasury.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> EcosystemTreasury.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>42/42</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">89.06% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>57/64</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>13/13</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>56/56</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">79×</span>
+<span class="cline-any cline-yes">79×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-yes">57×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">23×</span>
+<span class="cline-any cline-yes">23×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./JOLToken.sol";
+&nbsp;
+/**
+ * @title EcosystemTreasury
+ * @notice Community-owned treasury for ecosystem development.
+ *
+ * Funded by: 5% of total supply (10,500,000 JOL), minted gradually.
+ * Spent by: DAO governance vote (proposal + majority).
+ *
+ * Treasury split:
+ *   90% = 9,450,000 JOL — bounties, developers, audits, DEX liquidity
+ *   10% = 1,050,000 JOL — insurance reserve (smart contract bug coverage)
+ *
+ * Insurance payouts require DAO vote + 7-day timelock.
+ * No single person controls this. Fully transparent, on-chain, auditable.
+ */
+contract EcosystemTreasury is AccessControl, ReentrancyGuard {
+    bytes32 public constant GOVERNANCE_ROLE = keccak256("GOVERNANCE_ROLE");
+&nbsp;
+    JOLToken public jolToken;
+&nbsp;
+    uint256 public constant MAX_TREASURY = 10_500_000 ether; // 5% of 210M
+    uint256 public constant MAX_INSURANCE = 1_050_000 ether; // 10% of treasury
+    uint256 public constant INSURANCE_TIMELOCK = 7 days;
+&nbsp;
+    uint256 public totalMinted;
+    uint256 public totalSpent;
+    uint256 public insuranceReserve;
+&nbsp;
+    // Insurance payout requests (timelocked)
+    struct InsuranceRequest {
+        address recipient;
+        uint256 amount;
+        string reason;
+        uint256 requestedAt;
+        bool executed;
+    }
+    uint256 public nextInsuranceId = 1;
+    mapping(uint256 =&gt; InsuranceRequest) public insuranceRequests;
+&nbsp;
+    // Bounty system
+    struct Bounty {
+        uint256 id;
+        string description;
+        uint256 reward;
+        address claimedBy;
+        bool active;
+        bool paid;
+    }
+&nbsp;
+    uint256 public nextBountyId = 1;
+    mapping(uint256 =&gt; Bounty) public bounties;
+&nbsp;
+    // Spend proposals (linked to Governance contract)
+    struct SpendProposal {
+        address recipient;
+        uint256 amount;
+        string reason;
+        bool executed;
+    }
+&nbsp;
+    mapping(uint256 =&gt; SpendProposal) public proposals; // governanceProposalId → spend
+&nbsp;
+    event TreasuryFunded(uint256 amount, uint256 totalMinted);
+    event BountyCreated(uint256 indexed id, string description, uint256 reward);
+    event BountyClaimed(uint256 indexed id, address claimedBy);
+    event BountyPaid(uint256 indexed id, address to, uint256 amount);
+    event SpendApproved(uint256 indexed proposalId, address recipient, uint256 amount, string reason);
+    event InsuranceFunded(uint256 amount, uint256 totalReserve);
+    event InsuranceRequested(uint256 indexed id, address recipient, uint256 amount, string reason);
+    event InsurancePayout(uint256 indexed id, address indexed recipient, uint256 amount, string reason);
+&nbsp;
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+    }
+&nbsp;
+    // ─── Funding ───────────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Mint JOL to treasury (called periodically, respects 5% cap)
+     * Minting schedule: proportional to total mined supply.
+     * For every 95 JOL mined by miners, 5 JOL minted to treasury.
+     */
+    function fundTreasury(uint256 _amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(totalMinted + _amount &lt;= MAX_TREASURY, "Exceeds treasury cap");
+        totalMinted += _amount;
+        jolToken.mint(address(this), _amount);
+        emit TreasuryFunded(_amount, totalMinted);
+    }
+&nbsp;
+    // ─── Bounties ──────────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Create a bounty (governance only)
+     */
+    function createBounty(
+        string calldata _description,
+        uint256 _reward
+    ) external onlyRole(GOVERNANCE_ROLE) returns (uint256) {
+        require(_reward &gt; 0, "Zero reward");
+&nbsp;
+        uint256 id = nextBountyId++;
+        bounties[id] = Bounty({
+            id: id,
+            description: _description,
+            reward: _reward,
+            claimedBy: address(0),
+            active: true,
+            paid: false
+        });
+&nbsp;
+        emit BountyCreated(id, _description, _reward);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Claim a bounty (anyone can claim, governance approves payment)
+     */
+    function claimBounty(uint256 _bountyId) external {
+        Bounty storage b = bounties[_bountyId];
+        require(b.active, "Not active");
+        require(b.claimedBy == address(0), "Already claimed");
+&nbsp;
+        b.claimedBy = msg.sender;
+        emit BountyClaimed(_bountyId, msg.sender);
+    }
+&nbsp;
+    /**
+     * @notice Pay out a claimed bounty (governance approves)
+     */
+    function payBounty(uint256 _bountyId) external onlyRole(GOVERNANCE_ROLE) <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        Bounty storage b = bounties[_bountyId];
+        require(b.claimedBy != address(0), "Not claimed");
+        require(!b.paid, "Already paid");
+        require(jolToken.balanceOf(address(this)) &gt;= b.reward + insuranceReserve, "Insufficient treasury (insurance reserved)");
+&nbsp;
+        b.paid = true;
+        b.active = false;
+        totalSpent += b.reward;
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(b.claimedBy, b.reward), "Transfer failed");
+        emit BountyPaid(_bountyId, b.claimedBy, b.reward);
+    }
+&nbsp;
+    /**
+     * @notice Cancel a bounty (governance only)
+     */
+    function cancelBounty(uint256 _bountyId) external onlyRole(GOVERNANCE_ROLE) {
+        bounties[_bountyId].active = false;
+    }
+&nbsp;
+    // ─── General Spending (via Governance) ─────────────────────────
+&nbsp;
+    /**
+     * @notice Execute a governance-approved spend
+     */
+    function executeSpend(
+        address _recipient,
+        uint256 _amount,
+        string calldata _reason
+    ) external onlyRole(GOVERNANCE_ROLE) <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        require(_amount &gt; 0, "Zero amount");
+        uint256 balance = jolToken.balanceOf(address(this));
+        // Protect insurance reserve — general spend cannot touch it
+        require(balance &gt;= _amount + insuranceReserve, "Insufficient treasury (insurance reserved)");
+&nbsp;
+        totalSpent += _amount;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(_recipient, _amount), "Transfer failed");
+&nbsp;
+        emit SpendApproved(0, _recipient, _amount, _reason);
+    }
+&nbsp;
+    // ─── Insurance Reserve ─────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Fund the insurance reserve from treasury balance
+     */
+    function fundInsurance(uint256 _amount) external onlyRole(GOVERNANCE_ROLE) {
+        require(insuranceReserve + _amount &lt;= MAX_INSURANCE, "Exceeds insurance cap");
+        require(jolToken.balanceOf(address(this)) &gt;= _amount, "Insufficient treasury");
+        insuranceReserve += _amount;
+        emit InsuranceFunded(_amount, insuranceReserve);
+    }
+&nbsp;
+    /**
+     * @notice Request insurance payout (starts 7-day timelock)
+     */
+    function requestInsurancePayout(
+        address _recipient,
+        uint256 _amount,
+        string calldata _reason
+    ) external onlyRole(GOVERNANCE_ROLE) returns (uint256) {
+        require(_amount &gt; 0 &amp;&amp; _amount &lt;= insuranceReserve, "Invalid amount");
+        require(bytes(_reason).length &gt; 0, "Reason required");
+&nbsp;
+        uint256 id = nextInsuranceId++;
+        insuranceRequests[id] = InsuranceRequest({
+            recipient: _recipient,
+            amount: _amount,
+            reason: _reason,
+            requestedAt: block.timestamp,
+            executed: false
+        });
+&nbsp;
+        emit InsuranceRequested(id, _recipient, _amount, _reason);
+        return id;
+    }
+&nbsp;
+    /**
+     * @notice Execute insurance payout after 7-day timelock
+     */
+    function executeInsurancePayout(uint256 _id) external onlyRole(GOVERNANCE_ROLE) <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        InsuranceRequest storage req = insuranceRequests[_id];
+        require(!req.executed, "Already executed");
+        require(req.amount &gt; 0, "Invalid request");
+        require(block.timestamp &gt;= req.requestedAt + INSURANCE_TIMELOCK, "Timelock not expired");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(req.amount &lt;= insuranceReserve, "Exceeds insurance reserve");
+&nbsp;
+        req.executed = true;
+        insuranceReserve -= req.amount;
+        totalSpent += req.amount;
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(jolToken.transfer(req.recipient, req.amount), "Transfer failed");
+        emit InsurancePayout(_id, req.recipient, req.amount, req.reason);
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+    function treasuryBalance() external view returns (uint256) {
+        return jolToken.balanceOf(address(this));
+    }
+&nbsp;
+    function remainingMintable() external view returns (uint256) {
+        return MAX_TREASURY - totalMinted;
+    }
+&nbsp;
+    function getActiveBounties() external view returns (uint256 count) {
+        for (uint256 i = 1; i &lt; nextBountyId; i++) {
+            if (bounties[i].active) count++;
+        }
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/EnergyPeg.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> EnergyPeg.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">32.35% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>11/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16.67% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>6/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">33.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">37.78% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>17/45</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">80×</span>
+<span class="cline-any cline-yes">80×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">46×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+&nbsp;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "./JOLToken.sol";
+&nbsp;
+/**
+ * @title EnergyPeg
+ * @notice THE core value mechanism of JOULE.
+ *
+ * 1 JOL = 1 kWh of verified renewable energy.
+ *
+ * This is NOT a stablecoin peg. It's a FLOOR PRICE mechanism:
+ * - Energy producers deposit verified kWh → receive 1 JOL per kWh
+ * - Anyone holding JOL can redeem it for energy credits (1 JOL = 1 kWh)
+ * - Energy credits are redeemable at participating producers
+ * - Floor price = market price of 1 kWh (~0.20-0.30 EUR in EU)
+ * - JOL can trade ABOVE the floor (speculation, scarcity, utility)
+ * - JOL cannot sustainably trade BELOW the floor (arbitrage closes gap)
+ *
+ * As global energy prices rise → JOL floor rises.
+ * As AI compute demand grows → energy demand grows → JOL floor rises.
+ */
+contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
+    bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
+    bytes32 public constant PRODUCER_ROLE = keccak256("PRODUCER_ROLE");
+&nbsp;
+    JOLToken public jolToken;
+&nbsp;
+    // Energy Reserve cap — shared with PoEMining (total 42M for energy)
+    // EnergyPeg uses the Energy Reserve allocation (20% of supply)
+    // This cap prevents unlimited minting via depositEnergy
+    uint256 public constant MAX_PEG_MINT = 42_000_000 ether; // 20% of 210M
+&nbsp;
+    // Energy Reserve: total kWh backing in the system
+    uint256 public totalEnergyReserveKWh;
+    uint256 public totalMintedFromEnergy;
+    uint256 public totalRedeemedKWh;
+&nbsp;
+    // Producer registry
+    struct EnergyProducer {
+        address producer;
+        string name;
+        string country;           // ISO 3166-1
+        string energyType;        // "solar", "wind", "hydro"
+        uint256 totalDeposited;   // kWh deposited lifetime
+        uint256 totalRedeemed;    // kWh redeemed against this producer
+        uint256 availableKWh;     // current redeemable balance
+        bool active;
+    }
+&nbsp;
+    mapping(address =&gt; EnergyProducer) public producers;
+    address[] public producerList;
+&nbsp;
+    // Redemption tickets
+    struct RedemptionTicket {
+        uint256 id;
+        address redeemer;
+        address producer;
+        uint256 kWh;
+        uint256 createdAt;
+        bool fulfilled;
+    }
+&nbsp;
+    uint256 public nextTicketId = 1;
+    mapping(uint256 =&gt; RedemptionTicket) public tickets;
+    mapping(address =&gt; uint256[]) public userTickets;
+&nbsp;
+    // Price oracle (kWh price in USD cents, updated by oracle)
+    uint256 public kWhPriceUSDCents = 25; // default 0.25 USD
+    uint256 public lastPriceUpdate;
+&nbsp;
+    event EnergyDeposited(address indexed producer, uint256 kWh, uint256 jolMinted);
+    event EnergyRedeemed(address indexed redeemer, address indexed producer, uint256 kWh, uint256 jolBurned);
+    event RedemptionTicketCreated(uint256 indexed ticketId, address redeemer, uint256 kWh);
+    event RedemptionFulfilled(uint256 indexed ticketId, address producer);
+    event PriceUpdated(uint256 newPriceUSDCents);
+    event ProducerRegistered(address indexed producer, string name);
+&nbsp;
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        jolToken = JOLToken(_jolToken);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_pause()</span>; }</span>
+<span class="fstat-no" title="function not covered" >    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { <span class="cstat-no" title="statement not covered" >_unpause()</span>; }</span>
+&nbsp;
+    // ─── Producer Management ───────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Register as an energy producer
+     */
+    function registerProducer(
+        string calldata _name,
+        string calldata _country,
+        string calldata _energyType
+    ) external {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!producers[msg.sender].active, "Already registered");
+&nbsp;
+        producers[msg.sender] = EnergyProducer({
+            producer: msg.sender,
+            name: _name,
+            country: _country,
+            energyType: _energyType,
+            totalDeposited: 0,
+            totalRedeemed: 0,
+            availableKWh: 0,
+            active: true
+        });
+        producerList.push(msg.sender);
+&nbsp;
+        emit ProducerRegistered(msg.sender, _name);
+    }
+&nbsp;
+    // ─── THE PEG: Deposit Energy → Get JOL ─────────────────────────
+&nbsp;
+    /**
+     * @notice Deposit verified energy production, receive 1 JOL per kWh.
+     * Called by oracle after verifying real-world energy production.
+     *
+     * This is the MINTING mechanism. New JOL only enters circulation
+     * when REAL energy is produced and verified.
+     */
+    function depositEnergy(
+        address _producer,
+        uint256 _kWh
+    ) external <span class="missing-if-branch" title="else path not taken" >E</span>onlyRole(ORACLE_ROLE) <span class="missing-if-branch" title="else path not taken" >E</span>whenNotPaused {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(producers[_producer].active, "Not registered producer");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_kWh &gt; 0, "Zero kWh");
+&nbsp;
+        // Check peg mint cap
+        uint256 jolAmount = _kWh * 1 ether;
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(totalMintedFromEnergy * 1 ether + jolAmount &lt;= MAX_PEG_MINT, "Peg mint cap reached");
+&nbsp;
+        // Update producer state
+        producers[_producer].totalDeposited += _kWh;
+        producers[_producer].availableKWh += _kWh;
+&nbsp;
+        // Update global reserve
+        totalEnergyReserveKWh += _kWh;
+        totalMintedFromEnergy += _kWh;
+&nbsp;
+        // Mint 1 JOL per kWh to producer — capped
+        jolToken.mint(_producer, jolAmount);
+&nbsp;
+        emit EnergyDeposited(_producer, _kWh, jolAmount);
+    }
+&nbsp;
+    // ─── THE PEG: Burn JOL → Get Energy Credit ─────────────────────
+&nbsp;
+    /**
+     * @notice Redeem JOL for energy credits.
+     * Burns JOL and creates a redemption ticket against a producer.
+     *
+     * 1 JOL burned = 1 kWh credit at chosen producer.
+     * This creates the FLOOR PRICE: if JOL trades below energy price,
+     * arbitrageurs buy JOL and redeem for energy (profit).
+     */
+<span class="fstat-no" title="function not covered" >    function redeemForEnergy(</span>
+        address _producer,
+        uint256 _kWh
+    ) external nonReentrant whenNotPaused {
+<span class="cstat-no" title="statement not covered" >        require(producers[_producer].active, "Producer not active")</span>;
+<span class="cstat-no" title="statement not covered" >        require(producers[_producer].availableKWh &gt;= _kWh, "Insufficient producer capacity")</span>;
+<span class="cstat-no" title="statement not covered" >        require(_kWh &gt; 0, "Zero kWh")</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint256 jolAmount = _kWh * 1 ether;</span>
+&nbsp;
+        // Effects (state changes BEFORE external calls)
+        producers[_producer].availableKWh -= _kWh;
+        producers[_producer].totalRedeemed += _kWh;
+        totalEnergyReserveKWh -= _kWh;
+        totalRedeemedKWh += _kWh;
+&nbsp;
+        // Create redemption ticket
+<span class="cstat-no" title="statement not covered" >        uint256 ticketId = nextTicketId++;</span>
+&nbsp;
+        // Burn JOL from redeemer (interaction AFTER state changes)
+<span class="cstat-no" title="statement not covered" >        jolToken.protocolBurn(msg.sender, jolAmount, "energy_redemption")</span>;
+        tickets[ticketId] = RedemptionTicket({
+            id: ticketId,
+            redeemer: msg.sender,
+            producer: _producer,
+            kWh: _kWh,
+            createdAt: block.timestamp,
+            fulfilled: false
+        });
+<span class="cstat-no" title="statement not covered" >        userTickets[msg.sender].push(ticketId)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        emit RedemptionTicketCreated(ticketId, msg.sender, _kWh);</span>
+<span class="cstat-no" title="statement not covered" >        emit EnergyRedeemed(msg.sender, _producer, _kWh, jolAmount);</span>
+    }
+&nbsp;
+    /**
+     * @notice Producer marks redemption ticket as fulfilled
+     */
+<span class="fstat-no" title="function not covered" >    function fulfillRedemption(uint256 _ticketId) external {</span>
+<span class="cstat-no" title="statement not covered" >        RedemptionTicket storage ticket = tickets[_ticketId];</span>
+<span class="cstat-no" title="statement not covered" >        require(ticket.producer == msg.sender, "Not your ticket")</span>;
+<span class="cstat-no" title="statement not covered" >        require(!ticket.fulfilled, "Already fulfilled")</span>;
+&nbsp;
+        ticket.fulfilled = true;
+<span class="cstat-no" title="statement not covered" >        emit RedemptionFulfilled(_ticketId, msg.sender);</span>
+    }
+&nbsp;
+    // ─── Price Oracle ──────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Update the reference kWh price (oracle only)
+     */
+<span class="fstat-no" title="function not covered" >    function updatePrice(uint256 _priceUSDCents) external onlyRole(ORACLE_ROLE) {</span>
+<span class="cstat-no" title="statement not covered" >        require(_priceUSDCents &gt; 0 &amp;&amp; _priceUSDCents &lt; 10000, "Invalid price")</span>;
+        kWhPriceUSDCents = _priceUSDCents;
+        lastPriceUpdate = block.timestamp;
+<span class="cstat-no" title="statement not covered" >        emit PriceUpdated(_priceUSDCents);</span>
+    }
+&nbsp;
+    // ─── Views ─────────────────────────────────────────────────────
+&nbsp;
+    /**
+     * @notice Implied floor price of 1 JOL in USD cents
+     */
+    function floorPriceUSDCents() external view returns (uint256) {
+        return kWhPriceUSDCents; // 1 JOL = 1 kWh = kWh price
+    }
+&nbsp;
+    /**
+     * @notice Backing ratio: how much energy backs the circulating JOL
+     */
+<span class="fstat-no" title="function not covered" >    function backingRatio() external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 circulating = jolToken.totalSupply();</span>
+<span class="cstat-no" title="statement not covered" >        if (circulating == 0) <span class="cstat-no" title="statement not covered" >return 0;</span></span>
+<span class="cstat-no" title="statement not covered" >        return (totalEnergyReserveKWh * 1 ether * 10000) / circulating;</span> // basis points
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getProducerCount() external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return producerList.length;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getUserTickets(address _user) external view returns (uint256[] memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return userTickets[_user];</span>
+    }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Apr 05 2026 20:15:24 GMT+0300 (Ida-Euroopa suveaeg)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
