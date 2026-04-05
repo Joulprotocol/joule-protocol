@@ -20,6 +20,7 @@ contract Governance is AccessControl, ReentrancyGuard {
     uint256 public constant PROPOSAL_THRESHOLD = 100_000 ether;  // 100k JOL to propose
     uint256 public constant VOTING_PERIOD = 7 days;
     uint256 public constant EXECUTION_DELAY = 2 days;             // timelock after passing
+    uint256 public constant MAX_TARGETS = 10;                     // max actions per proposal
     uint256 public constant QUORUM_BPS = 400;                     // 4% of circulating supply
     uint256 public constant MAX_WALLET_VOTE_BPS = 500;            // max 5% of circulating supply per voter
 
@@ -50,6 +51,7 @@ contract Governance is AccessControl, ReentrancyGuard {
     event ProposalExecuted(uint256 indexed id);
     event ProposalCancelled(uint256 indexed id);
     event ProposalFinalized(uint256 indexed id, ProposalState state);
+    event ExecutionCallFailed(uint256 indexed proposalId, uint256 index, address target, bytes returnData);
 
     constructor(address admin, address _jolToken) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
@@ -70,6 +72,7 @@ contract Governance is AccessControl, ReentrancyGuard {
             "Insufficient voting power to propose (delegate first)"
         );
         require(_targets.length == _calldatas.length, "Length mismatch");
+        require(_targets.length <= MAX_TARGETS, "Too many targets");
 
         uint256 id = nextProposalId++;
         Proposal storage p = proposals[id];
@@ -150,9 +153,12 @@ contract Governance is AccessControl, ReentrancyGuard {
 
         p.state = ProposalState.Executed;
 
+        // Execute each target — failures are logged, not reverted (prevents DoS)
         for (uint256 i = 0; i < p.targets.length; i++) {
-            (bool success, ) = p.targets[i].call(p.calldatas[i]);
-            require(success, "Execution failed");
+            (bool success, bytes memory returnData) = p.targets[i].call(p.calldatas[i]);
+            if (!success) {
+                emit ExecutionCallFailed(_proposalId, i, p.targets[i], returnData);
+            }
         }
 
         emit ProposalExecuted(_proposalId);

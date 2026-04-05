@@ -2,6 +2,8 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "./JOLToken.sol";
 
@@ -22,7 +24,7 @@ import "./JOLToken.sol";
  * 2. Exchange signed payment messages off-chain (instant, free)
  * 3. Close channel (settle final balance on-chain)
  */
-contract PaymentChannel is ReentrancyGuard {
+contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
     using ECDSA for bytes32;
     
 
@@ -53,9 +55,13 @@ contract PaymentChannel is ReentrancyGuard {
     event ChannelClosed(uint256 indexed id, uint256 senderAmount, uint256 receiverAmount);
     event ChannelExpired(uint256 indexed id, uint256 refunded);
 
-    constructor(address _jolToken) {
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
     }
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
 
     /**
      * @notice Open a payment channel by depositing JOL
@@ -67,7 +73,7 @@ contract PaymentChannel is ReentrancyGuard {
         address _receiver,
         uint256 _deposit,
         uint256 _duration
-    ) external nonReentrant returns (uint256) {
+    ) external nonReentrant whenNotPaused returns (uint256) {
         require(_receiver != address(0) && _receiver != msg.sender, "Invalid receiver");
         require(_deposit > 0, "Zero deposit");
         require(_duration >= 60 && _duration <= 365 days, "Invalid duration");

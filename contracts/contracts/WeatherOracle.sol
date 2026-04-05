@@ -88,6 +88,14 @@ contract WeatherOracle is AccessControl {
         require(_timestamp <= block.timestamp, "Future timestamp");
         require(_timestamp > block.timestamp - 2 days, "Data too old");
 
+        // Anti-backfill: reject weather for days that already have verified data
+        uint256 day = _timestamp / 1 days;
+        uint256 existingId = dailyWeatherId[_facilityId][day];
+        require(
+            existingId == 0 || !weatherData[existingId].verified,
+            "Weather already verified for this day"
+        );
+
         (, , , uint256 capacityKW, , , , , , , , , ) = registry.facilities(_facilityId);
         require(capacityKW > 0, "Facility not found");
 
@@ -103,7 +111,6 @@ contract WeatherOracle is AccessControl {
             verified: false
         });
 
-        uint256 day = _timestamp / 1 days;
         dailyWeatherId[_facilityId][day] = id;
 
         emit WeatherSubmitted(id, _facilityId, msg.sender);

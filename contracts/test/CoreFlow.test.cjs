@@ -55,10 +55,10 @@ describe("JOULE Core Flow", function () {
     machineReg = await MachineRegistry.deploy(owner.address);
 
     const PaymentChannel = await ethers.getContractFactory("PaymentChannel");
-    payChannel = await PaymentChannel.deploy(jolToken.target);
+    payChannel = await PaymentChannel.deploy(owner.address, jolToken.target);
 
     const StreamingPayments = await ethers.getContractFactory("StreamingPayments");
-    streaming = await StreamingPayments.deploy(jolToken.target);
+    streaming = await StreamingPayments.deploy(owner.address, jolToken.target);
 
     const CarbonCredit = await ethers.getContractFactory("CarbonCredit");
     carbon = await CarbonCredit.deploy(owner.address);

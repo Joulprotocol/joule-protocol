@@ -2,6 +2,8 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./JOLToken.sol";
 
 /**
@@ -17,7 +19,7 @@ import "./JOLToken.sol";
  * Money flows continuously. No invoices, no billing cycles, no disputes.
  * Machines pay EXACTLY for what they use, per-second.
  */
-contract StreamingPayments is ReentrancyGuard {
+contract StreamingPayments is ReentrancyGuard, Pausable, AccessControl {
     JOLToken public jolToken;
 
     uint256 public constant FEE_BPS = 10; // 0.1% protocol fee — 100% burned
@@ -50,9 +52,13 @@ contract StreamingPayments is ReentrancyGuard {
     event StreamStopped(uint256 indexed id, uint256 senderRefund, uint256 receiverPaid);
     event StreamToppedUp(uint256 indexed id, uint256 amount);
 
-    constructor(address _jolToken) {
+    constructor(address admin, address _jolToken) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
     }
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
 
     /**
      * @notice Start a payment stream
@@ -64,7 +70,7 @@ contract StreamingPayments is ReentrancyGuard {
         address _receiver,
         uint256 _ratePerSecond,
         uint256 _deposit
-    ) external returns (uint256) {
+    ) external whenNotPaused returns (uint256) {
         require(_receiver != address(0) && _receiver != msg.sender, "Invalid receiver");
         require(_ratePerSecond > 0, "Zero rate");
         require(_deposit >= _ratePerSecond, "Deposit too small");

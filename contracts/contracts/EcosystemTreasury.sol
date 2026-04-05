@@ -138,7 +138,7 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
         Bounty storage b = bounties[_bountyId];
         require(b.claimedBy != address(0), "Not claimed");
         require(!b.paid, "Already paid");
-        require(jolToken.balanceOf(address(this)) >= b.reward, "Insufficient treasury");
+        require(jolToken.balanceOf(address(this)) >= b.reward + insuranceReserve, "Insufficient treasury (insurance reserved)");
 
         b.paid = true;
         b.active = false;
@@ -166,7 +166,9 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
         string calldata _reason
     ) external onlyRole(GOVERNANCE_ROLE) nonReentrant {
         require(_amount > 0, "Zero amount");
-        require(jolToken.balanceOf(address(this)) >= _amount, "Insufficient treasury");
+        uint256 balance = jolToken.balanceOf(address(this));
+        // Protect insurance reserve — general spend cannot touch it
+        require(balance >= _amount + insuranceReserve, "Insufficient treasury (insurance reserved)");
 
         totalSpent += _amount;
         require(jolToken.transfer(_recipient, _amount), "Transfer failed");
