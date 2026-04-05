@@ -1,0 +1,1120 @@
+
+
+  JOULE Adversarial Agents
+    Agent: Pettis Tootja (Fake Producer)
+      ✔ cannot submit oracle reports without oracle role
+      ✔ cannot register duplicate meter IDs
+      ✔ cannot submit kWh exceeding physical capacity via PhysicalCap
+      ✔ cannot claim rewards without staking (StakeSlash blocks)
+      ✔ cannot get past EnergyProofEngine without all 5 layers
+      ✔ SCORECARD: all fake producer attacks failed
+    Agent: Governance Ründaja
+      ✔ cannot create proposal without enough voting power
+      ✔ cannot vote on proposal without delegation (snapshot)
+      ✔ cannot execute proposal before timelock expires
+      ✔ cannot create proposal with too many targets
+      ✔ cannot cancel other people's proposals
+      ✔ SCORECARD: all governance attacks failed
+    Agent: Lazy Oracle
+      ✔ cannot submit report after window closes (1h)
+      ✔ cannot submit duplicate reports for same period
+      ✔ gets slashed for wildly different value (>5% deviation)
+      ✔ cannot reach quorum with only 1 oracle (quorum enforced)
+      ✔ SCORECARD: all lazy oracle attacks blocked
+    Agent: Treasury Raider
+      ✔ cannot call fundTreasury without admin role
+      ✔ cannot call executeSpend without governance role
+      ✔ cannot drain treasury past insurance reserve
+      ✔ cannot execute insurance payout without timelock
+      ✔ cannot create bounty without governance role
+      ✔ SCORECARD: all treasury raids failed
+    Agent: Replay Attacker
+      ✔ cannot process same oracle report twice through EnergyProofEngine
+      ✔ cannot use same ethTxHash in bridge twice
+      ✔ cannot vote twice on same governance proposal
+      ✔ cannot submit same oracle report twice
+      ✔ SCORECARD: all replay attacks failed
+
+  BridgeLock — Ethereum Bridge
+    lockJOL
+      ✔ locks native JOL and emits event
+      ✔ updates totalLocked correctly
+      ✔ increments lockId for each lock
+      ✔ contract receives the locked JOL
+      ✔ reverts on zero amount
+    confirmUnlock — first confirmation
+      ✔ initializes unlock request on first confirmation
+      ✔ rejects confirmation from non-validator
+    confirmUnlock — hash-bound validation
+      ✔ accepts matching second confirmation
+      ✔ rejects mismatched user address
+      ✔ rejects mismatched amount
+      ✔ rejects mismatched ethTxHash
+      ✔ rejects double confirmation by same validator
+    Multi-validator confirmation flow (3/5)
+      ✔ does not execute with only 2 confirmations
+      ✔ auto-executes on 3rd confirmation
+      ✔ updates totalUnlocked after execution
+      ✔ rejects 4th confirmation on already executed request
+    Timelock for large amounts (>= 100k JOL)
+      ✔ reverts when timelock not expired
+      ✔ executes after 24h timelock expires
+      ✔ no timelock for amounts below 100k
+    Double-process prevention (same ethTxHash)
+      ✔ marks ethTxHash as processed after execution
+      ✔ rejects new unlock with already-processed ethTxHash
+    Execute unlock — balance checks
+      ✔ reverts when bridge has insufficient balance
+      ✔ transfers exact amount to user
+      ✔ bridgeTVL decreases after unlock
+    Edge cases
+      ✔ receive() allows direct funding of bridge
+      ✔ multiple independent unlocks work correctly
+      ✔ LARGE_AMOUNT constant matches 100_000 ether
+      ✔ TIMELOCK_DURATION constant matches 24 hours
+      ✔ requiredConfirmations is 3
+
+  ConflictScore — Proportional Consequences
+    Penalty Values
+      ✔ infrastructure attack = 500 points
+      ✔ node attack = 200 points
+      ✔ false oracle data = 100 points
+      ✔ sell limit violation = 20 points
+    Level Thresholds
+      ✔ starts at Level 0 (clean)
+      ✔ sell limit → Level 0 (score 20)
+      ✔ false oracle → Level 1 (score 100)
+      ✔ node attack → Level 2 (score 200 → needs 300)
+      ✔ infrastructure attack → Level 3 (score 500)
+      ✔ double infrastructure → Level 4 (score 1000)
+    Sell Limit — Max Level 2
+      ✔ sell limit violations capped at score 499
+      ✔ sell limit never causes Level 3 suspension
+    Reward Multipliers
+      ✔ Level 0 → 100% rewards
+      ✔ Level 1 → 75% rewards
+      ✔ Level 2 → 50% rewards
+      ✔ Level 3+ → 0% rewards
+    Access Control by Level
+      ✔ Level 0-1 can govern and trade
+      ✔ Level 2 → no governance, can still trade
+      ✔ Level 3 → no governance, no trading
+    Score Decay
+      ✔ Level 1 decays -20 per month
+      ✔ Level 3 decays slower (-10 per month)
+      ✔ multiple months of peace stack decay
+      ✔ score doesn't go below zero
+      ✔ Level 4 (expelled) — no decay
+    Authorization
+      ✔ only reporter can report violations
+      ✔ anyone can trigger decay
+
+  JOULE Core Flow
+    1. JOL Token
+      ✔ has 210M max supply
+      ✔ mints and burns correctly
+      ✔ enforces max supply
+    2. Energy Registration + Verification
+      ✔ registers solar facility
+      ✔ verifies and records production
+      ✔ rejects fossil fuel types (only 0-3 allowed)
+    3. Energy Peg
+      ✔ deposits energy and mints JOL 1:1
+      ✔ reports floor price
+    4. Payment Channels (Micropayments)
+      ✔ opens channel, signs off-chain, closes with settlement
+    5. Streaming Payments (Per-Second)
+      ✔ creates stream and receiver can withdraw
+      ✔ stops stream and refunds sender
+    6. AI Agent Wallets
+      ✔ creates wallet with limits and agent spends within them
+      ✔ rejects spend over per-tx limit
+      ✔ owner can freeze wallet
+    7. Carbon Credits (NFT)
+      ✔ issues carbon credit NFT from verified energy
+      ✔ retires credit (cannot transfer after)
+    8. Machine Registry + Reputation
+      ✔ registers and verifies a machine
+    9. Energy Marketplace (P2P + Burn)
+      ✔ creates listing, buyer purchases, fees burned
+    10. Full Lifecycle: Energy → JOL → Payment → Burn
+      ✔ producer generates energy, earns JOL, AI agent pays, fees burned
+
+  DEXLiquidity — Uniswap v3 Provisioning
+    Constants
+      ✔ total DEX allocation = 6.3M JOL (3% of 210M)
+      ✔ Pool A (JOL/USDC) = 60% = 3.78M JOL
+      ✔ Pool B (JOL/ETH) = 40% = 2.52M JOL
+      ✔ A + B = total allocation
+      ✔ fee tier = 3000 (0.3%)
+      ✔ price range: 0.10 – 2.00 USDC
+    Pool Configuration
+      ✔ sets pool addresses
+      ✔ rejects zero addresses
+      ✔ only admin can set pool addresses
+    Provisioning
+      ✔ provisions Pool A with 3.78B JOL
+      ✔ provisions Pool B with 2.52B JOL
+      ✔ both pools provisioned → fullyProvisioned = true
+      ✔ contract empty after both provisions
+      ✔ rejects double provisioning Pool A
+      ✔ rejects double provisioning Pool B
+      ✔ rejects zero recipient
+      ✔ rejects unauthorized provisioning
+    Emergency Withdraw
+      ✔ admin can withdraw before provisioning
+      ✔ blocked after any provisioning
+      ✔ only admin can emergency withdraw
+
+  5-Year Economic Stress Simulation
+    Year 1 — 10 miners, 36 JOL/block
+      ✔ 10 miners produce ~75.6M JOL in year 1 (era 0 = full year)
+      ✔ each of 10 miners gets equal share (~7.56M each)
+      ✔ minting 75.6M stays well under 210M cap on-chain
+    Year 2 — block reward halved to 18 JOL
+      ✔ calculates year 2 minting with halving at block 2,100,000
+      ✔ cumulative supply after 2 years stays under cap
+    Year 3 — Bear market, 80% miners leave
+      ✔ remaining 20% of miners still mine (2 out of 10)
+      ✔ chain security: fewer miners = same block production rate
+      ✔ PoE rewards still flow to remaining producers
+    Year 4 — Oracle count drops, quorum edge cases
+      ✔ OracleConsensus quorum=2 still works with exactly 2 oracles
+      ✔ setQuorum rejects quorum < 2
+      ✔ setQuorum rejects minOracles < 3
+      ✔ raising quorum to 3 requires 3/5 consensus — stricter security
+      ✔ quorum must be >50% of minOracles (BFT requirement)
+    Year 5 — Largest producer (50% of PoE) exits
+      ✔ remaining producers still earn rewards after large exit
+      ✔ totalPoEMinted tracks all rewards including exited producer
+    Supply Invariant — total never exceeds 210M
+      ✔ total PoW supply from all eras converges below 210M
+      ✔ PoE minting is capped by JOLToken.MAX_SUPPLY on-chain
+      ✔ total supply never exceeds 210M across all scenarios
+
+  EcosystemTreasury
+    1. fundTreasury
+      ✔ mints JOL to treasury and updates totalMinted
+      ✔ allows multiple funding calls up to cap
+      ✔ reverts when exceeding MAX_TREASURY cap
+      ✔ reverts when exact cap exceeded by 1 wei
+      ✔ emits TreasuryFunded event
+      ✔ only admin can fund treasury
+    2. Bounty Lifecycle
+      ✔ creates a bounty (governance only)
+      ✔ increments bounty IDs
+      ✔ anyone can claim an active bounty
+      ✔ cannot claim already-claimed bounty
+      ✔ cannot claim inactive bounty
+      ✔ governance pays a claimed bounty
+      ✔ cannot pay unclaimed bounty
+      ✔ cannot double-pay a bounty
+      ✔ cancels a bounty (governance only)
+      ✔ getActiveBounties returns correct count
+      ✔ rejects zero-reward bounty
+    3. executeSpend
+      ✔ governance executes a spend
+      ✔ rejects zero amount spend
+      ✔ rejects spend exceeding available balance
+    4. Insurance Reserve
+      ✔ funds insurance reserve from treasury balance
+      ✔ allows funding insurance up to MAX_INSURANCE
+      ✔ rejects insurance funding exceeding cap
+      ✔ rejects insurance funding exceeding treasury balance
+      ✔ requests insurance payout (starts timelock)
+      ✔ rejects payout request with zero amount
+      ✔ rejects payout request exceeding insurance reserve
+      ✔ rejects payout request without reason
+    5. Insurance Timelock
+      ✔ rejects payout before 7-day timelock expires
+      ✔ rejects payout at 6 days 23 hours
+      ✔ executes payout after 7-day timelock
+      ✔ cannot execute same payout twice
+      ✔ rejects execution of nonexistent request
+    6. Insurance Reserve Protection
+      ✔ executeSpend cannot touch insurance reserve
+      ✔ executeSpend can spend up to non-insurance balance
+      ✔ payBounty cannot touch insurance reserve
+      ✔ payBounty works within non-insurance balance
+    7. Access Control
+      ✔ stranger cannot create bounty
+      ✔ stranger cannot pay bounty
+      ✔ stranger cannot cancel bounty
+      ✔ stranger cannot executeSpend
+      ✔ stranger cannot fundInsurance
+      ✔ stranger cannot requestInsurancePayout
+      ✔ stranger cannot executeInsurancePayout
+      ✔ stranger cannot fundTreasury (admin-only)
+    8. Edge Cases
+      ✔ can fund treasury with exact remaining cap
+      ✔ multiple bounties paid sequentially reduce balance correctly
+      ✔ spending entire non-insurance balance leaves only insurance
+      ✔ insurance payout reduces reserve, allowing more general spend later
+      ✔ views return correct values
+      ✔ constants are correct
+
+  Emission Model — 36 JOL/block
+    §1 — Emission Math
+      ✔ Era 0: 36 × 2,100,000 = 75,600,000 JOL
+      ✔ Era 1: 18 × 2,100,000 = 37,800,000 JOL
+      ✔ Era 2: 9 × 2,100,000 = 18,900,000 JOL
+      ✔ Era 3: 4 × 2,100,000 = 8,400,000 JOL (integer division: 4.5→4)
+      ✔ Era 4: 2 × 2,100,000 = 4,200,000 JOL
+      ✔ Era 5: 1 × 2,100,000 = 2,100,000 JOL
+      ✔ Era 6+: 0 JOL (36/64 = 0 in integer division)
+      ✔ Total mined (eras 0-5) = 147,000,000 — EXCEEDS mining pool by 2.1M!
+      ✔ Zero gap: 70% pool (147M) = total mined (147M) — perfect fit
+      ✔ All 6 eras mine completely — no truncation needed
+      ✔ ALTERNATIVE: use 70% mining pool (147M) — clean fit
+    §2 — Integer Division: 36 is NOT cleanly halvable
+      ✔ 36 → 18 → 9 → 4 → 2 → 1 → 0 (NOT 4.5!)
+      ✔ go-joule uses bit shift (Rsh) — same truncation as BigInt /2
+      ✔ Lost JOL from truncation: 36 series loses 3.15M vs ideal
+      ✔ Compare: 50 JOL/block — same truncation pattern
+      ✔ Compare: 32 JOL/block — PERFECT binary halving, zero truncation
+      ✔ Compare: 48 JOL/block — loses 4.2M, but cleaner halvings
+    §3 — Block Time × Halving Interval → Era Duration
+      ✔ Current go-joule: 15s blocks × 2,160,000 interval = 1.03 years/era
+      ✔ Scenario A: 60s blocks × 2,100,000 interval = 3.99 years/era ✓
+      ✔ Scenario B: 15s blocks × 2,100,000 interval = 1.0 year/era
+      ✔ Scenario C: 15s blocks × 8,409,600 interval = 4.0 years/era
+      ✔ Scenario D: 30s blocks × 2,100,000 interval = 2.0 years/era
+      ✔ For 4-year eras with 36 JOL — only 60s block time works
+      ✔ 60s block time: throughput = ~16.7 tx/min (vs 15s: ~66.7 tx/min)
+    §4 — Distribution with 36 JOL Model
+      ✔ 69% mining pool = 144.9M — but 36 JOL series gives 147M (overflow)
+      ✔ OPTION 1: Adjust to 70% mining = 147M — perfect fit for 36 JOL
+      ✔ OPTION 2: Keep 69%, cap mining at 144.9M — wastes 2.1M potential
+      ✔ OPTION 3: Use 34 JOL/block — series gives 142.8M, under 144.9M ✓
+      ✔ BEST FIT: 36 JOL + 70% pool is the cleanest solution
+    §5 — Post-Mining Economy
+      ✔ At 60s blocks: mining ends at year ~20 (era 5 truncated)
+      ✔ At 15s blocks: mining ends at year ~5 (era 5 truncated)
+      ✔ Fee economy: need 5 JOL/block equiv from fees at era 4+ to sustain miners
+      ✔ 36 vs 50: mining lasts 5 eras (same) but 36 is gentler curve
+    §6 — PoE Multiplier Economics
+      ✔ PoE 3× still works: 100 kWh = 300 JOL gross, 294 net
+      ✔ PoE vs PoW ratio changes: 36 JOL block vs 3 JOL/kWh
+      ✔ PoE eats into mining pool: 1M kWh/year = 3M JOL/year from pool
+      ✔ RISK: PoE acceleration can drain mining pool before era schedule completes
+    §7 — Security Analysis
+      ✔ Lower reward = lower hashrate = potentially easier 51% attack
+      ✔ Longer mining = longer network security from PoW
+      ✔ 60s block time: 51% attack cost increases (more work per block)
+    §8 — Contract-level Supply Cap
+      ✔ JOLToken MAX_SUPPLY = 210M — unchanged regardless of emission model
+      ✔ 36 JOL model total (147M) + reserves (63M) = 210M — cap holds
+      ✔ Even with PoE acceleration, MAX_SUPPLY is the hard stop
+    §9 — go-joule vs Proposed Model: Gap Analysis
+      ✔ CRITICAL GAP: go-joule has 16,000 JOL/block — needs change to 36
+      ✔ CRITICAL GAP: go-joule targets 15s blocks — proposal implies 60s
+      ✔ GAP: go-joule comment says 210B — needs update to 210M
+      ✔ GAP: halving interval 2,160,000 vs tests using 2,100,000
+      ✔ Test suite constants still use 50 JOL — need update to 36
+    §10 — Emission Model Comparison
+      ✔ 36 JOL: 6 eras, 147M total, cap hit at era 5
+      ✔ 50 JOL: 6 eras, 203.7M total, cap hit at era 1
+      ✔ 32 JOL: 6 eras, 132.3M total, NEVER hits cap — 12.6M wasted
+      ✔ 48 JOL: 6 eras, 197.4M total, cap hit at era 1
+      ✔ WINNER: 36 JOL — best balance of reward distribution and pool utilization
+    §11 — Erkki's Proposed Numbers
+      ✔ 'Era 1: 36 JOL = ~75.7M (36%)' — actual: 75.6M (36.0%)
+      ✔ 'Era 2: 18 JOL = ~37.8M (18%)' — actual: 37.8M (18.0%) ✓
+      ✔ 'Era 3: 9 JOL = ~18.9M (9%)' — actual: 18.9M (9.0%) ✓
+      ✔ 'Era 4: 4.5 JOL = ~9.5M (4.5%)' — WRONG: integer 4 JOL = 8.4M (4.0%)
+      ✔ 'Total: ~143M' — actual: 141.75M (integer) or 147M (with eras 4-5)
+      ✔ Summary verdict: proposal is GOOD with minor corrections needed
+
+  EnergyProofEngine — 5-Layer Gateway
+    Deployment
+      ✔ engine has all dependencies set
+      ✔ starts with zero stats
+    Preflight Check
+      ✔ returns facility readiness
+      ✔ detects unstaked facility
+    Access Control
+      ✔ only ENGINE_OPERATOR can call processReport
+      ✔ pausing blocks processReport
+    Report Processing
+      ✔ rejects unfinalized report
+      ✔ rejects already processed report
+      ✔ isProcessed returns false for new reports
+    Layer Isolation
+      ✔ engine cannot mint directly — only through PoEMining and EnergyFloor
+      ✔ engine has ORACLE_ROLE on PoEMining
+      ✔ engine has ORACLE_ROLE on EnergyFloor
+
+  EnergyRegistry
+    Registration
+      ✔ should register a solar facility
+      ✔ should prevent duplicate meter IDs
+      ✔ should reject zero capacity
+    Verification
+      ✔ should allow verifier to verify facility
+      ✔ should reject unauthorized verification
+      ✔ should track total capacity after verification
+    Production Recording
+      ✔ should record production within capacity
+      ✔ should reject production exceeding capacity
+    Deregistration
+      ✔ should allow owner to deregister
+      ✔ should reject non-owner deregistration
+
+  FounderSellLimit — Code is Commitment
+    Volume Reporting
+      ✔ oracle sets daily volume
+      ✔ rejects non-oracle volume update
+    Daily Limit
+      ✔ 1% of 1M volume = 10,000 JOL
+      ✔ 1% of 10M volume = 100,000 JOL
+      ✔ zero volume → falls back to yesterday
+    Selling
+      ✔ founder sells within limit
+      ✔ founder sells exactly at limit
+      ✔ blocks sell exceeding limit
+      ✔ multiple sells accumulate
+      ✔ limit resets next day
+      ✔ only founder can sell
+    Transparency — Community Sees Everything
+      ✔ sell events are on-chain and auditable
+      ✔ blocked sells emit event too
+
+  FoundersVesting — OpenZeppelin + Cliff
+    Deployment
+      ✔ sets correct beneficiary
+      ✔ sets correct start time
+      ✔ sets correct duration (48 months)
+      ✔ sets correct cliff (6 months)
+      ✔ holds founder allocation
+    Cliff — 6 Months
+      ✔ nothing vested before cliff
+      ✔ nothing vested at 5 months
+      ✔ nothing releasable before cliff
+      ✔ cannot release tokens before cliff
+    Linear Vesting After Cliff
+      ✔ vests proportionally at cliff + time
+      ✔ releases tokens after cliff
+      ✔ 50% vested at 2 years
+      ✔ 100% vested at 48 months
+      ✔ 100% vested after 48 months
+    Full Release Cycle
+      ✔ founder receives all tokens over 48 months
+      ✔ multiple claims over time accumulate correctly
+
+  Governance — Snapshot + Timelock
+    ERC20Votes Integration
+      ✔ holders have voting power after delegation
+      ✔ undelegated holders have zero voting power
+      ✔ delegation to another address transfers voting power
+    Proposal Creation
+      ✔ proposer with enough voting power can propose
+      ✔ rejects proposal from undelegated holder
+      ✔ rejects proposal from holder with insufficient voting power
+    Flashloan Resistance
+      ✔ tokens bought after proposal have zero voting power
+      ✔ snapshot captures pre-proposal balances only
+    Voting
+      ✔ votes for and against counted correctly
+      ✔ rejects double voting
+      ✔ rejects voting after period ends
+    Finalization
+      ✔ passes with majority and quorum
+      ✔ rejects if quorum not met
+      ✔ rejects if majority against
+    Timelock + Execution
+      ✔ rejects execution before timelock expires
+      ✔ anyone can execute after timelock
+      ✔ rejects double execution
+    Cancellation
+      ✔ proposer can cancel own proposal
+      ✔ admin can cancel any proposal
+      ✔ random address cannot cancel
+
+  JOLToken
+    Deployment
+      ✔ should have correct name and symbol
+      ✔ should have max supply of 210B
+      ✔ should start with zero supply
+    Minting
+      ✔ should allow minter to mint tokens
+      ✔ should reject minting beyond max supply
+      ✔ should reject unauthorized minting
+    Burning
+      ✔ should allow users to burn own tokens
+      ✔ should track remaining supply correctly
+    Protocol Burns
+      ✔ should track fee burns
+
+  LiquidityMining — MasterChef Pattern
+    Program Constants
+      ✔ total rewards = 4.2M JOL
+      ✔ program duration = 180 days
+      ✔ early bird period = 30 days
+      ✔ base daily reward = 20k JOL
+      ✔ REWARD_PER_SECOND = 20,000 ether / 86,400
+    Program State
+      ✔ starts active
+      ✔ starts in early bird
+      ✔ starts at day 0
+      ✔ day advances with time
+    Multiplier
+      ✔ early bird: 1 day = 2 × 86400 weighted seconds
+      ✔ after early bird: 1 day = 86400 weighted seconds
+      ✔ spans boundary correctly
+      ✔ returns 0 after program end
+    LP Staking
+      ✔ stakes LP tokens in JOL/USDC pool
+      ✔ stakes LP tokens in JOL/ETH pool
+      ✔ rejects invalid pool (2+)
+      ✔ rejects zero amount
+      ✔ tracks total staked
+    Rewards (MasterChef O(1))
+      ✔ sole LP gets ~40k JOL for 1 day during early bird
+      ✔ after early bird: ~20k JOL/day
+      ✔ two LPs split rewards proportionally (3:1)
+      ✔ rewards are O(1) even after 100 days
+    Claiming
+      ✔ claims rewards and mints JOL
+      ✔ no double-claim for same time
+    Unstaking
+      ✔ unstakes and claims pending
+      ✔ rejects non-owner unstake
+    Program End
+      ✔ rejects staking after 180 days
+      ✔ total rewards capped at 4.2M
+    Stats
+      ✔ returns comprehensive stats
+
+  Mainnet V1 — Supply & PoE Parameters
+    Supply Constants
+      ✔ MAX_SUPPLY = 210,000,000,000 JOL (210B)
+      ✔ starts with zero total supply
+      ✔ remainingSupply = MAX_SUPPLY when nothing minted
+      ✔ minting reduces remainingSupply
+      ✔ cannot mint beyond MAX_SUPPLY
+      ✔ can mint exactly MAX_SUPPLY
+      ✔ cannot mint 1 wei after MAX_SUPPLY reached
+    Mining Pool (70% of supply)
+      ✔ 147M JOL = 70% of 210M
+      ✔ block reward × blocks = 75.6M in era 0
+    PoE 3× Reward Multiplier
+      ✔ POE_REWARD_MULTIPLIER = 3
+      ✔ getJolPerKWh returns 3 JOL per kWh
+      ✔ 100 kWh production yields ~294 JOL (300 gross - 2% oracle fee)
+      ✔ totalPoEMinted tracks gross rewards (including oracle fee)
+      ✔ claim mints tokens via JOLToken
+    Halving Schedule (math validation)
+      ✔ halving interval = 2,100,000 blocks (~365 days at 15s)
+      ✔ total supply from mining converges to 147M with halvings
+      ✔ reward drops to 0 after 6 halvings (integer: 36/64=0)
+
+  OracleConsensus
+    1. joinAsOracle
+      ✔ stakes JOL and becomes active oracle
+      ✔ transfers JOL from oracle to contract
+      ✔ emits OracleJoined event
+      ✔ rejects stake below MIN_STAKE (10,000 JOL)
+      ✔ rejects already active oracle
+      ✔ accepts exact MIN_STAKE
+    2. exitOracle
+      ✔ returns stake after 30-day lock
+      ✔ emits OracleExited event
+      ✔ rejects exit before 30-day lock expires
+      ✔ rejects exit from non-active oracle
+      ✔ rejects exit at 29 days (needs >30 days)
+    3. submitReport
+      ✔ oracle submits an energy report
+      ✔ rejects submission from non-oracle
+      ✔ rejects submission for non-active facility
+    4. Quorum finalization
+      ✔ finalizes report when quorum (2) is reached
+      ✔ records production in registry after finalization
+      ✔ rejects submission to already finalized report
+    5. setQuorum
+      ✔ admin can scale quorum
+      ✔ rejects quorum < 2
+      ✔ rejects minOracles < 3
+      ✔ rejects quorum <= 50% of minOracles (must be >50%)
+      ✔ rejects quorum exceeding minOracles
+      ✔ non-admin cannot set quorum
+      ✔ accepts valid boundary: quorum=2, minOracles=3 (2*2=4 > 3)
+    6. Median calculation
+      ✔ selects correct median from 3 submissions (80, 82, 90)
+      ✔ selects correct median from 3 identical submissions
+      ✔ stake-weighted median: equal stakes produce regular median
+      ✔ selects correct median when submissions are in descending order (90, 82, 80)
+    7. Outlier slashing (>5% deviation from median)
+      ✔ slashes oracle deviating >5% from median
+      ✔ does not slash oracle within 5% deviation
+      ✔ deactivates oracle if stake falls below MIN_STAKE after slash
+    8. Slashed funds go to treasury
+      ✔ transfers slashed JOL to treasury address
+    9. Weather hash cross-check
+      ✔ flags anomaly when weather hashes do not agree
+      ✔ does not flag anomaly when majority of weather hashes match
+    10. Double submission prevention
+      ✔ rejects second submission from same oracle
+    11. Report window (1 hour)
+      ✔ rejects submission after report window closes
+      ✔ allows submission within the 1-hour window
+    12. Pausable
+      ✔ paused contract blocks submitReport
+      ✔ paused contract blocks joinAsOracle
+      ✔ unpausing restores functionality
+      ✔ only admin can pause/unpause
+    13. Access control
+      ✔ only admin can setPoEMining
+      ✔ only admin can setQuorum
+      ✔ admin has DEFAULT_ADMIN_ROLE
+      ✔ non-oracle cannot submit reports
+
+  PhysicalCap — Physics Layer
+    Solar Peak Hours by Latitude Band
+      ✔ equator (band 4) = 5.5h
+      ✔ tropical (band 0) = 5.0h
+      ✔ temperate (band 1) = 4.0h
+      ✔ subarctic (band 2) = 3.0h — Tallinn
+      ✔ arctic (band 3) = 2.0h — Reykjavik
+      ✔ all bands covered
+    Technology Efficiency
+      ✔ Solar = 20%
+      ✔ Wind = 30%
+      ✔ Hydro = 50%
+      ✔ Geothermal = 90%
+    Max Daily Output
+      ✔ 50kW solar in Tallinn (58°N) → max ~33 kWh/day
+      ✔ 50kW solar in Malaga (37°N) → max ~44 kWh/day
+      ✔ 100kW wind in Tallinn → max ~99 kWh/day
+      ✔ 200kW hydro at equator → max ~605 kWh/day
+      ✔ 500kW geothermal at equator → max ~2722 kWh/day
+      ✔ 1MW solar in arctic (65°N) → very limited
+    Production Verification
+      ✔ passes when claimed ≤ max
+      ✔ passes at exactly max
+      ✔ fails when claimed > max (physics says no)
+      ✔ cloudy day in Tallinn — can't claim full capacity
+      ✔ returns false for overclaim, true for valid
+    Edge Cases
+      ✔ reverts for non-existent facility
+      ✔ zero claimed kWh always passes
+
+  SellLimit — Square Root Harmony
+    Square Root
+      ✔ sqrt(0) = 0
+      ✔ sqrt(1) = 1
+      ✔ sqrt(4) = 2
+      ✔ sqrt(1000000) = 1000
+      ✔ sqrt(large number) works
+    Daily Sell Limit
+      ✔ zero production → zero limit
+      ✔ small producer gets 0.5% minimum guarantee
+      ✔ large producer capped at 5% maximum
+      ✔ sqrt formula works in middle range
+      ✔ larger producer has proportionally smaller sell %
+    Sell Tracking
+      ✔ records sell and deducts from allowance
+      ✔ rejects sell exceeding daily limit
+      ✔ multiple sells accumulate within day
+      ✔ limit resets next day
+
+  StakeSlash — Economics Layer
+    Stake Calculation
+      ✔ 50kW solar → 3 days × 50 × 4h × 30% × 1 JOL = 180 JOL
+      ✔ 100kW wind → 360 JOL stake
+      ✔ 1MW facility → 3600 JOL stake
+      ✔ stake pays for itself in half a day
+    Staking
+      ✔ producer stakes and activates facility
+      ✔ rejects double staking
+      ✔ rejects non-owner staking
+      ✔ rejects staking unverified facility
+    Slashing
+      ✔ slashes full stake for false data
+      ✔ first offense → 7 day ban
+      ✔ second offense → 30 day ban
+      ✔ third offense → 365 day ban
+      ✔ banned user cannot stake
+      ✔ rejects unauthorized slash
+    Stake Withdrawal
+      ✔ owner can withdraw active stake
+      ✔ cannot withdraw slashed stake
+    Economics Invariant
+      ✔ cheating profit always less than loss (3 day stake > 1 day cheat)
+    ConflictScore Integration
+      ✔ slash reports FalseOracle violation to ConflictScore
+      ✔ slash raises ConflictScore to Level 1
+      ✔ multiple slashes escalate ConflictScore level
+      ✔ Level 3 ConflictScore blocks staking
+
+  TimeBomb — Year 8+ Zero Emission Scenarios
+    Scenario 1 — After 10 halvings, reward = 0
+      ✔ 36 / 2^6 = 0 via integer division
+      ✔ reward becomes 0 at block 12,600,000 (~2,188 days / ~6 years)
+      ✔ all 6 productive eras enumerated
+    Scenario 2 — Geometric series converges to 147M (< 210M)
+      ✔ sum of all PoW mining = 147,000,000 JOL
+      ✔ theoretical limit with real division would be 151.2M
+      ✔ 4.2M JOL gap is unreachable — permanently lost supply
+    Scenario 3 — Transaction fee burn makes supply deflationary
+      ✔ 10k tx/day × 0.001 JOL × 50% burned = 5 JOL/day burned
+      ✔ after year 8, supply is net deflationary (0 new PoW, positive burn)
+      ✔ burn mechanics work on-chain
+      ✔ 10 years of fee burn: 18,250 JOL destroyed
+    Scenario 4 — PoE survives when block reward = 0
+      ✔ EnergyFloor mints 1 JOL per kWh regardless of block reward
+      ✔ EnergyFloor has independent cap of 39.9M JOL (MAX_FLOOR_MINT)
+      ✔ EnergyFloor works even after PoW exhausted (supply allows it)
+      ✔ EnergyFloor respects its own 39.9M cap
+      ✔ PoE mining via PoEMining still accrues with 3x multiplier
+    Scenario 5 — Governance works with 0 new supply
+      ✔ existing holders can propose with 100k+ JOL
+      ✔ voting power is based on existing holdings, not new emissions
+      ✔ QUORUM_BPS = 400 (4% of supply needed for valid vote)
+      ✔ proposal passes with quorum met and majority for
+    Combined — Full emission timeline verification
+      ✔ complete emission schedule: 6 eras, 147M total, then 0
+      ✔ post-emission economy: PoE + fees sustain the network
+
+  Trail of Bits — Attack Scenarios
+    ATTACK 1: Infinite Mint
+      ✔ ATTACK: mint through JOLToken.mint() without MINTER_ROLE
+      ✔ ATTACK: mint through JOLToken.mintFor() without MINTER_ROLE
+      ✔ ATTACK: mint through EnergyFloor.depositEnergy() without ORACLE_ROLE
+      ✔ ATTACK: mint through PoEMining.accrueReward() without ORACLE_ROLE
+      ✔ ATTACK: mint through EcosystemTreasury.fundTreasury() over MAX_TREASURY
+      ✔ ATTACK: mint beyond MAX_SUPPLY (210M)
+      ✔ ATTACK: total mint across ALL paths still respects 210M
+    ATTACK 2: Steal Tokens
+      ✔ ATTACK: protocolBurn someone else's tokens without BURNER_ROLE
+      ✔ ATTACK: transferFrom without approval
+      ✔ ATTACK: drain EcosystemTreasury without GOVERNANCE_ROLE
+      ✔ ATTACK: drain insurance fund without timelock
+      ✔ ATTACK: claim someone else's PoE rewards
+      ✔ ATTACK: claim someone else's LP rewards
+      ✔ ATTACK: steal from payment channel with forged signature
+      ✔ ATTACK: drain stream payment as non-receiver
+    ATTACK 3: Governance Takeover
+      ✔ ATTACK: flashloan vote — buy→vote→sell same block
+      ✔ ATTACK: vote recycling — vote→transfer→vote again from new address
+      ✔ ATTACK: execute proposal before timelock
+      ✔ ATTACK: execute failed/cancelled proposal
+      ✔ ATTACK: create proposal without enough voting power
+    ATTACK 4: Oracle Manipulation
+      ✔ ATTACK: submit fake energy report without oracle role (no stake)
+      ✔ ATTACK: submit same report twice (duplicate)
+      ✔ ATTACK: oracle exits before slashing (30-day lock)
+      ✔ ATTACK: manipulate median with extreme outlier (>5% slashed)
+    ATTACK 5: Bridge Exploit
+      ✔ ATTACK: unlock without any lock (no validator role)
+      ✔ ATTACK: replay same ethTxHash
+      ✔ ATTACK: confirm with different payload (parameter mismatch)
+      ✔ ATTACK: unlock before required confirmations
+      ✔ ATTACK: lock 0 amount
+      ✔ ATTACK: unlock more than locked total
+    ATTACK 6: Economic Attacks
+      ✔ ATTACK: LP fabrication without real tokens
+      ✔ ATTACK: sell limit bypass via direct transfer (not via SellLimit)
+      ✔ ATTACK: EnergyFloor deposit exceeds MAX_FLOOR_MINT
+      ✔ ATTACK: LP reward timing manipulation (stake just before claim)
+    ATTACK 7: Denial of Service
+      ✔ ATTACK: block governance execute with reverting target
+      ✔ ATTACK: oracle voter cap prevents unbounded gas
+    ATTACK 8: Reentrancy Protection
+      ✔ ATTACK: all critical functions have nonReentrant
+    ATTACK 9: Integer Edge Cases
+      ✔ ATTACK: mint with amount = type(uint256).max
+      ✔ ATTACK: stream with rate = 0
+      ✔ ATTACK: oracle report with kWh = type(uint256).max
+      ✔ ATTACK: EnergyFloor deposit with kWh = 0
+    ATTACK 10: Privacy & Identity
+      ✔ ATTACK: register machine with someone else's address
+      ✔ ATTACK: register facility at same geohash (no conflict)
+      ✔ ATTACK: duplicate meter ID blocked
+
+  Fuzz Tests — Random Inputs
+    FUZZ: JOLToken.mint
+      ✔ 100 random mint amounts — never exceeds MAX_SUPPLY (97ms)
+    FUZZ: JOLToken.transfer
+      ✔ 100 random transfers — balances always non-negative (369ms)
+    FUZZ: EnergyFloor.depositEnergy
+      ✔ 100 random kWh deposits — never exceeds MAX_FLOOR_MINT (83ms)
+    FUZZ: OracleConsensus.submitReport
+      ✔ 100 random kWh values from non-oracles — all rejected (64ms)
+    FUZZ: Governance.vote
+      ✔ 100 random proposal IDs — all rejected (non-existent) (54ms)
+    FUZZ: StreamingPayments.createStream
+      ✔ 100 random rates — zero rate always rejected, valid ones succeed (81ms)
+    FUZZ: PaymentChannel.openChannel
+      ✔ 100 random deposits — zero always rejected (78ms)
+    FUZZ: PoEMining.accrueReward
+      ✔ 100 random facilityId + kWh — invalid IDs always rejected (91ms)
+    FUZZ: EcosystemTreasury.fundTreasury
+      ✔ 100 random fund amounts — never exceeds MAX_TREASURY (77ms)
+    FUZZ: BridgeLock.lockJOL
+      ✔ 100 random lock amounts — zero always rejected, totalLocked increases (59ms)
+    FUZZ: Global supply invariant
+      ✔ After mixed operations, totalSupply <= MAX_SUPPLY
+
+  System Invariants — must ALWAYS hold
+    I1: Supply Invariant
+      ✔ INVARIANT: totalSupply() <= MAX_SUPPLY at all times
+      ✔ INVARIANT: totalSupply() == sum of all known balances after transfers
+      ✔ INVARIANT: totalBurned tracks correctly
+      ✔ INVARIANT: remainingSupply == MAX_SUPPLY - totalSupply
+    I2: Energy Floor Invariant
+      ✔ INVARIANT: totalMintedFromEnergy increases monotonically
+      ✔ INVARIANT: totalMintedFromEnergy * 1 ether <= MAX_FLOOR_MINT
+      ✔ INVARIANT: totalRedeemed <= totalDeposited
+    I3: Treasury Invariant
+      ✔ INVARIANT: totalMinted <= MAX_TREASURY
+      ✔ INVARIANT: insuranceReserve <= MAX_INSURANCE
+      ✔ INVARIANT: spending reduces balance correctly
+    I4: Vesting Invariant
+      ✔ INVARIANT: nothing claimable before cliff (1 year)
+      ✔ INVARIANT: everything claimable after full vesting
+      ✔ INVARIANT: partial vesting after cliff + 2 years ≈ 75%
+    I5: Oracle Invariant
+      ✔ INVARIANT: oracle cannot exit during 30-day lock
+      ✔ INVARIANT: slashed stake reduces oracle.stake and totalStaked
+      ✔ INVARIANT: quorum * 2 > minOracles (BFT requirement)
+    I6: Mining Invariant
+      ✔ INVARIANT: PoE multiplier = 3
+      ✔ INVARIANT: totalPoEMinted tracks all accrued rewards
+      ✔ INVARIANT: PoE claim respects JOLToken MAX_SUPPLY
+    I7: Bridge Invariant
+      ✔ INVARIANT: totalUnlocked <= totalLocked
+      ✔ INVARIANT: each ethTxHash processed only once
+    I8: Governance Invariant
+      ✔ INVARIANT: proposal cannot execute before timelock
+      ✔ INVARIANT: each address votes only once per proposal
+      ✔ INVARIANT: vote weight == getPastVotes at snapshot block
+    I9: Cross-Contract Invariant
+      ✔ INVARIANT: sum of all contract caps <= MAX_SUPPLY
+      ✔ INVARIANT: 70+19+6+5 = 100% of supply
+      ✔ INVARIANT: no single mint path can exceed its allocation
+    I10: Economic Invariant
+      ✔ INVARIANT: emission series 36+18+9+4+2+1 × 2.1M = exactly 147M
+      ✔ INVARIANT: 147M = exactly 70% of 210M
+      ✔ INVARIANT: block reward integer halving series terminates
+      ✔ INVARIANT: MAX_SUPPLY hard cap in JOLToken is 210M
+
+  WeatherOracle — Weather Layer
+    Weather Submission
+      ✔ oracle submits weather data
+      ✔ rejects future timestamp
+      ✔ rejects data older than 2 days
+      ✔ rejects non-oracle submission
+      ✔ rejects non-existent facility
+    Solar — Weather Impact
+      ✔ clear sky (1000 W/m²) in Tallinn → full physics output
+      ✔ PILVINE PÄEV TALLINNAS — päikesepark ei saa väita täistoodangut
+      ✔ partly cloudy (500 W/m²) → half the clear-sky output
+    Wind — Weather Impact
+      ✔ good wind (12+ m/s) → full capacity factor
+      ✔ calm day (2 m/s) → below cut-in, zero output
+      ✔ storm (30 m/s) → above cut-out, safety shutdown
+      ✔ moderate wind (7.5 m/s) → partial output, capped by physics
+    Hydro — Weather Impact
+      ✔ no rain → 30% base flow
+      ✔ heavy rain → up to 50% capacity factor
+    Cross-Verification — Physics + Weather
+      ✔ physics fail blocks even if weather would pass
+      ✔ no weather data → conservative 50% of physics cap
+      ✔ full cycle: submit weather → verify → passes
+    Geothermal — Weather Independent
+      ✔ any weather → ~95% constant output
+
+
+  604 passing (18s)
+
+····················································································································
+|  [32m[1mSolidity and Network Configuration[22m[39m                                                                              │
+·······························|·················|···············|·················|································
+|  [36mSolidity: 0.8.24[39m            ·  [36mOptim: true[39m    ·  [36mRuns: 200[39m    ·  [36mviaIR: true[39m    ·     [36mBlock: 60,000,000 gas[39m     │
+·······························|·················|···············|·················|································
+|  [32m[1mMethods[22m[39m                                                                                                         │
+·······························|·················|···············|·················|················|···············
+|  [32m[1mContracts / Methods[22m[39m         ·  [1mMin[22m            ·  [1mMax[22m          ·  [1mAvg[22m            ·  [1m# calls[22m       ·  [1musd (avg)[22m   │
+·······························|·················|···············|·················|················|···············
+|  [1mAgentWallet[22m                 ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      agentSpend              ·        [36m233,786[39m  ·      [31m233,834[39m  ·        233,810  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      createWallet            ·              [90m-[39m  ·            [90m-[39m  ·        329,280  ·             4  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      freezeWallet            ·              [90m-[39m  ·            [90m-[39m  ·         29,957  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      fundWallet              ·              [90m-[39m  ·            [90m-[39m  ·         92,280  ·             4  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mBridgeLock[22m                  ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      confirmUnlock           ·         [36m69,721[39m  ·      [31m168,305[39m  ·        130,617  ·            70  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,129[39m  ·       [31m51,141[39m  ·         51,138  ·           253  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      lockJOL                 ·        [36m104,499[39m  ·      [31m121,599[39m  ·        106,581  ·           115  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mCarbonCredit[22m                ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,239  ·            19  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      issueCredit             ·        [36m352,751[39m  ·      [31m352,763[39m  ·        352,757  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      retireCredit            ·              [90m-[39m  ·            [90m-[39m  ·         72,121  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mConflictScore[22m               ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      applyDecay              ·         [36m26,676[39m  ·       [31m35,000[39m  ·         32,808  ·             6  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,151[39m  ·       [31m51,163[39m  ·         51,163  ·           105  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      reportViolation         ·         [36m42,302[39m  ·      [31m116,052[39m  ·         57,919  ·           104  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mDEXLiquidity[22m                ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      emergencyWithdraw       ·              [90m-[39m  ·            [90m-[39m  ·         64,804  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,254  ·            20  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      provisionPoolA          ·              [90m-[39m  ·            [90m-[39m  ·        112,569  ·             6  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      provisionPoolB          ·         [36m73,289[39m  ·      [31m112,289[39m  ·         96,689  ·             5  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      setPoolAddresses        ·              [90m-[39m  ·            [90m-[39m  ·         72,920  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEcosystemTreasury[22m           ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      cancelBounty            ·              [90m-[39m  ·            [90m-[39m  ·         24,383  ·             3  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      claimBounty             ·              [90m-[39m  ·            [90m-[39m  ·         28,087  ·            10  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      createBounty            ·        [36m121,578[39m  ·      [31m121,734[39m  ·        121,636  ·            20  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      executeInsurancePayout  ·         [36m93,275[39m  ·      [31m127,475[39m  ·        118,925  ·             4  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      executeSpend            ·         [36m95,876[39m  ·       [31m95,972[39m  ·         95,926  ·             7  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      fundInsurance           ·         [36m55,473[39m  ·       [31m55,485[39m  ·         55,485  ·            26  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      fundTreasury            ·         [36m88,172[39m  ·      [31m154,306[39m  ·        133,616  ·            86  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,168  ·            86  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      payBounty               ·         [36m67,388[39m  ·      [31m101,588[39m  ·         95,888  ·             6  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      requestInsurancePayout  ·        [36m126,949[39m  ·      [31m172,183[39m  ·        134,590  ·            12  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyFloor[22m                 ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      depositEnergy           ·        [36m106,955[39m  ·      [31m224,365[39m  ·        120,294  ·            82  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,189[39m  ·       [31m51,201[39m  ·         51,200  ·           178  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      redeemForEnergy         ·              [90m-[39m  ·            [90m-[39m  ·        329,192  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      registerProducer        ·        [36m189,589[39m  ·      [31m189,757[39m  ·        189,669  ·            53  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyMarketplace[22m           ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      buy                     ·        [36m207,399[39m  ·      [31m212,199[39m  ·        209,799  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      createListing           ·              [90m-[39m  ·            [90m-[39m  ·        237,377  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyProofEngine[22m           ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,287  ·            40  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      pause                   ·              [90m-[39m  ·            [90m-[39m  ·         30,119  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyRegistry[22m              ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      deregisterFacility      ·         [36m29,859[39m  ·       [31m46,959[39m  ·         35,559  ·             3  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,171[39m  ·       [31m51,195[39m  ·         51,195  ·           489  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      recordProduction        ·              [90m-[39m  ·            [90m-[39m  ·         97,447  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      registerFacility        ·        [36m250,338[39m  ·      [31m284,562[39m  ·        282,331  ·           155  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      verifyFacility          ·         [36m84,086[39m  ·      [31m118,286[39m  ·        115,692  ·           145  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mFounderSellLimit[22m            ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      sell                    ·         [36m58,569[39m  ·       [31m92,781[39m  ·         84,227  ·            10  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      updateDailyVolume       ·         [36m47,388[39m  ·       [31m47,400[39m  ·         47,390  ·            14  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mGovernance[22m                  ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      cancel                  ·         [36m47,109[39m  ·       [31m49,300[39m  ·         47,839  ·             3  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      execute                 ·         [36m34,808[39m  ·       [31m44,579[39m  ·         37,251  ·             4  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      finalize                ·         [36m53,946[39m  ·       [31m76,148[39m  ·         74,298  ·            12  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      propose                 ·        [36m211,491[39m  ·      [31m277,005[39m  ·        230,902  ·            34  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      vote                    ·         [36m70,894[39m  ·       [31m87,994[39m  ·         84,456  ·            29  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mJOLToken[22m                    ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      approve                 ·         [36m46,137[39m  ·       [31m46,449[39m  ·         46,270  ·           344  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      burn                    ·         [36m76,207[39m  ·       [31m93,307[39m  ·         82,304  ·            14  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      delegate                ·         [36m96,040[39m  ·       [31m96,596[39m  ·         96,055  ·            90  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,281[39m  ·       [31m51,305[39m  ·         51,304  ·          1237  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      mint                    ·         [36m73,957[39m  ·      [31m123,003[39m  ·        103,169  ·           617  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      protocolBurn            ·              [90m-[39m  ·            [90m-[39m  ·        114,894  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      transfer                ·         [36m39,493[39m  ·       [31m84,309[39m  ·         52,834  ·            39  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mJOULEFoundersVesting[22m        ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      release                 ·         [36m43,148[39m  ·       [31m86,075[39m  ·         65,875  ·             6  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mLiquidityMining[22m             ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      claimRewards            ·        [36m120,165[39m  ·      [31m237,719[39m  ·        214,115  ·             5  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      setLPTokens             ·         [36m69,496[39m  ·       [31m69,520[39m  ·         69,518  ·            73  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      stakeLiquidity          ·        [36m240,807[39m  ·      [31m294,322[39m  ·        249,701  ·            19  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      unstakeLiquidity        ·              [90m-[39m  ·            [90m-[39m  ·        235,709  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mMachineRegistry[22m             ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,117[39m  ·       [31m51,129[39m  ·         51,128  ·            20  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      registerMachine         ·        [36m330,192[39m  ·      [31m330,240[39m  ·        330,216  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      verifyMachine           ·              [90m-[39m  ·            [90m-[39m  ·         76,513  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mOracleConsensus[22m             ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      exitOracle              ·              [90m-[39m  ·            [90m-[39m  ·         68,659  ·             3  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      joinAsOracle            ·        [36m173,957[39m  ·      [31m234,857[39m  ·        195,855  ·           159  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      pause                   ·              [90m-[39m  ·            [90m-[39m  ·         47,208  ·             3  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      setPoEMining            ·         [36m46,807[39m  ·       [31m46,819[39m  ·         46,818  ·            92  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      setQuorum               ·         [36m29,960[39m  ·       [31m35,560[39m  ·         33,160  ·            14  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      submitReport            ·        [36m155,270[39m  ·      [31m619,307[39m  ·        382,839  ·            65  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      unpause                 ·              [90m-[39m  ·            [90m-[39m  ·         25,005  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPaymentChannel[22m              ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      closeChannel            ·              [90m-[39m  ·            [90m-[39m  ·        157,331  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      openChannel             ·        [36m254,452[39m  ·      [31m323,121[39m  ·        256,486  ·           102  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPhysicalCap[22m                 ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      verifyProduction        ·         [36m54,159[39m  ·       [31m54,160[39m  ·         54,160  ·             8  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPoEMining[22m                   ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      accrueReward            ·         [36m83,943[39m  ·      [31m169,443[39m  ·        160,316  ·            15  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      claimRewards            ·              [90m-[39m  ·            [90m-[39m  ·        154,135  ·             2  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,167[39m  ·       [31m51,179[39m  ·         51,177  ·           278  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mSellLimit[22m                   ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      checkSell               ·         [36m38,952[39m  ·       [31m56,052[39m  ·         48,723  ·             7  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,151  ·            14  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mStakeSlash[22m                  ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·         [36m51,120[39m  ·       [31m51,132[39m  ·         51,127  ·            49  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      slash                   ·        [36m105,629[39m  ·      [31m261,838[39m  ·        218,589  ·            16  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      stake                   ·        [36m275,086[39m  ·      [31m279,886[39m  ·        277,099  ·            31  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      withdrawStake           ·              [90m-[39m  ·            [90m-[39m  ·         59,489  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mStreamingPayments[22m           ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      createStream            ·        [36m303,773[39m  ·      [31m389,542[39m  ·        307,066  ·           103  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      stopStream              ·              [90m-[39m  ·            [90m-[39m  ·        217,334  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      withdrawFromStream      ·              [90m-[39m  ·            [90m-[39m  ·        192,482  ·             1  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mWeatherOracle[22m               ·                                                                                   │
+·······························|·················|···············|·················|················|···············
+|      grantRole               ·              [90m-[39m  ·            [90m-[39m  ·         51,259  ·            64  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      submitWeather           ·        [36m179,914[39m  ·      [31m219,750[39m  ·        202,679  ·            14  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|      verifyWithWeather       ·              [90m-[39m  ·            [90m-[39m  ·         96,371  ·             4  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [32m[1mDeployments[22m[39m                                   ·                                 ·  [1m% of limit[22m    ·              │
+·······························|·················|···············|·················|················|···············
+|  [1mAgentWallet[22m                 ·      [36m1,280,167[39m  ·    [31m1,280,215[39m  ·      1,280,213  ·         2.1 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mBridgeLock[22m                  ·              [90m-[39m  ·            [90m-[39m  ·      1,263,593  ·         2.1 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mCarbonCredit[22m                ·              [90m-[39m  ·            [90m-[39m  ·      2,274,757  ·         3.8 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mConflictScore[22m               ·              [90m-[39m  ·            [90m-[39m  ·        999,900  ·         1.7 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mDEXLiquidity[22m                ·      [36m1,426,680[39m  ·    [31m1,426,728[39m  ·      1,426,726  ·         2.4 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEcosystemTreasury[22m           ·      [36m2,117,810[39m  ·    [31m2,117,858[39m  ·      2,117,857  ·         3.5 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyFloor[22m                 ·      [36m1,993,136[39m  ·    [31m1,993,184[39m  ·      1,993,183  ·         3.3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyMarketplace[22m           ·      [36m1,576,144[39m  ·    [31m1,576,192[39m  ·      1,576,189  ·         2.6 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyProofEngine[22m           ·      [36m2,047,283[39m  ·    [31m2,047,319[39m  ·      2,047,308  ·         3.4 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mEnergyRegistry[22m              ·              [90m-[39m  ·            [90m-[39m  ·      1,447,645  ·         2.4 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mFounderSellLimit[22m            ·        [36m551,188[39m  ·      [31m551,236[39m  ·        551,235  ·         0.9 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mGovernance[22m                  ·      [36m1,739,096[39m  ·    [31m1,739,144[39m  ·      1,739,143  ·         2.9 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mJOLToken[22m                    ·              [90m-[39m  ·            [90m-[39m  ·      3,167,773  ·         5.3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mJOULEFoundersVesting[22m        ·              [90m-[39m  ·            [90m-[39m  ·        602,281  ·           1 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mLiquidityMining[22m             ·      [36m1,780,403[39m  ·    [31m1,780,451[39m  ·      1,780,450  ·           3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mMachineRegistry[22m             ·              [90m-[39m  ·            [90m-[39m  ·      1,707,577  ·         2.8 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mOracleConsensus[22m             ·      [36m2,328,962[39m  ·    [31m2,329,010[39m  ·      2,329,008  ·         3.9 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPaymentChannel[22m              ·      [36m1,791,482[39m  ·    [31m1,791,530[39m  ·      1,791,529  ·           3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPhysicalCap[22m                 ·        [36m473,982[39m  ·      [31m473,994[39m  ·        473,993  ·         0.8 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mPoEMining[22m                   ·      [36m1,244,180[39m  ·    [31m1,244,228[39m  ·      1,244,226  ·         2.1 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mSellLimit[22m                   ·              [90m-[39m  ·            [90m-[39m  ·        809,901  ·         1.3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mStakeSlash[22m                  ·      [36m1,742,707[39m  ·    [31m1,742,755[39m  ·      1,742,752  ·         2.9 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mStreamingPayments[22m           ·      [36m1,624,665[39m  ·    [31m1,624,713[39m  ·      1,624,712  ·         2.7 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [1mWeatherOracle[22m               ·      [36m1,404,109[39m  ·    [31m1,404,133[39m  ·      1,404,131  ·         2.3 %  ·           [32m[90m-[39m[32m[39m  │
+·······························|·················|···············|·················|················|···············
+|  [32m[1mKey[22m[39m                                                                                                             │
+····················································································································
+|  [35m[1m◯[22m[39m  Execution gas for this method does not include intrinsic gas overhead                                        │
+····················································································································
+|  [35m[1m△[22m[39m  Cost was non-zero but below the precision setting for the currency display (see options)                     │
+····················································································································
+|  [35mToolchain:[39m  hardhat                                                                                             │
+····················································································································
