@@ -9,7 +9,7 @@ import "./EnergyRegistry.sol";
  * @title PoEMining
  * @notice Proof-of-Energy mining with fixed 3× reward multiplier.
  *
- * 69% total mining = PoW blocks + PoE rewards = 144,900,000 JOL
+ * 70% total mining = PoW blocks + PoE rewards = 147,000,000 JOL
  * PoE producers get 3× the reward per kWh vs base PoW block reward.
  * Supply cap enforced by JOLToken (210M MAX_SUPPLY).
  *
@@ -61,7 +61,7 @@ contract PoEMining is AccessControl {
 
     /**
      * @notice Get current JOL reward per kWh.
-     * PoE gets 3× the base PoW reward from the same 126B mining pool.
+     * PoE gets 3× the base PoW reward from the same 147M mining pool.
      * Base: 1 JOL per kWh × POE_REWARD_MULTIPLIER (3×)
      */
     function getJolPerKWh() public pure returns (uint256) {
@@ -80,7 +80,7 @@ contract PoEMining is AccessControl {
     ) external onlyRole(ORACLE_ROLE) {
         require(_verifiedKWh > 0, "Zero production");
 
-        // Calculate reward: kWh × 3× multiplier (from same 126B mining pool)
+        // Calculate reward: kWh × 3× multiplier (from same 147M mining pool)
         uint256 jolPerKWh = getJolPerKWh();
         uint256 grossReward = _verifiedKWh * jolPerKWh;
 

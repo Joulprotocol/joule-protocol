@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0] - 2026-04-05
+
+### Emission Model — 36 JOL/block
+- Block reward: 50 → 36 JOL/block (go-joule updated from 16,000)
+- Block time target: 15 seconds (unchanged)
+- Halving interval: 2,100,000 blocks (~1 year per era)
+- Distribution: 70% Mining (147M), 19% Energy Reserve (39.9M), 6% Founder, 5% Ecosystem
+- EnergyFloor MAX_FLOOR_MINT: 42M → 39.9M (19% of 210M)
+- 6 eras, total mined = 147M (36+18+9+4+2+1 × 2.1M blocks)
+- go-joule halving interval aligned: 2,160,000 → 2,100,000
+- All contracts, tests, docs, whitepaper, README aligned
+
 ## [0.6.0] - 2026-04-05
 
 ### Tokenomics Overhaul

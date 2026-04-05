@@ -101,12 +101,12 @@ web3.fromWei(eth.getBalance(eth.coinbase), "ether")
 
 | Parameter | Value |
 |-----------|-------|
-| Block reward | 50 JOL |
-| Block time | ~6 seconds |
-| Blocks per day | ~14,400 |
-| JOL per day (solo) | Up to 720,000 JOL |
+| Block reward | 36 JOL (era 0) |
+| Block time | ~15 seconds |
+| Blocks per day | ~5,760 |
+| JOL per day (solo) | Up to 207,360 JOL |
 | Halving interval | Every 2,100,000 blocks (~1 year) |
-| Halving schedule | 50 → 25 → 12.5 → 6.25 → ... |
+| Halving schedule | 36 → 18 → 9 → 4 → 2 → 1 → 0 |
 
 Note: Solo mining rewards depend on your hash rate relative to network difficulty.
 

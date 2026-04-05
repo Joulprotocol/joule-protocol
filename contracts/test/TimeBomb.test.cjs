@@ -7,7 +7,7 @@ const { ethers } = require("hardhat");
  * After enough halvings, PoW block rewards drop to 0 (integer division).
  * JOULE must survive on:
  *   1. Transaction fees (partially burned → deflationary)
- *   2. PoE rewards via EnergyFloor (1 JOL/kWh, capped at 42M)
+ *   2. PoE rewards via EnergyFloor (1 JOL/kWh, capped at 39.9M)
  *   3. Governance by existing token holders
  *
  * This file validates the math and on-chain behavior for end-of-emission.
@@ -17,9 +17,9 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
   // ─── Protocol Constants ───────────────────────────────────────
   const MAX_SUPPLY        = 210_000_000n;
   const HALVING_INTERVAL  = 2_100_000n;
-  const BLOCKS_PER_DAY    = 14_400n;
-  const INITIAL_REWARD    = 50n;
-  const MAX_FLOOR_MINT      = 42_000_000n;
+  const BLOCKS_PER_DAY    = 5_760n;  // 86400/15 = 5,760 blocks/day at 15s
+  const INITIAL_REWARD    = 36n;
+  const MAX_FLOOR_MINT      = 39_900_000n;
 
   let jolToken, registry, poeMining, energyFloor, governance;
   let owner, producer, oracleNode, voter1, voter2;
@@ -61,9 +61,9 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
   // ─── Scenario 1: Reward → 0 After 10 Halvings ─────────────────
 
   describe("Scenario 1 — After 10 halvings, reward = 0", function () {
-    it("50 / 2^10 = 0 via integer division", function () {
-      // 50 → 25 → 12 → 6 → 3 → 1 → 0
-      // Actually hits 0 at halving 6, not 10
+    it("36 / 2^6 = 0 via integer division", function () {
+      // 36 → 18 → 9 → 4 → 2 → 1 → 0
+      // Hits 0 at halving 6
       let reward = INITIAL_REWARD;
       let halvings = 0;
 
@@ -80,17 +80,17 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       expect(INITIAL_REWARD >> 10n).to.equal(0n);
     });
 
-    it("reward becomes 0 at block 12,600,000 (~875 days / ~2.4 years)", function () {
+    it("reward becomes 0 at block 12,600,000 (~2,188 days / ~6 years)", function () {
       // Era 6 starts at block 6 × 2,100,000 = 12,600,000
       const zeroRewardBlock = 6n * HALVING_INTERVAL;
       expect(zeroRewardBlock).to.equal(12_600_000n);
 
       const daysToZero = zeroRewardBlock / BLOCKS_PER_DAY;
-      expect(daysToZero).to.equal(875n);
+      expect(daysToZero).to.equal(2187n); // 12,600,000 / 5,760 = 2,187.5
 
-      // ~2.4 years
+      // ~6 years
       const yearsToZero = daysToZero * 100n / 365n;
-      expect(yearsToZero).to.equal(239n); // 2.39 years × 100
+      expect(yearsToZero).to.equal(599n); // 5.99 years × 100
     });
 
     it("all 6 productive eras enumerated", function () {
@@ -100,11 +100,11 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
         eras.push({ era: Number(i), reward: Number(reward) });
       }
 
-      expect(eras[0].reward).to.equal(50);
-      expect(eras[1].reward).to.equal(25);
-      expect(eras[2].reward).to.equal(12);
-      expect(eras[3].reward).to.equal(6);
-      expect(eras[4].reward).to.equal(3);
+      expect(eras[0].reward).to.equal(36);
+      expect(eras[1].reward).to.equal(18);
+      expect(eras[2].reward).to.equal(9);
+      expect(eras[3].reward).to.equal(4);
+      expect(eras[4].reward).to.equal(2);
       expect(eras[5].reward).to.equal(1);
       expect(eras[6].reward).to.equal(0);
       expect(eras[7].reward).to.equal(0);
@@ -115,12 +115,12 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
 
   // ─── Scenario 2: Geometric Series Convergence ─────────────────
 
-  describe("Scenario 2 — Geometric series converges to ~203.7M (< 210M)", function () {
-    it("sum of all PoW mining = 203,700,000 JOL", function () {
-      // 50 × 2,100,000 × sum(1/2^n for n=0..5) where reward > 0
-      // = 2,100,000 × (50 + 25 + 12 + 6 + 3 + 1)
-      // = 2,100,000 × 97
-      // = 203,700,000
+  describe("Scenario 2 — Geometric series converges to 147M (< 210M)", function () {
+    it("sum of all PoW mining = 147,000,000 JOL", function () {
+      // 36 × 2,100,000 × sum(1/2^n for n=0..5) where reward > 0
+      // = 2,100,000 × (36 + 18 + 9 + 4 + 2 + 1)
+      // = 2,100,000 × 70
+      // = 147,000,000
       let total = 0n;
       let reward = INITIAL_REWARD;
 
@@ -130,29 +130,30 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
         reward = reward >> 1n;
       }
 
-      expect(total).to.equal(203_700_000n);
+      expect(total).to.equal(147_000_000n);
     });
 
-    it("theoretical limit with real division would be exactly 210M", function () {
-      // With real number division: 50 × 2,100,000 × (1/(1-0.5)) = 210,000,000
-      // But integer division loses 6,300,000 JOL to rounding
+    it("theoretical limit with real division would be 151.2M", function () {
+      // With real number division: 36 × 2,100,000 × (1/(1-0.5)) = 151,200,000
+      // But integer division loses 4,200,000 JOL to rounding
       const theoretical = INITIAL_REWARD * HALVING_INTERVAL * 2n;
-      expect(theoretical).to.equal(210_000_000n);
+      expect(theoretical).to.equal(151_200_000n);
 
       // Lost to integer rounding
-      const lost = theoretical - 203_700_000n;
-      expect(lost).to.equal(6_300_000n);
+      const lost = theoretical - 147_000_000n;
+      expect(lost).to.equal(4_200_000n);
     });
 
-    it("6.3M JOL gap is unreachable — permanently lost supply", function () {
-      // These 6.3M JOL can NEVER be minted via PoW
-      // Only EnergyFloor (42M cap) could partially fill the gap
-      const powTotal = 203_700_000n;
+    it("4.2M JOL gap is unreachable — permanently lost supply", function () {
+      // These 4.2M JOL can NEVER be minted via PoW
+      // Only EnergyFloor (39.9M cap) could partially fill the gap
+      const powTotal = 147_000_000n;
       const gap = MAX_SUPPLY - powTotal;
-      expect(gap).to.equal(6_300_000n);
+      expect(gap).to.equal(63_000_000n);
 
-      // EnergyFloor cap (42M) far exceeds the gap
-      expect(MAX_FLOOR_MINT).to.be.gt(gap);
+      // 63M is for reserves (19% Reserve + 6% Founder + 5% Ecosystem)
+      // EnergyFloor cap (39.9M) covers the reserve portion
+      expect(MAX_FLOOR_MINT).to.be.lt(gap);
     });
   });
 
@@ -211,11 +212,11 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       const tenYearBurn = dailyBurn * 365n * 10n;
       expect(tenYearBurn).to.equal(18_250n);
 
-      // Still tiny vs total supply (0.009% of 203.7M)
+      // Still tiny vs total supply (0.012% of 147M)
       // But demonstrates deflationary pressure exists
-      const burnPercentBps = tenYearBurn * 10_000n / 203_700_000n;
-      // 18250 / 203700000 × 10000 ≈ 0 bps (rounds to 0 in integer)
-      expect(burnPercentBps).to.equal(0n); // tiny but real
+      const burnPercentBps = tenYearBurn * 10_000n / 147_000_000n;
+      // 18250 / 147000000 × 10000 ≈ 1 bps (tiny but real)
+      expect(burnPercentBps).to.equal(1n); // tiny but real
     });
   });
 
@@ -233,33 +234,32 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("100"));
     });
 
-    it("EnergyFloor has independent cap of 42M JOL (MAX_FLOOR_MINT)", async function () {
+    it("EnergyFloor has independent cap of 39.9M JOL (MAX_FLOOR_MINT)", async function () {
       const maxPegMint = await energyFloor.MAX_FLOOR_MINT();
-      expect(maxPegMint).to.equal(ethers.parseEther("42000000"));
+      expect(maxPegMint).to.equal(ethers.parseEther("39900000"));
     });
 
     it("EnergyFloor works even after PoW exhausted (supply allows it)", async function () {
-      // Mint 203.7M via PoW (simulated)
-      await jolToken.mint(owner.address, ethers.parseEther("203700000"));
+      // Mint 147M via PoW (simulated)
+      await jolToken.mint(owner.address, ethers.parseEther("147000000"));
 
-      // 6.3M remaining capacity. EnergyFloor can still mint.
+      // 63M remaining capacity. EnergyFloor can still mint.
       await energyFloor.connect(producer).registerProducer("Post-PoW Solar", "EE", "solar");
       await energyFloor.connect(oracleNode).depositEnergy(producer.address, 1000);
 
       // 1000 JOL minted via peg
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("1000"));
 
-      // Total supply now 203,701,000
-      expect(await jolToken.totalSupply()).to.equal(ethers.parseEther("203701000"));
+      // Total supply now 147,001,000
+      expect(await jolToken.totalSupply()).to.equal(ethers.parseEther("147001000"));
     });
 
-    it("EnergyFloor respects its own 42M cap", async function () {
+    it("EnergyFloor respects its own 39.9M cap", async function () {
       await energyFloor.connect(producer).registerProducer("Cap Test", "EE", "solar");
 
       // Deposit just under the cap (using totalMintedFromEnergy tracking)
       // The cap check is: totalMintedFromEnergy * 1 ether + jolAmount <= MAX_FLOOR_MINT
-      // So max kWh via peg = 42,000,000
-      // Deposit 42M kWh in one shot would be the limit
+      // So max kWh via peg = 39,900,000
       // Test: deposit a small amount succeeds
       await energyFloor.connect(oracleNode).depositEnergy(producer.address, 100);
       expect(await energyFloor.totalMintedFromEnergy()).to.equal(100);
@@ -393,7 +393,7 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
   // ─── Combined Timeline Summary ─────────────────────────────────
 
   describe("Combined — Full emission timeline verification", function () {
-    it("complete emission schedule: 6 eras, 203.7M total, then 0", function () {
+    it("complete emission schedule: 6 eras, 147M total, then 0", function () {
       const schedule = [];
       let cumulativeSupply = 0n;
 
@@ -410,31 +410,32 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       }
 
       // Era breakdown
-      expect(schedule[0]).to.deep.include({ era: 0, reward: 50, eraMined: 105_000_000 });
-      expect(schedule[1]).to.deep.include({ era: 1, reward: 25, eraMined: 52_500_000 });
-      expect(schedule[2]).to.deep.include({ era: 2, reward: 12, eraMined: 25_200_000 });
-      expect(schedule[3]).to.deep.include({ era: 3, reward: 6,  eraMined: 12_600_000 });
-      expect(schedule[4]).to.deep.include({ era: 4, reward: 3,  eraMined: 6_300_000 });
+      expect(schedule[0]).to.deep.include({ era: 0, reward: 36, eraMined: 75_600_000 });
+      expect(schedule[1]).to.deep.include({ era: 1, reward: 18, eraMined: 37_800_000 });
+      expect(schedule[2]).to.deep.include({ era: 2, reward: 9,  eraMined: 18_900_000 });
+      expect(schedule[3]).to.deep.include({ era: 3, reward: 4,  eraMined: 8_400_000 });
+      expect(schedule[4]).to.deep.include({ era: 4, reward: 2,  eraMined: 4_200_000 });
       expect(schedule[5]).to.deep.include({ era: 5, reward: 1,  eraMined: 2_100_000 });
       expect(schedule[6]).to.deep.include({ era: 6, reward: 0,  eraMined: 0 });
 
       // Final cumulative
-      expect(schedule[9].cumulative).to.equal(203_700_000);
+      expect(schedule[9].cumulative).to.equal(147_000_000);
     });
 
     it("post-emission economy: PoE + fees sustain the network", function () {
-      // After all PoW emissions (203.7M minted):
-      // Remaining mintable via JOLToken: 210M - 203.7M = 6.3M
-      // EnergyFloor cap: 42M (but limited by remaining supply)
-      // PoE (3x multiplier) also mints from remaining supply
+      // After all PoW emissions (147M minted):
+      // Remaining mintable via JOLToken: 210M - 147M = 63M
+      // Of which: 39.9M reserve, 12.6M founder, 10.5M ecosystem
+      // EnergyFloor cap: 39.9M (the reserve allocation)
+      // PoE (3x multiplier) also mints from mining allocation
       //
       // Long-term: fee burns reduce circulating supply
       // PoE minting adds new supply for energy producers
       // Net effect depends on adoption and tx volume
 
-      const powMinted = 203_700_000n;
+      const powMinted = 147_000_000n;
       const remainingCapacity = MAX_SUPPLY - powMinted;
-      expect(remainingCapacity).to.equal(6_300_000n);
+      expect(remainingCapacity).to.equal(63_000_000n);
 
       // Even if all remaining capacity is used, supply never exceeds 210M
       const maxPossibleSupply = powMinted + remainingCapacity;

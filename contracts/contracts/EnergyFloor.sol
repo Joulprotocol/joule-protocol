@@ -29,10 +29,10 @@ contract EnergyFloor is AccessControl, ReentrancyGuard, Pausable {
 
     JOLToken public jolToken;
 
-    // Energy Reserve cap — shared with PoEMining (total 42M for energy)
-    // EnergyFloor uses the Energy Reserve allocation (20% of supply)
+    // Energy Reserve cap — shared with PoEMining (total 39.9M for energy)
+    // EnergyFloor uses the Energy Reserve allocation (19% of supply)
     // This cap prevents unlimited minting via depositEnergy
-    uint256 public constant MAX_FLOOR_MINT = 42_000_000 ether; // 20% of 210M
+    uint256 public constant MAX_FLOOR_MINT = 39_900_000 ether; // 19% of 210M
 
     // Energy Reserve: total kWh backing in the system
     uint256 public totalEnergyReserveKWh;

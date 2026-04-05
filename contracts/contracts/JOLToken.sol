@@ -19,7 +19,7 @@ contract JOLToken is ERC20, ERC20Permit, ERC20Votes, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
-    // Distribution: 69% Mining, 20% Energy Reserve, 6% Founder, 5% Ecosystem
+    // Distribution: 70% Mining, 19% Energy Reserve, 6% Founder, 5% Ecosystem
     uint256 public constant MAX_SUPPLY = 210_000_000 ether; // 210M JOL
     address public constant BURN_ADDRESS = 0x0000000000000000000000000000000000000369;
     uint256 public totalBurned;

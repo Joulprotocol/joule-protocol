@@ -95,7 +95,7 @@ describe("JOULE Core Flow", function () {
   // ─── 1. Token ──────────────────────────────────────────────
 
   describe("1. JOL Token", function () {
-    it("has 210B max supply", async function () {
+    it("has 210M max supply", async function () {
       expect(await jolToken.MAX_SUPPLY()).to.equal(ethers.parseEther("210000000"));
     });
 

@@ -5,11 +5,11 @@ const { ethers } = require("hardhat");
  * Mainnet V1 Tests — Supply, Halving, PoE 3× Multiplier
  *
  * Validates the core mainnet-v1 parameters:
- * - MAX_SUPPLY = 210,000,000,000 JOL (210B)
- * - Mining pool = 126B (60% of supply)
+ * - MAX_SUPPLY = 210,000,000 JOL (210M)
+ * - Mining pool = 147M (70% of supply)
  * - PoE reward multiplier = 3×
- * - Block reward = 16,000 JOL (validated in go-joule, not Solidity)
- * - Halving interval = 2,160,000 blocks (validated in go-joule)
+ * - Block reward = 36 JOL (validated in go-joule, not Solidity)
+ * - Halving interval = 2,100,000 blocks (validated in go-joule)
  */
 
 describe("Mainnet V1 — Supply & PoE Parameters", function () {
@@ -86,23 +86,21 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
     });
   });
 
-  // ─── Mining Pool (69% = 144.9M) ──────────────────────────────
+  // ─── Mining Pool (70% = 147M) ──────────────────────────────
 
-  describe("Mining Pool (69% of supply)", function () {
-    it("144.9M JOL = 69% of 210M", function () {
+  describe("Mining Pool (70% of supply)", function () {
+    it("147M JOL = 70% of 210M", function () {
       const maxSupply = 210_000_000n;
-      const miningPool = maxSupply * 69n / 100n;
-      expect(miningPool).to.equal(144_900_000n);
+      const miningPool = maxSupply * 70n / 100n;
+      expect(miningPool).to.equal(147_000_000n);
     });
 
-    it("block reward × blocks = ~105M in year 1", function () {
-      // 50 JOL/block × 14,400 blocks/day × 365 days = 262,800,000
-      // But with halving at 2.1M blocks (~146 days), first era mines:
-      // 50 × 2,100,000 = 105,000,000 JOL
-      const blockReward = 50n;
+    it("block reward × blocks = 75.6M in era 0", function () {
+      // 36 JOL/block × 2,100,000 blocks = 75,600,000 JOL
+      const blockReward = 36n;
       const halvingInterval = 2_100_000n;
       const firstEraMined = blockReward * halvingInterval;
-      expect(firstEraMined).to.equal(105_000_000n);
+      expect(firstEraMined).to.equal(75_600_000n);
     });
   });
 
@@ -168,35 +166,36 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
   // ─── Halving Schedule (Go-level, validated by math) ──────────
 
   describe("Halving Schedule (math validation)", function () {
-    it("halving interval = 2,100,000 blocks (~146 days)", function () {
-      // 14,400 blocks/day × ~146 days ≈ 2,100,000
-      const blocksPerDay = 86400 / 6;
+    it("halving interval = 2,100,000 blocks (~365 days at 15s)", function () {
+      // 5,760 blocks/day × ~365 days ≈ 2,102,400 ≈ 2,100,000
+      const blocksPerDay = 86400 / 15;
       const halvingBlocks = 2_100_000;
       const halvingDays = halvingBlocks / blocksPerDay;
-      expect(halvingDays).to.be.closeTo(146, 1);
+      expect(halvingDays).to.be.closeTo(365, 2);
     });
 
-    it("total supply from mining converges below 210M with halvings", function () {
-      // Geometric series: 50 × 2,100,000 × (1 + 1/2 + 1/4 + ...)
-      // Era 0: 50 × 2,100,000 = 105,000,000
-      // Era 1: 25 × 2,100,000 = 52,500,000
-      // ...sum ≈ 210,000,000 (approaches but never exceeds)
+    it("total supply from mining converges to 147M with halvings", function () {
+      // Geometric series: 36 × 2,100,000 × (1 + 1/2 + 1/4 + ...)
+      // Era 0: 36 × 2,100,000 = 75,600,000
+      // Era 1: 18 × 2,100,000 = 37,800,000
+      // ...sum = 147,000,000 (integer halving, 6 eras)
       let total = 0n;
-      let reward = 50n;
+      let reward = 36n;
       const interval = 2_100_000n;
       for (let era = 0; era < 10; era++) {
         total += reward * interval;
         reward = reward / 2n;
       }
+      expect(total).to.equal(147_000_000n);
       expect(total).to.be.lt(210_000_000n);
-      expect(total).to.be.gt(200_000_000n);
     });
 
-    it("reward drops to 0 after 10 halvings", function () {
-      // In go-joule: if halvings >= 10, reward = 0
-      // After 10 × 2,160,000 = 21,600,000 blocks
-      const totalBlocks = 10 * 2_160_000;
-      expect(totalBlocks).to.equal(21_600_000);
+    it("reward drops to 0 after 6 halvings (integer: 36/64=0)", function () {
+      // 36 → 18 → 9 → 4 → 2 → 1 → 0
+      let reward = 36n;
+      let halvings = 0;
+      while (reward > 0n) { reward = reward / 2n; halvings++; }
+      expect(halvings).to.equal(6);
     });
   });
 });

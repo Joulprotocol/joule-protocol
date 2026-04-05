@@ -94,7 +94,7 @@ JOULE is an EVM-compatible Layer 1 blockchain, forked from go-ethereum with the 
 
 - **Consensus:** EtHash-J — modified Ethash with memory-hard parameters tuned for GPU efficiency and ASIC resistance. DAG size increases follow a steeper curve.
 - **Block time:** 15 seconds
-- **Block reward:** Starts at 50 JOL, halving every 2,100,000 blocks (~1 year)
+- **Block reward:** Starts at 36 JOL, halving every 2,100,000 blocks (~1 year)
 - **EVM version:** Shanghai-compatible (full smart contract support)
 - **State management:** Standard Merkle Patricia Trie
 
@@ -147,19 +147,21 @@ EtHash-J Parameters:
 | Parameter | Value |
 |-----------|-------|
 | **Max supply** | 210,000,000 JOL |
-| **Mining (PoW + PoE)** | 69% (144.9M JOL) — GPU miners + energy producers |
-| **Energy Reserve** | 20% (42M JOL) — backs the 1 JOL = 1 kWh peg |
+| **Mining (PoW + PoE)** | 70% (147M JOL) — GPU miners + energy producers |
+| **Energy Reserve** | 19% (39.9M JOL) — backs the 1 JOL = 1 kWh peg |
 | **Founder** | 6% (12.6M JOL) — 1-year cliff, 4-year vesting |
 | **Ecosystem** | 5% (10.5M JOL) — bounties, developers, audits, DEX liquidity |
 
 ### 4.2 Emission Schedule
 
 ```
-Year 1: 50 JOL/block  → ~52.5M JOL mined
-Year 2: 25 JOL/block  → ~26.25M JOL mined
-Year 3: 12.5 JOL/block → ~13.125M JOL mined
-Year 4: 6.25 JOL/block → ~6.5625M JOL mined
-...halving continues until max supply reached (~Year 10)
+Era 0 (Year 1): 36 JOL/block  → 75.6M JOL mined
+Era 1 (Year 2): 18 JOL/block  → 37.8M JOL mined
+Era 2 (Year 3):  9 JOL/block  → 18.9M JOL mined
+Era 3 (Year 4):  4 JOL/block  →  8.4M JOL mined
+Era 4 (Year 5):  2 JOL/block  →  4.2M JOL mined
+Era 5 (Year 6):  1 JOL/block  →  2.1M JOL mined
+Total mining: 147M JOL (70% of supply, ~6 years)
 ```
 
 ### 4.3 Burn Mechanics

@@ -59,10 +59,10 @@ go build -o ../bin/gjoule ./cmd/geth
 GPU Miners (PoW)                    Energy Producers (PoE)
 ─────────────────                   ──────────────────────
 Solve EtHash-J puzzles              Produce solar/wind/hydro/geo
-Earn 50 JOL/block               Earn 3× JOL per kWh (same pool)
+Earn 36 JOL/block               Earn 3× JOL per kWh (same pool)
 Secure the network                  Back the network with real energy
 
-         Both earn from the same 126B mining pool.
+         Both earn from the same 147M mining pool.
          Both are essential. PoW secures. PoE gives value.
 ```
 
@@ -83,17 +83,17 @@ All three must agree. Physics is the judge. Weather is the witness. Economics is
 ```
 Max Supply:     210,000,000 JOL (210M — hard cap, forever)
 
-Mining (PoW+PoE):  69%  = 144.9M   Block reward: 50 JOL, halving every 2,100,000 blocks
-Energy Reserve:    20%  =  42.0M   Backs the 1 JOL = 1 kWh peg
+Mining (PoW+PoE):  70%  = 147.0M   Block reward: 36 JOL, halving every 2,100,000 blocks
+Energy Reserve:    19%  =  39.9M   Backs the 1 JOL = 1 kWh peg
 Founder:            6%  =  12.6M   1-year cliff, 4-year linear vesting (OpenZeppelin)
 Ecosystem:          5%  =  10.5M   Bounties, developers, audits, DEX liquidity
-  ├── 90% Development = 9.45M    Bounties, audits, DEX
-  └── 10% Insurance   = 1.05M    Smart contract bug coverage (DAO + 7d timelock)
+  ├── 90% Development =  9.45M   Bounties, audits, DEX
+  └── 10% Insurance   =  1.05M   Smart contract bug coverage (DAO + 7d timelock)
                   ────
                   100%  = 210.0M
 ```
 
-Block reward halves every ~1 year: 50 → 25 → 12.5 → 6.25 → ... → 0
+Block reward halves every ~1 year: 36 → 18 → 9 → 4 → 2 → 1 → 0
 
 ### Allowed Energy Types
 
@@ -200,8 +200,8 @@ npx hardhat test    # 231 passing (3s)
 |-----------|-------|
 | Chain ID | 707070 |
 | Consensus | EtHash-J (Proof of Work) |
-| Block time | ~6 seconds |
-| Block reward | 50 JOL (halving every 2,100,000 blocks) |
+| Block time | ~15 seconds |
+| Block reward | 36 JOL (halving every 2,100,000 blocks) |
 | Max supply | 210,000,000 JOL |
 | Gas limit | 30,000,000 |
 

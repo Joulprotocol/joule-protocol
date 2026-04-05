@@ -10,8 +10,8 @@ const { ethers } = require("hardhat");
  *
  * Protocol constants:
  *   MAX_SUPPLY       = 210,000,000 JOL
- *   Block reward     = 50 JOL (era 0), halving every 2,100,000 blocks
- *   Blocks/day       = 14,400 (6s block time)
+ *   Block reward     = 36 JOL (era 0), halving every 2,100,000 blocks
+ *   Blocks/day       = 5,760 (15s block time)
  *   PoE multiplier   = 3x (1 JOL/kWh × 3)
  *   Oracle fee       = 2%
  */
@@ -21,11 +21,11 @@ describe("5-Year Economic Stress Simulation", function () {
   const MAX_SUPPLY        = 210_000_000n;
   const MAX_SUPPLY_WEI    = MAX_SUPPLY * 10n ** 18n;
   const HALVING_INTERVAL  = 2_100_000n;
-  const BLOCKS_PER_DAY    = 14_400n;
+  const BLOCKS_PER_DAY    = 5_760n;  // 86400/15 = 5,760 at 15s blocks
   const BLOCKS_PER_YEAR   = BLOCKS_PER_DAY * 365n;
   const POE_MULTIPLIER    = 3n;
   const ORACLE_FEE_BPS    = 200n;
-  const INITIAL_REWARD    = 50n;
+  const INITIAL_REWARD    = 36n;
 
   let jolToken, registry, poeMining;
   let owner, producer1, producer2, oracleNode;
@@ -55,65 +55,55 @@ describe("5-Year Economic Stress Simulation", function () {
 
   // ─── Year 1: Growth Phase ──────────────────────────────────────
 
-  describe("Year 1 — 10 miners, 50 JOL/block", function () {
-    it("10 miners produce ~52.56M JOL in year 1 (block rewards only)", function () {
-      // 14,400 blocks/day × 365 days = 5,256,000 blocks/year
-      // 50 JOL/block × 5,256,000 = 262,800,000 JOL if no halving
-      // But halving at block 2,100,000 (~day 146):
-      //   Era 0: 50 × 2,100,000 = 105,000,000
-      //   Era 1: 25 × (5,256,000 - 2,100,000) = 25 × 3,156,000 = 78,900,000
-      //   Total = 183,900,000 — but this exceeds cap considerations
-      //
-      // Per-miner share (10 miners): each gets 1/10 of blocks
-      // Total mined in year 1 with halving: 105M + 78.9M = 183.9M
-      // This is UNDER MAX_SUPPLY of 210M. Supply cap holds.
+  describe("Year 1 — 10 miners, 36 JOL/block", function () {
+    it("10 miners produce ~75.6M JOL in year 1 (era 0 = full year)", function () {
+      // 5,760 blocks/day × 365 days = 2,102,400 blocks/year
+      // Halving at block 2,100,000 (~day 365):
+      //   Era 0: 36 × 2,100,000 = 75,600,000
+      //   Remaining year 1 blocks: 2,400 at 18 JOL = 43,200
+      //   Total ≈ 75,643,200
       const era0Blocks = HALVING_INTERVAL;
       const year1Blocks = BLOCKS_PER_YEAR;
       const era1Blocks = year1Blocks - era0Blocks;
 
-      const era0Mined = 50n * era0Blocks;
-      const era1Mined = 25n * era1Blocks;
+      const era0Mined = 36n * era0Blocks;
+      const era1Mined = 18n * era1Blocks;
       const totalYear1 = era0Mined + era1Mined;
 
-      expect(totalYear1).to.equal(183_900_000n);
+      expect(era0Mined).to.equal(75_600_000n);
+      expect(totalYear1).to.equal(75_643_200n);
       expect(totalYear1).to.be.lt(MAX_SUPPLY);
     });
 
-    it("each of 10 miners gets equal share (~18.39M each)", function () {
-      const year1Blocks = BLOCKS_PER_YEAR;
-      const era0Mined = 50n * HALVING_INTERVAL;
-      const era1Mined = 25n * (year1Blocks - HALVING_INTERVAL);
-      const totalYear1 = era0Mined + era1Mined;
-
-      const perMiner = totalYear1 / 10n;
-      expect(perMiner).to.equal(18_390_000n);
+    it("each of 10 miners gets equal share (~7.56M each)", function () {
+      const era0Mined = 36n * HALVING_INTERVAL;
+      const perMiner = era0Mined / 10n;
+      expect(perMiner).to.equal(7_560_000n);
     });
 
-    it("minting 183.9M stays under 210M cap on-chain", async function () {
-      const amount = ethers.parseEther("183900000");
+    it("minting 75.6M stays well under 210M cap on-chain", async function () {
+      const amount = ethers.parseEther("75600000");
       await jolToken.mint(owner.address, amount);
 
       const remaining = await jolToken.remainingSupply();
-      expect(remaining).to.equal(ethers.parseEther("26100000"));
+      expect(remaining).to.equal(ethers.parseEther("134400000"));
       expect(await jolToken.totalSupply()).to.be.lte(await jolToken.MAX_SUPPLY());
     });
   });
 
   // ─── Year 2: First Full Halving Era ────────────────────────────
 
-  describe("Year 2 — block reward halved to 25 JOL", function () {
-    it("calculates year 2 minting with halving at block 4,200,000", function () {
-      // Year 2 blocks: 5,256,000 to 10,512,000
+  describe("Year 2 — block reward halved to 18 JOL", function () {
+    it("calculates year 2 minting with halving at block 2,100,000", function () {
+      // Year 2 blocks: 2,102,400 to 4,204,800
       // Halving schedule:
-      //   Era 0 (blocks 0 - 2,099,999): 50 JOL — done in year 1
-      //   Era 1 (blocks 2,100,000 - 4,199,999): 25 JOL
-      //   Era 2 (blocks 4,200,000+): 12.5 → 12 JOL (integer)
+      //   Era 0 (blocks 0 - 2,099,999): 36 JOL — done in year 1
+      //   Era 1 (blocks 2,100,000 - 4,199,999): 18 JOL
+      //   Era 2 (blocks 4,200,000+): 9 JOL
       //
-      // Year 2 starts at block 5,256,000:
-      //   Era 1 ended at block 4,200,000 — already in year 1!
-      //   Year 2 is entirely in Era 2 (12 JOL/block)
-      //   But wait: 5,256,000 / 2,100,000 = era 2 (floor division)
-      //   Reward = 50 / 2^2 = 12 (integer division)
+      // Year 2 starts at block 2,102,400:
+      //   In Era 1 (18 JOL/block) until block 4,200,000
+      //   Then Era 2 (9 JOL/block) for remainder
       const year2Start = BLOCKS_PER_YEAR;
       const year2End = BLOCKS_PER_YEAR * 2n;
       const year2Blocks = year2End - year2Start;
@@ -133,13 +123,9 @@ describe("5-Year Economic Stress Simulation", function () {
         currentBlock = endBlock;
       }
 
-      // Year 2 spans era 2 (12 JOL) partially into era 3 (6 JOL)
-      // era 2: blocks 4,200,000..6,300,000 → year 2 range: 5,256,000..6,300,000 = 1,044,000 blocks × 12
-      // era 3: blocks 6,300,000..8,400,000 → year 2 range: 6,300,000..10,512,000 = 4,212,000 blocks × 6
-      //   but year 2 ends at 10,512,000 and era 3 ends at 8,400,000
-      // era 3: 6,300,000..8,400,000 = 2,100,000 blocks × 6
-      // era 4: 8,400,000..10,500,000 = 2,100,000 blocks × 3
-      // era 5: 10,500,000..10,512,000 = 12,000 blocks × 1 (50/2^5=1)
+      // Year 2 spans era 1 (18 JOL) and era 2 (9 JOL)
+      // Era 1: blocks 2,100,000..4,200,000 → year 2 portion: 2,102,400..4,200,000
+      // Era 2: blocks 4,200,000+ → year 2 portion: 4,200,000..4,204,800
       expect(totalMintedYear2).to.be.gt(0n);
       expect(totalMintedYear2).to.be.lt(MAX_SUPPLY);
     });
@@ -200,10 +186,10 @@ describe("5-Year Economic Stress Simulation", function () {
     });
 
     it("chain security: fewer miners = same block production rate", function () {
-      // JOULE uses PoW — difficulty adjusts. Blocks keep coming at 6s.
-      // Hashrate drops but difficulty drops too. 14,400 blocks/day stays.
+      // JOULE uses PoW — difficulty adjusts. Blocks keep coming at 15s.
+      // Hashrate drops but difficulty drops too. 5,760 blocks/day stays.
       const blocksPerDayBear = BLOCKS_PER_DAY; // unchanged
-      expect(blocksPerDayBear).to.equal(14_400n);
+      expect(blocksPerDayBear).to.equal(5_760n);
     });
 
     it("PoE rewards still flow to remaining producers", async function () {
@@ -352,9 +338,9 @@ describe("5-Year Economic Stress Simulation", function () {
 
   describe("Supply Invariant — total never exceeds 210M", function () {
     it("total PoW supply from all eras converges below 210M", function () {
-      // Geometric series: sum = 50 × 2,100,000 × (1 + 1/2 + 1/4 + ... + 1/2^n)
-      // Theoretical limit = 50 × 2,100,000 × 2 = 210,000,000
-      // But integer division causes undershoot
+      // Geometric series: sum = 36 × 2,100,000 × (1 + 1/2 + 1/4 + ... + 1/2^n)
+      // Theoretical limit = 36 × 2,100,000 × 2 = 151,200,000
+      // Integer division: 36+18+9+4+2+1 = 70; 70 × 2.1M = 147M
       let totalMined = 0n;
       let reward = INITIAL_REWARD;
 
@@ -364,11 +350,11 @@ describe("5-Year Economic Stress Simulation", function () {
         reward = reward >> 1n;
       }
 
-      // With 50 JOL initial reward, integer halving gives:
-      // 50 → 25 → 12 → 6 → 3 → 1 → 0
+      // With 36 JOL initial reward, integer halving gives:
+      // 36 → 18 → 9 → 4 → 2 → 1 → 0
       // Eras: 6 productive eras
-      // Sum: (50+25+12+6+3+1) × 2,100,000 = 97 × 2,100,000 = 203,700,000
-      expect(totalMined).to.equal(203_700_000n);
+      // Sum: (36+18+9+4+2+1) × 2,100,000 = 70 × 2,100,000 = 147,000,000
+      expect(totalMined).to.equal(147_000_000n);
       expect(totalMined).to.be.lt(MAX_SUPPLY);
     });
 
