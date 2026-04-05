@@ -111,6 +111,7 @@ contract LiquidityMining is AccessControl {
 
     function updatePool() public {
         if (block.timestamp <= lastRewardTime) return;
+        if (!isActive() && lastRewardTime >= programStart + PROGRAM_DURATION) return;
 
         if (totalLPStaked == 0) {
             lastRewardTime = block.timestamp;

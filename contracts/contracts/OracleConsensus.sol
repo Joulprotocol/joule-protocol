@@ -196,6 +196,9 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         require(!report.finalized, "Already finalized");
         require(block.timestamp <= report.createdAt + REPORT_WINDOW, "Report window closed");
 
+        // Cap voters to prevent gas DoS on finalization
+        require(report.voters.length < 20, "Max oracles per report");
+
         // Check oracle hasn't already voted
         for (uint256 i = 0; i < report.voters.length; i++) {
             require(report.voters[i] != msg.sender, "Already submitted");
