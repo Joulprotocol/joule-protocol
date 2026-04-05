@@ -87,6 +87,8 @@ Mining (PoW+PoE):  69%  = 144.9M   Block reward: 50 JOL, halving every 2,100,000
 Energy Reserve:    20%  =  42.0M   Backs the 1 JOL = 1 kWh peg
 Founder:            6%  =  12.6M   1-year cliff, 4-year linear vesting (OpenZeppelin)
 Ecosystem:          5%  =  10.5M   Bounties, developers, audits, DEX liquidity
+  ├── 90% Development = 9.45M    Bounties, audits, DEX
+  └── 10% Insurance   = 1.05M    Smart contract bug coverage (DAO + 7d timelock)
                   ────
                   100%  = 210.0M
 ```

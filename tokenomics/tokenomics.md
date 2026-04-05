@@ -7,7 +7,9 @@ Total Max Supply: 210,000,000 JOL
 ├── Mining (PoW + PoE):  144,900,000 JOL (69%) — GPU miners & energy producers
 ├── Energy Reserve:       42,000,000 JOL (20%) — backs 1 JOL = 1 kWh peg
 ├── Founder:              12,600,000 JOL  (6%) — 1-year cliff, 4-year vesting
-└── Ecosystem:            10,500,000 JOL  (5%) — bounties, developers, audits, DEX liquidity
+└── Ecosystem:            10,500,000 JOL  (5%)
+    ├── 90% Development:   9,450,000 JOL — bounties, developers, audits, DEX liquidity
+    └── 10% Insurance:     1,050,000 JOL — smart contract bug coverage (DAO + 7d timelock)
 ```
 
 ## Founder Allocation: 6%
