@@ -67,14 +67,12 @@ contract PaymentChannel is ReentrancyGuard {
         address _receiver,
         uint256 _deposit,
         uint256 _duration
-    ) external returns (uint256) {
+    ) external nonReentrant returns (uint256) {
         require(_receiver != address(0) && _receiver != msg.sender, "Invalid receiver");
         require(_deposit > 0, "Zero deposit");
         require(_duration >= 60 && _duration <= 365 days, "Invalid duration");
 
-        // Transfer JOL from sender to this contract
-        require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
-
+        // Effects (state changes BEFORE external calls)
         uint256 id = nextChannelId++;
         channels[id] = Channel({
             id: id,
@@ -90,6 +88,9 @@ contract PaymentChannel is ReentrancyGuard {
         senderChannels[msg.sender].push(id);
         receiverChannels[_receiver].push(id);
         totalChannelsOpened++;
+
+        // Interaction (external call AFTER state changes)
+        require(jolToken.transferFrom(msg.sender, address(this), _deposit), "Transfer failed");
 
         emit ChannelOpened(id, msg.sender, _receiver, _deposit, block.timestamp + _duration);
         return id;
@@ -178,12 +179,12 @@ contract PaymentChannel is ReentrancyGuard {
     /**
      * @notice Top up channel deposit (sender only)
      */
-    function topUpChannel(uint256 _channelId, uint256 _amount) external {
+    function topUpChannel(uint256 _channelId, uint256 _amount) external nonReentrant {
         Channel storage ch = channels[_channelId];
         require(ch.open, "Not open");
         require(msg.sender == ch.sender, "Only sender");
-        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
         ch.deposit += _amount;
+        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
     }
 
     // ─── Views ─────────────────────────────────────────────────────

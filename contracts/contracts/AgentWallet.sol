@@ -123,11 +123,11 @@ contract AgentWallet is ReentrancyGuard {
     /**
      * @notice Fund an agent wallet
      */
-    function fundWallet(uint256 _walletId, uint256 _amount) external {
+    function fundWallet(uint256 _walletId, uint256 _amount) external nonReentrant {
         Wallet storage w = wallets[_walletId];
         require(w.active, "Not active");
-        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
         w.balance += _amount;
+        require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
         emit WalletFunded(_walletId, _amount);
     }
 

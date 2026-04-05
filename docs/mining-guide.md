@@ -50,7 +50,7 @@ Save your password securely. Copy the address (0x...) — this is your miner add
   --mine \
   --miner.etherbase 0xYOUR_ADDRESS_HERE \
   --miner.threads 2 \
-  --bootnodes "enode://369ca3173dbbdbcff271c45a920012f30dc92c6b93d60f95c0695877014d9459cb3fba7754210f0318372877656037082d78f7a0a9d83b59633aa050bb4d7ef3@bootnode.joule.energy:30307" \
+  --bootnodes "enode://4fe9a8ffee1731a9666a24afcb8b4cd44f236cc22d1b327cd2663646bbc25f6215b6bc361a25e4982c5f7e4b23d591c41995c567159e8d833f0adccec6634846@204.168.211.136:30307" \
   --maxpeers 50 \
   --verbosity 3
 ```

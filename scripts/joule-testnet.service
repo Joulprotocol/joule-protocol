@@ -1,0 +1,18 @@
+[Unit]
+Description=JOULE Testnet Node
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+User=erkki
+Group=erkki
+WorkingDirectory=/home/erkki/paul/projects/joule
+ExecStart=/bin/bash /home/erkki/paul/projects/joule/scripts/start-testnet.sh
+ExecStop=/bin/kill -SIGINT $MAINPID
+PIDFile=/home/erkki/paul/projects/joule/data/testnet/gjoule.pid
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

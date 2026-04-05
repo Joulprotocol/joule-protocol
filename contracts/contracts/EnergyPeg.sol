@@ -164,10 +164,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
 
         uint256 jolAmount = _kWh * 1 ether;
 
-        // Burn JOL from redeemer
-        jolToken.protocolBurn(msg.sender, jolAmount, "energy_redemption");
-
-        // Update state
+        // Effects (state changes BEFORE external calls)
         producers[_producer].availableKWh -= _kWh;
         producers[_producer].totalRedeemed += _kWh;
         totalEnergyReserveKWh -= _kWh;
@@ -175,6 +172,9 @@ contract EnergyPeg is AccessControl, ReentrancyGuard {
 
         // Create redemption ticket
         uint256 ticketId = nextTicketId++;
+
+        // Burn JOL from redeemer (interaction AFTER state changes)
+        jolToken.protocolBurn(msg.sender, jolAmount, "energy_redemption");
         tickets[ticketId] = RedemptionTicket({
             id: ticketId,
             redeemer: msg.sender,

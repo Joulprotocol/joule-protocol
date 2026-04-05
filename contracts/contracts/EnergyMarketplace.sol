@@ -87,7 +87,14 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard {
         uint256 burnAmount = (totalPrice * BURN_BPS) / 10000;
         uint256 sellerReceives = totalPrice - burnAmount;
 
-        // Execute transfers
+        // Effects (state changes BEFORE external calls)
+        listing.kWh -= _kWh;
+        if (listing.kWh == 0) listing.active = false;
+        totalTradeVolume += totalPrice;
+        totalBurned += burnAmount;
+        totalTrades++;
+
+        // Interactions (external calls AFTER state changes)
         require(
             jolToken.transferFrom(msg.sender, listing.seller, sellerReceives),
             "Seller transfer failed"
@@ -96,18 +103,7 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard {
             jolToken.transferFrom(msg.sender, address(this), burnAmount),
             "Fee transfer failed"
         );
-
-        // Burn — 100% of fees destroyed
         jolToken.burn(burnAmount);
-
-        // Update listing
-        listing.kWh -= _kWh;
-        if (listing.kWh == 0) listing.active = false;
-
-        // Stats
-        totalTradeVolume += totalPrice;
-        totalBurned += burnAmount;
-        totalTrades++;
 
         emit TradExecuted(_listingId, msg.sender, _kWh, totalPrice);
         emit FeeBurned(burnAmount);

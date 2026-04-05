@@ -25,6 +25,10 @@ Thumbs.db
 *.key
 .env
 
+# Private
+technical/resonance.md
+security/
+
 # Go build
 go-joule/build/bin/
 go-joule/vendor/

@@ -126,8 +126,8 @@ contract EnergyRegistry is AccessControl {
         require(_periodEnd <= block.timestamp, "Future period");
 
         // Sanity check: production can't exceed capacity × hours
-        uint256 periodHours = (_periodEnd - _periodStart) / 3600;
-        uint256 maxProduction = f.capacityKW * periodHours;
+        // Multiply before divide to avoid precision loss
+        uint256 maxProduction = f.capacityKW * (_periodEnd - _periodStart) / 3600;
         require(_kWh <= maxProduction, "Production exceeds capacity");
 
         f.totalVerifiedKWh += _kWh;
