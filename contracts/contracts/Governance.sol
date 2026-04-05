@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./JOLToken.sol";
 
 /**
@@ -9,7 +10,7 @@ import "./JOLToken.sol";
  * @notice On-chain governance for JOULE protocol upgrades.
  * 1 JOL = 1 vote. Simple majority with quorum requirement.
  */
-contract Governance is AccessControl {
+contract Governance is AccessControl, ReentrancyGuard {
     JOLToken public jolToken;
 
     uint256 public constant PROPOSAL_THRESHOLD = 100_000 ether;  // 100k JOL to propose
@@ -124,7 +125,7 @@ contract Governance is AccessControl {
     /**
      * @notice Execute a passed proposal
      */
-    function execute(uint256 _proposalId) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function execute(uint256 _proposalId) external onlyRole(DEFAULT_ADMIN_ROLE) nonReentrant {
         Proposal storage p = proposals[_proposalId];
         require(p.state == ProposalState.Passed, "Not passed");
 

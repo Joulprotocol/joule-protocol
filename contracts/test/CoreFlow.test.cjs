@@ -82,6 +82,10 @@ describe("JOULE Core Flow", function () {
     await oracle.setPoEMining(poeMining.target);
     await carbon.grantRole(CARBON_MINTER, owner.address);
 
+    // Grant RECORDER_ROLE to AgentWallet so it can record machine transactions
+    const RECORDER_ROLE = ethers.keccak256(ethers.toUtf8Bytes("RECORDER_ROLE"));
+    await machineReg.grantRole(RECORDER_ROLE, agentWallet.target);
+
     // Give oracle role to energyPeg for production recording
     await registry.grantRole(VERIFIER_ROLE, energyPeg.target);
   });

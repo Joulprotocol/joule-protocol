@@ -1,0 +1,13 @@
+{
+  "name": "joule-meter-bridge",
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "start": "node meter-bridge.js",
+    "test": "bash test-bridge.sh",
+    "fake": "node fake-shelly.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  }
+}

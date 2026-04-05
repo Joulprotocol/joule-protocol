@@ -14,7 +14,9 @@ describe("SellLimit — Square Root Harmony", function () {
   beforeEach(async function () {
     [owner, seller] = await ethers.getSigners();
     const SellLimit = await ethers.getContractFactory("SellLimit");
-    sellLimit = await SellLimit.deploy();
+    sellLimit = await SellLimit.deploy(owner.address);
+    const EXCHANGE_ROLE = ethers.keccak256(ethers.toUtf8Bytes("EXCHANGE_ROLE"));
+    await sellLimit.grantRole(EXCHANGE_ROLE, owner.address);
   });
 
   // ─── Square Root Function ───────────────────────────────────

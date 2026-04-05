@@ -19,6 +19,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  */
 contract MachineRegistry is AccessControl {
     bytes32 public constant VERIFIER_ROLE = keccak256("VERIFIER_ROLE");
+    bytes32 public constant RECORDER_ROLE = keccak256("RECORDER_ROLE");
 
     enum MachineType {
         IoTSensor,          // 0: temperature, humidity, etc.
@@ -142,7 +143,7 @@ contract MachineRegistry is AccessControl {
         address _machineWallet,
         uint256 _amount,
         bool _success
-    ) external {
+    ) external onlyRole(RECORDER_ROLE) {
         uint256 id = walletToMachine[_machineWallet];
         if (id == 0) return; // unregistered machine, skip
 
@@ -165,7 +166,7 @@ contract MachineRegistry is AccessControl {
     /**
      * @notice Record energy production/consumption by a machine
      */
-    function recordEnergy(address _machineWallet, uint256 _kWh) external {
+    function recordEnergy(address _machineWallet, uint256 _kWh) external onlyRole(RECORDER_ROLE) {
         uint256 id = walletToMachine[_machineWallet];
         if (id == 0) return;
         machines[id].totalEnergyKWh += _kWh;

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
 /**
  * @title SellLimit
  * @notice Square root harmony sell limiter.
@@ -14,7 +16,9 @@ pragma solidity ^0.8.24;
  * Formula: sqrt(dailyProduction) × marketVolume / 1,000,000
  * Clamped between 0.5% minimum and 5% maximum of daily production.
  */
-contract SellLimit {
+contract SellLimit is AccessControl {
+    bytes32 public constant EXCHANGE_ROLE = keccak256("EXCHANGE_ROLE");
+
     // Min 0.5% of daily production
     uint256 public constant MIN_SELL_BPS = 50;    // 0.5% in BPS (base 10000)
     // Max 5% of daily production
@@ -26,6 +30,10 @@ contract SellLimit {
     mapping(address => mapping(uint256 => uint256)) public dailySold; // address → day → amount
 
     event SellLimitChecked(address indexed seller, uint256 amount, uint256 limit, bool allowed);
+
+    constructor(address admin) {
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+    }
 
     /**
      * @notice Calculate daily sell limit for a producer.
@@ -68,7 +76,7 @@ contract SellLimit {
         uint256 _amount,
         uint256 _dailyProduction,
         uint256 _marketVolume
-    ) external returns (bool allowed) {
+    ) external onlyRole(EXCHANGE_ROLE) returns (bool allowed) {
         uint256 today = block.timestamp / 1 days;
         uint256 limit = dailySellLimit(_dailyProduction, _marketVolume);
         uint256 alreadySold = dailySold[_seller][today];

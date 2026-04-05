@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./EnergyRegistry.sol";
 import "./PoEMining.sol";
 
@@ -24,7 +25,7 @@ import "./PoEMining.sol";
  * Weakest link: hardware manipulation. Mitigated by MID certification (criminal offense
  * to tamper), registered GPS location, and weather cross-check.
  */
-contract OracleConsensus is AccessControl {
+contract OracleConsensus is AccessControl, ReentrancyGuard {
     uint256 public constant MIN_ORACLES = 5;                // minimum oracle network size
     uint256 public constant MIN_STAKE = 10_000 ether;      // 10,000 JOL
     uint256 public constant QUORUM = 3;                    // 3-of-5 consensus required
@@ -112,7 +113,7 @@ contract OracleConsensus is AccessControl {
     /**
      * @notice Exit oracle network and reclaim stake (minus any slashing)
      */
-    function exitOracle() external {
+    function exitOracle() external nonReentrant {
         OracleNode storage node = oracles[msg.sender];
         require(node.active, "Not active oracle");
         require(block.timestamp > node.joinedAt + 30 days, "Lock period 30 days");
