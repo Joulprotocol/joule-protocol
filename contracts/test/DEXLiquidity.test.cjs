@@ -23,7 +23,7 @@ describe("DEXLiquidity — Uniswap v3 Provisioning", function () {
     // Fund the DEX contract with allocation
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     await jolToken.grantRole(MINTER_ROLE, owner.address);
-    await jolToken.mint(dexLiquidity.target, ethers.parseEther("6300000000"));
+    await jolToken.mint(dexLiquidity.target, ethers.parseEther("6300000"));
 
     // Grant provisioner role
     const PROVISIONER_ROLE = await dexLiquidity.PROVISIONER_ROLE();
@@ -33,25 +33,25 @@ describe("DEXLiquidity — Uniswap v3 Provisioning", function () {
   // ─── Constants ──────────────────────────────────────────────
 
   describe("Constants", function () {
-    it("total DEX allocation = 6.3B JOL (3% of 210B)", async function () {
-      expect(await dexLiquidity.TOTAL_DEX_ALLOCATION()).to.equal(ethers.parseEther("6300000000"));
-      // Verify: 3% of 210B
-      const total = 210_000_000_000n;
-      expect(total * 3n / 100n).to.equal(6_300_000_000n);
+    it("total DEX allocation = 6.3M JOL (3% of 210M)", async function () {
+      expect(await dexLiquidity.TOTAL_DEX_ALLOCATION()).to.equal(ethers.parseEther("6300000"));
+      // Verify: 3% of 210M
+      const total = 210_000_000n;
+      expect(total * 3n / 100n).to.equal(6_300_000n);
     });
 
-    it("Pool A (JOL/USDC) = 60% = 3.78B JOL", async function () {
-      expect(await dexLiquidity.poolAAllocation()).to.equal(ethers.parseEther("3780000000"));
+    it("Pool A (JOL/USDC) = 60% = 3.78M JOL", async function () {
+      expect(await dexLiquidity.poolAAllocation()).to.equal(ethers.parseEther("3780000"));
     });
 
-    it("Pool B (JOL/ETH) = 40% = 2.52B JOL", async function () {
-      expect(await dexLiquidity.poolBAllocation()).to.equal(ethers.parseEther("2520000000"));
+    it("Pool B (JOL/ETH) = 40% = 2.52M JOL", async function () {
+      expect(await dexLiquidity.poolBAllocation()).to.equal(ethers.parseEther("2520000"));
     });
 
     it("A + B = total allocation", async function () {
       const a = await dexLiquidity.poolAAllocation();
       const b = await dexLiquidity.poolBAllocation();
-      expect(a + b).to.equal(ethers.parseEther("6300000000"));
+      expect(a + b).to.equal(ethers.parseEther("6300000"));
     });
 
     it("fee tier = 3000 (0.3%)", async function () {

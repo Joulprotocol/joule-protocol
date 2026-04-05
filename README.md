@@ -13,7 +13,7 @@ GPU-mineable. Fair launch. Energy-backed floor price.
 - **Energy floor price** — 1 JOL is always backed by 1 kWh of verified renewable energy. Price can't go below energy cost.
 - **Dual mining** — GPU miners (PoW) secure the network. Energy producers (PoE) back it with real power. Both earn from the same pool.
 - **Machine payments** — AI agents, EVs, IoT devices pay each other in JOL. Per-second. Sub-cent.
-- **Deflationary** — 210B max supply. All fees burned. Supply only shrinks after month ~36.
+- **Deflationary** — 210M max supply. All fees burned. Supply only shrinks after month ~36.
 
 ## Mine JOULE in 5 minutes
 
@@ -59,7 +59,7 @@ go build -o ../bin/gjoule ./cmd/geth
 GPU Miners (PoW)                    Energy Producers (PoE)
 ─────────────────                   ──────────────────────
 Solve EtHash-J puzzles              Produce solar/wind/hydro/geo
-Earn 16,000 JOL/block               Earn 3× JOL per kWh (same pool)
+Earn 50 JOL/block               Earn 3× JOL per kWh (same pool)
 Secure the network                  Back the network with real energy
 
          Both earn from the same 126B mining pool.
@@ -81,9 +81,9 @@ All three must agree. Physics is the judge. Weather is the witness. Economics is
 ### Tokenomics
 
 ```
-Max Supply:     210,000,000,000 JOL (210B — hard cap, forever)
+Max Supply:     210,000,000 JOL (210M — hard cap, forever)
 
-Mining (PoW+PoE):  60%  = 126.0B   Block reward: 16,000 JOL, halving every 2.16M blocks
+Mining (PoW+PoE):  60%  = 126.0M   Block reward: 50 JOL, halving every 2,100,000 blocks
 Ecosystem:         15%  =  31.5B   DAO-governed treasury
 Founders:          10%  =  21.0B   6-month cliff, 48-month linear vesting (OpenZeppelin)
 Development:       10%  =  21.0B   Multisig controlled
@@ -93,7 +93,7 @@ LP Mining:          2%  =   4.2B   180-day program, 2× early bird first 30 days
                   100%  = 210.0B
 ```
 
-Block reward halves every ~18 months: 16,000 → 8,000 → 4,000 → ... → 0
+Block reward halves every ~1 year: 50 → 25 → 12.5 → 6.25 → ... → 0
 
 ### Allowed Energy Types
 
@@ -144,7 +144,7 @@ Min 0.5%, max 5% of daily production. Resets daily.
 
 | Contract | Purpose |
 |----------|---------|
-| JOLToken | ERC-20, 210B cap, burn mechanics |
+| JOLToken | ERC-20, 210M cap, burn mechanics |
 | EnergyRegistry | Facility registration + verification |
 | PhysicalCap | GPS + technology physics cap (10% tolerance) |
 | WeatherOracle | Open-Meteo weather verification |
@@ -201,8 +201,8 @@ npx hardhat test    # 231 passing (3s)
 | Chain ID | 707070 |
 | Consensus | EtHash-J (Proof of Work) |
 | Block time | ~6 seconds |
-| Block reward | 16,000 JOL (halving every 2,160,000 blocks) |
-| Max supply | 210,000,000,000 JOL |
+| Block reward | 50 JOL (halving every 2,100,000 blocks) |
+| Max supply | 210,000,000 JOL |
 | Gas limit | 30,000,000 |
 
 ## License

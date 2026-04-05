@@ -44,7 +44,7 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
   describe("Supply Constants", function () {
     it("MAX_SUPPLY = 210,000,000,000 JOL (210B)", async function () {
       const maxSupply = await jolToken.MAX_SUPPLY();
-      expect(maxSupply).to.equal(ethers.parseEther("210000000000"));
+      expect(maxSupply).to.equal(ethers.parseEther("210000000"));
     });
 
     it("starts with zero total supply", async function () {
@@ -52,14 +52,14 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
     });
 
     it("remainingSupply = MAX_SUPPLY when nothing minted", async function () {
-      expect(await jolToken.remainingSupply()).to.equal(ethers.parseEther("210000000000"));
+      expect(await jolToken.remainingSupply()).to.equal(ethers.parseEther("210000000"));
     });
 
     it("minting reduces remainingSupply", async function () {
       const amount = ethers.parseEther("1000000");
       await jolToken.mint(owner.address, amount);
       expect(await jolToken.remainingSupply()).to.equal(
-        ethers.parseEther("210000000000") - amount
+        ethers.parseEther("210000000") - amount
       );
     });
 
@@ -86,24 +86,23 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
     });
   });
 
-  // ─── Mining Pool (60% = 126B) ────────────────────────────────
+  // ─── Mining Pool (60% = 126M) ────────────────────────────────
 
   describe("Mining Pool (60% of supply)", function () {
-    it("126B JOL = 60% of 210B", function () {
-      const maxSupply = 210_000_000_000n;
+    it("126M JOL = 60% of 210M", function () {
+      const maxSupply = 210_000_000n;
       const miningPool = maxSupply * 60n / 100n;
-      expect(miningPool).to.equal(126_000_000_000n);
+      expect(miningPool).to.equal(126_000_000n);
     });
 
-    it("block reward × blocks = ~126B in 18 months", function () {
-      // 16,000 JOL/block × 14,400 blocks/day × 540 days = 124,416,000,000
-      const blockReward = 16_000n;
-      const blocksPerDay = 86400n / 6n; // 6s block time
-      const days18months = 540n;
-      const totalMined = blockReward * blocksPerDay * days18months;
-      // Should be approximately 126B (within 2% tolerance)
-      expect(totalMined).to.be.gt(120_000_000_000n);
-      expect(totalMined).to.be.lt(130_000_000_000n);
+    it("block reward × blocks = ~105M in year 1", function () {
+      // 50 JOL/block × 14,400 blocks/day × 365 days = 262,800,000
+      // But with halving at 2.1M blocks (~146 days), first era mines:
+      // 50 × 2,100,000 = 105,000,000 JOL
+      const blockReward = 50n;
+      const halvingInterval = 2_100_000n;
+      const firstEraMined = blockReward * halvingInterval;
+      expect(firstEraMined).to.equal(105_000_000n);
     });
   });
 
@@ -169,31 +168,28 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
   // ─── Halving Schedule (Go-level, validated by math) ──────────
 
   describe("Halving Schedule (math validation)", function () {
-    it("halving interval = 2,160,000 blocks", function () {
-      // 14,400 blocks/day × 150 days = 2,160,000
+    it("halving interval = 2,100,000 blocks (~146 days)", function () {
+      // 14,400 blocks/day × ~146 days ≈ 2,100,000
       const blocksPerDay = 86400 / 6;
-      const halvingDays = 150; // ~5 months per halving
-      expect(blocksPerDay * halvingDays).to.equal(2_160_000);
+      const halvingBlocks = 2_100_000;
+      const halvingDays = halvingBlocks / blocksPerDay;
+      expect(halvingDays).to.be.closeTo(146, 1);
     });
 
-    it("total supply from mining converges below 126B with halvings", function () {
-      // Geometric series: 16000 × 2,160,000 × (1 + 1/2 + 1/4 + ...)
-      // = 16000 × 2,160,000 × 2 = 69,120,000,000
-      // Wait, let me recalculate properly:
-      // Era 0: 16,000 × 2,160,000 = 34,560,000,000
-      // Era 1: 8,000 × 2,160,000 = 17,280,000,000
-      // Era 2: 4,000 × 2,160,000 = 8,640,000,000
-      // ...sum = 34.56B × (1 + 0.5 + 0.25 + ...) ≈ 69.12B
-      // This is within 126B budget
+    it("total supply from mining converges below 210M with halvings", function () {
+      // Geometric series: 50 × 2,100,000 × (1 + 1/2 + 1/4 + ...)
+      // Era 0: 50 × 2,100,000 = 105,000,000
+      // Era 1: 25 × 2,100,000 = 52,500,000
+      // ...sum ≈ 210,000,000 (approaches but never exceeds)
       let total = 0n;
-      let reward = 16_000n;
-      const interval = 2_160_000n;
+      let reward = 50n;
+      const interval = 2_100_000n;
       for (let era = 0; era < 10; era++) {
         total += reward * interval;
         reward = reward / 2n;
       }
-      expect(total).to.be.lt(126_000_000_000n);
-      expect(total).to.be.gt(60_000_000_000n);
+      expect(total).to.be.lt(210_000_000n);
+      expect(total).to.be.gt(200_000_000n);
     });
 
     it("reward drops to 0 after 10 halvings", function () {

@@ -29,10 +29,10 @@ contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
 
     JOLToken public jolToken;
 
-    // Energy Reserve cap — shared with PoEMining (total 42B for energy)
+    // Energy Reserve cap — shared with PoEMining (total 42M for energy)
     // EnergyPeg uses the Energy Reserve allocation (20% of supply)
     // This cap prevents unlimited minting via depositEnergy
-    uint256 public constant MAX_PEG_MINT = 42_000_000_000 ether; // 20% of 210B
+    uint256 public constant MAX_PEG_MINT = 42_000_000 ether; // 20% of 210M
 
     // Energy Reserve: total kWh backing in the system
     uint256 public totalEnergyReserveKWh;

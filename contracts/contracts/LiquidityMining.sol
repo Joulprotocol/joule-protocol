@@ -9,7 +9,7 @@ import "./JOLToken.sol";
  * @title LiquidityMining
  * @notice 180-day liquidity mining program.
  *
- * Total rewards: 4,200,000,000 JOL (2% of 210B supply)
+ * Total rewards: 4,200,000 JOL (2% of 210M supply)
  * Duration: 180 days (6 months)
  * Early bird bonus: 2× rewards for first 30 days
  *
@@ -25,7 +25,7 @@ import "./JOLToken.sol";
 contract LiquidityMining is AccessControl {
     JOLToken public jolToken;
 
-    uint256 public constant TOTAL_REWARDS = 4_200_000_000 ether; // 4.2B JOL
+    uint256 public constant TOTAL_REWARDS = 4_200_000 ether; // 4.2M JOL (2% of 210M)
     uint256 public constant PROGRAM_DURATION = 180 days;
     uint256 public constant EARLY_BIRD_PERIOD = 30 days;
     uint256 public constant EARLY_BIRD_MULTIPLIER = 2;
@@ -35,9 +35,9 @@ contract LiquidityMining is AccessControl {
 
     // Daily reward = TOTAL_REWARDS / weighted days
     // Weighted days = 30 × 2 + 150 × 1 = 210 weighted days
-    // Daily reward = 4,200,000,000 / 210 = 20,000,000 JOL base
+    // Daily reward = 4,200,000 / 210 = 20,000 JOL base
     uint256 public constant WEIGHTED_DAYS = 210;
-    uint256 public constant BASE_DAILY_REWARD = 20_000_000 ether; // 20M JOL/day
+    uint256 public constant BASE_DAILY_REWARD = 20_000 ether; // 20k JOL/day
 
     struct LPPosition {
         address provider;

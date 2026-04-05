@@ -29,9 +29,11 @@ Thumbs.db
 technical/resonance.md
 security/
 
-# Go build
-go-joule/build/bin/
-go-joule/vendor/
+# Go-joule (geth fork — large, tracked separately)
+go-joule/
 
-# Large test data in go-joule (keep only modified files)
-go-joule/signer/fourbyte/4byte.json
+# Soak test data
+soak-test-log.csv*
+
+# Test reports
+contracts/test_report.txt

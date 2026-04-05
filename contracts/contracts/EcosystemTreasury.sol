@@ -9,7 +9,7 @@ import "./JOLToken.sol";
  * @title EcosystemTreasury
  * @notice Community-owned treasury for ecosystem development.
  *
- * Funded by: 5% of total supply (10,500,000,000 JOL), minted gradually.
+ * Funded by: 5% of total supply (10,500,000 JOL), minted gradually.
  * Spent by: DAO governance vote (proposal + majority).
  *
  * Use cases:
@@ -27,7 +27,7 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
 
     JOLToken public jolToken;
 
-    uint256 public constant MAX_TREASURY = 10_500_000_000 ether; // 5% of 210B
+    uint256 public constant MAX_TREASURY = 10_500_000 ether; // 5% of 210M
     uint256 public totalMinted;
     uint256 public totalSpent;
 

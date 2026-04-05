@@ -3,8 +3,8 @@
 ## [0.5.0] - 2026-04-05
 
 ### Security Fixes (Critical)
-- **EnergyPeg**: Fix MAX_PEG_MINT from 42M to 42B (matching 210B total supply)
-- **EcosystemTreasury**: Fix MAX_TREASURY from 10.5M to 10.5B (matching 210B total supply)
+- **EnergyPeg**: Fix MAX_PEG_MINT to 42M (20% of 210M supply)
+- **EcosystemTreasury**: Fix MAX_TREASURY to 10.5M (5% of 210M supply)
 - **MachineRegistry**: Add RECORDER_ROLE to `recordTransaction()` and `recordEnergy()` — prevents unauthorized reputation manipulation
 - **SellLimit**: Add AccessControl with EXCHANGE_ROLE to `checkSell()` — prevents sell quota exhaustion attacks
 - **Governance**: Add ReentrancyGuard to `execute()` — prevents reentrancy via arbitrary `.call`
@@ -34,7 +34,7 @@
 ## [0.3.0] - 2026-03-28
 
 ### Features
-- Mainnet-v1 supply model: 210B supply, 16k block reward, 2.16M halving
+- Mainnet-v1 supply model: 210M supply, 50 JOL block reward, 2.1M halving
 - PoE 3x multiplier
 - Clean genesis
 

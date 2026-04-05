@@ -9,9 +9,9 @@ import "./EnergyRegistry.sol";
  * @title PoEMining
  * @notice Proof-of-Energy mining with fixed 3× reward multiplier.
  *
- * PoW and PoE share the same 126B JOL mining pool (60% of 210B supply).
+ * PoW and PoE share the same 126M JOL mining pool (60% of 210M supply).
  * PoE producers get 3× the reward per kWh vs base PoW block reward.
- * Supply cap enforced by JOLToken (210B MAX_SUPPLY).
+ * Supply cap enforced by JOLToken (210M MAX_SUPPLY).
  *
  * ONLY renewable energy: Solar, Wind, Hydro, Geothermal.
  * No biomass, no nuclear, no fossil. Period.

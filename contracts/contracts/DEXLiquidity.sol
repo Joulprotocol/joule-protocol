@@ -11,9 +11,9 @@ import "./JOLToken.sol";
  * Energy producers must be able to sell from day one.
  * Without liquidity, joining is pointless. This ensures the ring is complete.
  *
- * Allocation: 3% of total supply = 6,300,000,000 JOL
- *   Pool A: JOL/USDC — 60% (3,780,000,000 JOL)
- *   Pool B: JOL/ETH  — 40% (2,520,000,000 JOL)
+ * Allocation: 3% of total supply = 6,300,000 JOL
+ *   Pool A: JOL/USDC — 60% (3,780,000 JOL)
+ *   Pool B: JOL/ETH  — 40% (2,520,000 JOL)
  *
  * Uniswap v3 concentrated liquidity:
  *   Fee tier: 0.3% (3000) — standard tier, deepest liquidity
@@ -28,8 +28,8 @@ contract DEXLiquidity is AccessControl {
 
     JOLToken public jolToken;
 
-    // 3% of 210B = 6.3B JOL total DEX allocation
-    uint256 public constant TOTAL_DEX_ALLOCATION = 6_300_000_000 ether;
+    // 3% of 210M = 6.3M JOL total DEX allocation
+    uint256 public constant TOTAL_DEX_ALLOCATION = 6_300_000 ether;
 
     // Pool split
     uint256 public constant POOL_A_BPS = 6000;  // 60% → JOL/USDC

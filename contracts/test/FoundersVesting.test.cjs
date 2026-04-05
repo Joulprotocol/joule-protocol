@@ -14,7 +14,7 @@ describe("FoundersVesting — OpenZeppelin + Cliff", function () {
 
   const CLIFF = 6 * 30 * 86400;      // 6 months in seconds
   const DURATION = 48 * 30 * 86400;   // 48 months in seconds
-  const FOUNDER_ALLOCATION = ethers.parseEther("21000000000"); // 10% of 210B
+  const FOUNDER_ALLOCATION = ethers.parseEther("21000000"); // 10% of 210M
 
   let startTime;
 

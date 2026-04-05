@@ -49,7 +49,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
 
   describe("Program Constants", function () {
     it("total rewards = 4.2B JOL", async function () {
-      expect(await liqMining.TOTAL_REWARDS()).to.equal(ethers.parseEther("4200000000"));
+      expect(await liqMining.TOTAL_REWARDS()).to.equal(ethers.parseEther("4200000"));
     });
 
     it("program duration = 180 days", async function () {
@@ -60,18 +60,18 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       expect(await liqMining.EARLY_BIRD_PERIOD()).to.equal(30 * 86400);
     });
 
-    it("base daily reward = 20M JOL", async function () {
-      expect(await liqMining.BASE_DAILY_REWARD()).to.equal(ethers.parseEther("20000000"));
+    it("base daily reward = 20k JOL", async function () {
+      expect(await liqMining.BASE_DAILY_REWARD()).to.equal(ethers.parseEther("20000"));
     });
 
     it("weighted days: 30×2 + 150×1 = 210", async function () {
       expect(await liqMining.WEIGHTED_DAYS()).to.equal(210);
     });
 
-    it("4.2B / 210 weighted days = 20M/day", function () {
-      const total = 4_200_000_000n;
+    it("4.2M / 210 weighted days = 20k/day", function () {
+      const total = 4_200_000n;
       const weighted = 210n;
-      expect(total / weighted).to.equal(20_000_000n);
+      expect(total / weighted).to.equal(20_000n);
     });
   });
 
@@ -152,8 +152,8 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       await ethers.provider.send("evm_mine");
 
       const pending = await liqMining.pendingRewards(1);
-      // Day 0 = early bird, so 20M × 2 = 40M
-      expect(pending).to.equal(ethers.parseEther("40000000"));
+      // Day 0 = early bird, so 20k × 2 = 40M
+      expect(pending).to.equal(ethers.parseEther("40000"));
     });
 
     it("early bird: 2× rewards first 30 days", async function () {
@@ -164,7 +164,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       await ethers.provider.send("evm_mine");
 
       const earlyReward = await liqMining.pendingRewards(1);
-      expect(earlyReward).to.equal(ethers.parseEther("40000000")); // 20M × 2
+      expect(earlyReward).to.equal(ethers.parseEther("40000")); // 20k × 2
     });
 
     it("after early bird: 1× rewards", async function () {
@@ -180,7 +180,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       await ethers.provider.send("evm_mine");
 
       const normalReward = await liqMining.pendingRewards(1);
-      expect(normalReward).to.equal(ethers.parseEther("20000000")); // 20M × 1
+      expect(normalReward).to.equal(ethers.parseEther("20000")); // 20k × 1
     });
 
     it("two LPs split rewards proportionally", async function () {
@@ -194,9 +194,9 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const reward1 = await liqMining.pendingRewards(1);
       const reward2 = await liqMining.pendingRewards(2);
 
-      // Early bird: total 40M/day, 75% and 25%
-      expect(reward1).to.equal(ethers.parseEther("30000000")); // 75%
-      expect(reward2).to.equal(ethers.parseEther("10000000")); // 25%
+      // Early bird: total 40k/day, 75% and 25%
+      expect(reward1).to.equal(ethers.parseEther("30000")); // 75%
+      expect(reward2).to.equal(ethers.parseEther("10000")); // 25%
     });
   });
 
@@ -212,8 +212,8 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const tx = await liqMining.connect(lp1).claimRewards(1);
       await expect(tx).to.emit(liqMining, "RewardsClaimed");
 
-      expect(await jolToken.balanceOf(lp1.address)).to.equal(ethers.parseEther("40000000"));
-      expect(await liqMining.totalDistributed()).to.equal(ethers.parseEther("40000000"));
+      expect(await jolToken.balanceOf(lp1.address)).to.equal(ethers.parseEther("40000"));
+      expect(await liqMining.totalDistributed()).to.equal(ethers.parseEther("40000"));
     });
 
     it("no double-claim for same day", async function () {
@@ -280,7 +280,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const stats = await liqMining.programStats();
       expect(stats._totalStaked).to.equal(ethers.parseEther("1000"));
       expect(stats._totalDistributed).to.equal(0);
-      expect(stats._remainingRewards).to.equal(ethers.parseEther("4200000000"));
+      expect(stats._remainingRewards).to.equal(ethers.parseEther("4200000"));
       expect(stats._isActive).to.be.true;
       expect(stats._isEarlyBird).to.be.true;
     });
