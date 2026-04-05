@@ -12,7 +12,7 @@ import "./OracleConsensus.sol";
 import "./StakeSlash.sol";
 import "./ConflictScore.sol";
 import "./PoEMining.sol";
-import "./EnergyPeg.sol";
+import "./EnergyFloor.sol";
 
 /**
  * @title EnergyProofEngine
@@ -43,7 +43,7 @@ contract EnergyProofEngine is AccessControl, ReentrancyGuard, Pausable {
     StakeSlash public stakeSlash;
     ConflictScore public conflictScore;
     PoEMining public poeMining;
-    EnergyPeg public energyPeg;
+    EnergyFloor public energyFloor;
 
     // ─── State ────────────────────────────────────────────────────
     uint256 public totalVerifiedKWh;
@@ -87,7 +87,7 @@ contract EnergyProofEngine is AccessControl, ReentrancyGuard, Pausable {
         address _stakeSlash,
         address _conflictScore,
         address _poeMining,
-        address _energyPeg
+        address _energyFloor
     ) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
@@ -98,7 +98,7 @@ contract EnergyProofEngine is AccessControl, ReentrancyGuard, Pausable {
         stakeSlash = StakeSlash(_stakeSlash);
         conflictScore = ConflictScore(_conflictScore);
         poeMining = PoEMining(_poeMining);
-        energyPeg = EnergyPeg(_energyPeg);
+        energyFloor = EnergyFloor(_energyFloor);
     }
 
     function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
@@ -219,8 +219,8 @@ contract EnergyProofEngine is AccessControl, ReentrancyGuard, Pausable {
         // Accrue in PoEMining (it handles minting)
         poeMining.accrueReward(_facilityId, finalKWh);
 
-        // Deposit energy in peg (1 JOL per kWh backing)
-        energyPeg.depositEnergy(producer, finalKWh);
+        // Deposit energy in floor (1 JOL per kWh backing)
+        energyFloor.depositEnergy(producer, finalKWh);
 
         // Update stats
         totalVerifiedKWh += finalKWh;

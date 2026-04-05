@@ -121,7 +121,7 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
     it("100 kWh production yields ~294 JOL (300 gross - 2% oracle fee)", async function () {
       // Register and verify facility
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("SOLAR-V1-001"));
-      await registry.connect(producer).registerFacility(0, 500, meterId, 58381000, 24655000, "EE");
+      await registry.connect(producer).registerFacility(0, 500, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       // Accrue reward for 100 kWh
@@ -140,7 +140,7 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
 
     it("totalPoEMinted tracks gross rewards (including oracle fee)", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("WIND-V1-001"));
-      await registry.connect(producer).registerFacility(1, 1000, meterId, 0, 0, "EE");
+      await registry.connect(producer).registerFacility(1, 1000, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       await poeMining.connect(oracleNode).accrueReward(1, 500);
@@ -152,7 +152,7 @@ describe("Mainnet V1 — Supply & PoE Parameters", function () {
 
     it("claim mints tokens via JOLToken", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("HYDRO-V1-001"));
-      await registry.connect(producer).registerFacility(2, 200, meterId, 0, 0, "EE");
+      await registry.connect(producer).registerFacility(2, 200, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       await poeMining.connect(oracleNode).accrueReward(1, 50);

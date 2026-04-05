@@ -53,11 +53,11 @@ async function main() {
 
   // ─── Machine Economy Layer ───────────────────────────────────
 
-  // 7. EnergyPeg
-  const EnergyPeg = await hre.ethers.getContractFactory("EnergyPeg");
-  const energyPeg = await EnergyPeg.deploy(deployer.address, await jolToken.getAddress());
-  await energyPeg.waitForDeployment();
-  console.log("EnergyPeg:", await energyPeg.getAddress());
+  // 7. EnergyFloor
+  const EnergyFloor = await hre.ethers.getContractFactory("EnergyFloor");
+  const energyFloor = await EnergyFloor.deploy(deployer.address, await jolToken.getAddress());
+  await energyFloor.waitForDeployment();
+  console.log("EnergyFloor:", await energyFloor.getAddress());
 
   // 8. MachineRegistry
   const MachineRegistry = await hre.ethers.getContractFactory("MachineRegistry");
@@ -100,9 +100,9 @@ async function main() {
   const ORACLE_ROLE = await poeMining.ORACLE_ROLE();
 
   await jolToken.grantRole(MINTER_ROLE, await poeMining.getAddress());
-  await jolToken.grantRole(MINTER_ROLE, await energyPeg.getAddress());
+  await jolToken.grantRole(MINTER_ROLE, await energyFloor.getAddress());
   await jolToken.grantRole(BURNER_ROLE, await marketplace.getAddress());
-  await jolToken.grantRole(BURNER_ROLE, await energyPeg.getAddress());
+  await jolToken.grantRole(BURNER_ROLE, await energyFloor.getAddress());
   await registry.grantRole(VERIFIER_ROLE, await oracle.getAddress());
   await poeMining.grantRole(ORACLE_ROLE, await oracle.getAddress());
   await oracle.setPoEMining(await poeMining.getAddress());
@@ -110,7 +110,8 @@ async function main() {
   console.log("All roles configured");
 
   // SECURITY: Renounce admin on JOLToken — no more role changes possible
-  // This makes the token contract immutable. Only PoEMining and EnergyPeg can mint.
+  // This makes the token contract immutable. Only PoEMining and EnergyFloor can mint.
+  // (Formerly EnergyPeg, renamed for MiCA compliance)
   // Uncomment for mainnet deploy:
   // await jolToken.renounceAdmin();
   // console.log("JOLToken admin renounced — contract is now immutable");
@@ -125,7 +126,7 @@ async function main() {
     Governance: await governance.getAddress(),
     EnergyMarketplace: await marketplace.getAddress(),
     // Machine Economy
-    EnergyPeg: await energyPeg.getAddress(),
+    EnergyFloor: await energyFloor.getAddress(),
     MachineRegistry: await machineReg.getAddress(),
     PaymentChannel: await payChannel.getAddress(),
     StreamingPayments: await streaming.getAddress(),

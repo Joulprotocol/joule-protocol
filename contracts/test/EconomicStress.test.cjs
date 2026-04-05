@@ -209,7 +209,7 @@ describe("5-Year Economic Stress Simulation", function () {
     it("PoE rewards still flow to remaining producers", async function () {
       // Even in bear market, verified producers earn via PoE
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("BEAR-SOLAR-001"));
-      await registry.connect(producer1).registerFacility(0, 500, meterId, 58381000, 24655000, "EE");
+      await registry.connect(producer1).registerFacility(0, 500, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       // Producer submits 200 kWh during bear market
@@ -308,12 +308,12 @@ describe("5-Year Economic Stress Simulation", function () {
     it("remaining producers still earn rewards after large exit", async function () {
       // Producer 1: 50% of all PoE (large solar farm, 500 kWh)
       const meterId1 = ethers.keccak256(ethers.toUtf8Bytes("MEGA-SOLAR-001"));
-      await registry.connect(producer1).registerFacility(0, 5000, meterId1, 58381000, 24655000, "EE");
+      await registry.connect(producer1).registerFacility(0, 5000, meterId1, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       // Producer 2: 50% of all PoE (wind farm, 500 kWh)
       const meterId2 = ethers.keccak256(ethers.toUtf8Bytes("WIND-FARM-001"));
-      await registry.connect(producer2).registerFacility(1, 5000, meterId2, 59000000, 25000000, "EE");
+      await registry.connect(producer2).registerFacility(1, 5000, meterId2, "0x75636674", 2, "EE");
       await registry.verifyFacility(2);
 
       // Both produce equally
@@ -334,7 +334,7 @@ describe("5-Year Economic Stress Simulation", function () {
 
     it("totalPoEMinted tracks all rewards including exited producer", async function () {
       const meterId1 = ethers.keccak256(ethers.toUtf8Bytes("EXIT-SOLAR-001"));
-      await registry.connect(producer1).registerFacility(0, 5000, meterId1, 58381000, 24655000, "EE");
+      await registry.connect(producer1).registerFacility(0, 5000, meterId1, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       await poeMining.connect(oracleNode).accrueReward(1, 1000);
@@ -379,7 +379,7 @@ describe("5-Year Economic Stress Simulation", function () {
 
       // PoE tries to mint 3 JOL (1 kWh × 3) — only 1 JOL remaining
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("CAP-TEST-001"));
-      await registry.connect(producer1).registerFacility(0, 500, meterId, 58381000, 24655000, "EE");
+      await registry.connect(producer1).registerFacility(0, 500, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       // This will fail because 3 JOL > 1 JOL remaining

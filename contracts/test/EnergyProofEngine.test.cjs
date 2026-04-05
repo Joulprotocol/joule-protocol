@@ -9,7 +9,7 @@ const { ethers } = require("hardhat");
  */
 describe("EnergyProofEngine — 5-Layer Gateway", function () {
   let engine, jolToken, registry, physicalCap, weatherOracle;
-  let oracleConsensus, stakeSlash, conflictScore, poeMining, energyPeg;
+  let oracleConsensus, stakeSlash, conflictScore, poeMining, energyFloor;
   let admin, producer, oracle1, oracle2, oracle3, operator;
 
   const FACILITY_ID = 1;
@@ -51,9 +51,9 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
     const PoEMining = await ethers.getContractFactory("PoEMining");
     poeMining = await PoEMining.deploy(admin.address, jolToken.target, registry.target);
 
-    // Deploy EnergyPeg
-    const EnergyPeg = await ethers.getContractFactory("EnergyPeg");
-    energyPeg = await EnergyPeg.deploy(admin.address, jolToken.target);
+    // Deploy EnergyFloor
+    const EnergyFloor = await ethers.getContractFactory("EnergyFloor");
+    energyFloor = await EnergyFloor.deploy(admin.address, jolToken.target);
 
     // Deploy EnergyProofEngine
     const Engine = await ethers.getContractFactory("EnergyProofEngine");
@@ -67,19 +67,19 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
       stakeSlash.target,
       conflictScore.target,
       poeMining.target,
-      energyPeg.target
+      energyFloor.target
     );
 
     // ─── Configure Roles ──────────────────────────────────────
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     const VERIFIER_ROLE = await registry.VERIFIER_ROLE();
     const ORACLE_ROLE_POE = await poeMining.ORACLE_ROLE();
-    const ORACLE_ROLE_PEG = await energyPeg.ORACLE_ROLE();
+    const ORACLE_ROLE_PEG = await energyFloor.ORACLE_ROLE();
     const ENGINE_OP = await engine.ENGINE_OPERATOR();
 
-    // JOL minter: PoEMining, EnergyPeg
+    // JOL minter: PoEMining, EnergyFloor
     await jolToken.grantRole(MINTER_ROLE, poeMining.target);
-    await jolToken.grantRole(MINTER_ROLE, energyPeg.target);
+    await jolToken.grantRole(MINTER_ROLE, energyFloor.target);
     await jolToken.grantRole(MINTER_ROLE, admin.address); // for staking setup
 
     // Registry verifier: OracleConsensus, admin
@@ -89,8 +89,8 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
     // PoEMining oracle: EnergyProofEngine (not OracleConsensus directly)
     await poeMining.grantRole(ORACLE_ROLE_POE, engine.target);
 
-    // EnergyPeg oracle: EnergyProofEngine
-    await energyPeg.grantRole(ORACLE_ROLE_PEG, engine.target);
+    // EnergyFloor oracle: EnergyProofEngine
+    await energyFloor.grantRole(ORACLE_ROLE_PEG, engine.target);
 
     // Engine operator
     await engine.grantRole(ENGINE_OP, operator.address);
@@ -101,15 +101,15 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
       0, // Solar
       10, // 10 kW
       ethers.keccak256(ethers.toUtf8Bytes("meter-001")),
-      59370000, // Tallinn lat * 1e6
-      24750000, // Tallinn lon * 1e6
+      "0x75636674", // geohash "ucft" (Tallinn)
+      2, // subarctic (Tallinn ~59°N)
       "EE"
     );
     // Admin verifies
     await registry.verifyFacility(FACILITY_ID);
 
-    // Producer registers in EnergyPeg
-    await energyPeg.connect(producer).registerProducer("Test Solar", "EE", "solar");
+    // Producer registers in EnergyFloor
+    await energyFloor.connect(producer).registerProducer("Test Solar", "EE", "solar");
 
     // Producer stakes (need JOL for staking)
     await jolToken.mint(producer.address, ethers.parseEther("50000"));
@@ -147,7 +147,7 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
       // Register new facility without staking
       await registry.connect(producer).registerFacility(
         1, 5, ethers.keccak256(ethers.toUtf8Bytes("meter-002")),
-        59370000, 24750000, "EE"
+        "0x75636674", 2, "EE"
       );
       await registry.verifyFacility(2);
 
@@ -194,7 +194,7 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
   });
 
   describe("Layer Isolation", function () {
-    it("engine cannot mint directly — only through PoEMining and EnergyPeg", async function () {
+    it("engine cannot mint directly — only through PoEMining and EnergyFloor", async function () {
       // Engine doesn't have MINTER_ROLE on JOLToken
       const MINTER_ROLE = await jolToken.MINTER_ROLE();
       expect(await jolToken.hasRole(MINTER_ROLE, engine.target)).to.be.false;
@@ -205,9 +205,9 @@ describe("EnergyProofEngine — 5-Layer Gateway", function () {
       expect(await poeMining.hasRole(ORACLE_ROLE, engine.target)).to.be.true;
     });
 
-    it("engine has ORACLE_ROLE on EnergyPeg", async function () {
-      const ORACLE_ROLE = await energyPeg.ORACLE_ROLE();
-      expect(await energyPeg.hasRole(ORACLE_ROLE, engine.target)).to.be.true;
+    it("engine has ORACLE_ROLE on EnergyFloor", async function () {
+      const ORACLE_ROLE = await energyFloor.ORACLE_ROLE();
+      expect(await energyFloor.hasRole(ORACLE_ROLE, engine.target)).to.be.true;
     });
   });
 });

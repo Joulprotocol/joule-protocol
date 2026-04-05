@@ -11,14 +11,14 @@ describe("StakeSlash — Economics Layer", function () {
   let stakeSlash, jolToken, registry, conflictScore;
   let owner, producer, slasher, treasury;
 
-  const TALLINN_LAT = 58381000;
-  const TALLINN_LON = 24655000;
+  const TALLINN_GEOHASH = "0x75636674";
+  const TALLINN_BAND = 2;
 
   async function registerAndVerify(type, capacityKW) {
     const meterId = ethers.keccak256(
       ethers.toUtf8Bytes(`METER-${Date.now()}-${Math.random()}`)
     );
-    await registry.connect(producer).registerFacility(type, capacityKW, meterId, TALLINN_LAT, TALLINN_LON, "EE");
+    await registry.connect(producer).registerFacility(type, capacityKW, meterId, TALLINN_GEOHASH, TALLINN_BAND, "EE");
     const id = (await registry.nextFacilityId()) - 1n;
     await registry.connect(owner).verifyFacility(id);
     return id;
@@ -132,7 +132,7 @@ describe("StakeSlash — Economics Layer", function () {
 
     it("rejects staking unverified facility", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("UNVERIFIED"));
-      await registry.connect(producer).registerFacility(0, 50, meterId, TALLINN_LAT, TALLINN_LON, "EE");
+      await registry.connect(producer).registerFacility(0, 50, meterId, TALLINN_GEOHASH, TALLINN_BAND, "EE");
       const id = (await registry.nextFacilityId()) - 1n;
       // Not verified!
 

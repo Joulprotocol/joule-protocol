@@ -19,7 +19,7 @@ const { ethers } = require("hardhat");
 
 describe("JOULE Core Flow", function () {
   let jolToken, registry, poeMining, oracle, governance;
-  let energyPeg, machineReg, payChannel, streaming, carbon, agentWallet, marketplace;
+  let energyFloor, machineReg, payChannel, streaming, carbon, agentWallet, marketplace;
   let owner, producer, miner, aiAgent, buyer, oracleNode1, oracleNode2, oracleNode3;
 
   beforeEach(async function () {
@@ -42,12 +42,12 @@ describe("JOULE Core Flow", function () {
     const Governance = await ethers.getContractFactory("Governance");
     governance = await Governance.deploy(owner.address, jolToken.target);
 
-    // Deploy EnergyPeg before Marketplace (Marketplace references it)
-    const EnergyPeg = await ethers.getContractFactory("EnergyPeg");
-    energyPeg = await EnergyPeg.deploy(owner.address, jolToken.target);
+    // Deploy EnergyFloor before Marketplace (Marketplace references it)
+    const EnergyFloor = await ethers.getContractFactory("EnergyFloor");
+    energyFloor = await EnergyFloor.deploy(owner.address, jolToken.target);
 
     const EnergyMarketplace = await ethers.getContractFactory("EnergyMarketplace");
-    marketplace = await EnergyMarketplace.deploy(owner.address, jolToken.target, energyPeg.target);
+    marketplace = await EnergyMarketplace.deploy(owner.address, jolToken.target, energyFloor.target);
 
     // Deploy machine economy layer
 
@@ -75,9 +75,9 @@ describe("JOULE Core Flow", function () {
 
     await jolToken.grantRole(MINTER_ROLE, owner.address);
     await jolToken.grantRole(MINTER_ROLE, poeMining.target);
-    await jolToken.grantRole(MINTER_ROLE, energyPeg.target);
+    await jolToken.grantRole(MINTER_ROLE, energyFloor.target);
     await jolToken.grantRole(BURNER_ROLE, marketplace.target);
-    await jolToken.grantRole(BURNER_ROLE, energyPeg.target);
+    await jolToken.grantRole(BURNER_ROLE, energyFloor.target);
     await registry.grantRole(VERIFIER_ROLE, oracle.target);
     await registry.grantRole(VERIFIER_ROLE, owner.address);
     await poeMining.grantRole(ORACLE_ROLE, oracle.target);
@@ -88,8 +88,8 @@ describe("JOULE Core Flow", function () {
     const RECORDER_ROLE = ethers.keccak256(ethers.toUtf8Bytes("RECORDER_ROLE"));
     await machineReg.grantRole(RECORDER_ROLE, agentWallet.target);
 
-    // Give oracle role to energyPeg for production recording
-    await registry.grantRole(VERIFIER_ROLE, energyPeg.target);
+    // Give oracle role to energyFloor for production recording
+    await registry.grantRole(VERIFIER_ROLE, energyFloor.target);
   });
 
   // ─── 1. Token ──────────────────────────────────────────────
@@ -119,7 +119,7 @@ describe("JOULE Core Flow", function () {
   describe("2. Energy Registration + Verification", function () {
     it("registers solar facility", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("SHELLY-001"));
-      await registry.connect(producer).registerFacility(0, 50, meterId, 58381000, 24655000, "EE");
+      await registry.connect(producer).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
 
       const facility = await registry.facilities(1);
       expect(facility.owner).to.equal(producer.address);
@@ -129,7 +129,7 @@ describe("JOULE Core Flow", function () {
 
     it("verifies and records production", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("SHELLY-002"));
-      await registry.connect(producer).registerFacility(1, 100, meterId, 0, 0, "EE"); // Wind
+      await registry.connect(producer).registerFacility(1, 100, meterId, "0x75636674", 2, "EE"); // Wind
       await registry.connect(owner).verifyFacility(1);
 
       const facility = await registry.facilities(1);
@@ -148,7 +148,7 @@ describe("JOULE Core Flow", function () {
       // FacilityType enum: 0=Solar, 1=Wind, 2=Hydro, 3=Geothermal
       // Anything >= 4 should revert
       await expect(
-        registry.connect(producer).registerFacility(4, 100, meterId, 0, 0, "EE")
+        registry.connect(producer).registerFacility(4, 100, meterId, "0x75636674", 2, "EE")
       ).to.be.reverted;
     });
   });
@@ -158,21 +158,21 @@ describe("JOULE Core Flow", function () {
   describe("3. Energy Peg", function () {
     it("deposits energy and mints JOL 1:1", async function () {
       // Register producer in peg
-      await energyPeg.connect(producer).registerProducer("Solar Farm", "EE", "solar");
+      await energyFloor.connect(producer).registerProducer("Solar Farm", "EE", "solar");
 
       // Oracle deposits verified energy
-      const ORACLE_ROLE = await energyPeg.ORACLE_ROLE();
-      await energyPeg.grantRole(ORACLE_ROLE, owner.address);
+      const ORACLE_ROLE = await energyFloor.ORACLE_ROLE();
+      await energyFloor.grantRole(ORACLE_ROLE, owner.address);
 
-      await energyPeg.depositEnergy(producer.address, 100); // 100 kWh
+      await energyFloor.depositEnergy(producer.address, 100); // 100 kWh
 
       // Producer should have 100 JOL
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("100"));
-      expect(await energyPeg.totalEnergyReserveKWh()).to.equal(100);
+      expect(await energyFloor.totalEnergyReserveKWh()).to.equal(100);
     });
 
     it("reports floor price", async function () {
-      expect(await energyPeg.floorPriceUSDCents()).to.equal(25); // $0.25
+      expect(await energyFloor.floorPriceUSDCents()).to.equal(25); // $0.25
     });
   });
 
@@ -376,8 +376,7 @@ describe("JOULE Core Flow", function () {
         "Anthropic",
         "Claude-v4",
         firmware,
-        58381000,
-        24655000
+        "0x75636674"      // geohash "ucft" (Tallinn)
       );
 
       expect(await machineReg.totalMachines()).to.equal(1);
@@ -397,11 +396,11 @@ describe("JOULE Core Flow", function () {
     });
 
     it("creates listing, buyer purchases, fees burned", async function () {
-      // Register producer in EnergyPeg and give credits via oracle
-      await energyPeg.connect(producer).registerProducer("Test Solar", "EE", "solar");
-      const ORACLE_ROLE = await energyPeg.ORACLE_ROLE();
-      await energyPeg.grantRole(ORACLE_ROLE, owner.address);
-      await energyPeg.depositEnergy(producer.address, 200); // 200 kWh credits
+      // Register producer in EnergyFloor and give credits via oracle
+      await energyFloor.connect(producer).registerProducer("Test Solar", "EE", "solar");
+      const ORACLE_ROLE = await energyFloor.ORACLE_ROLE();
+      await energyFloor.grantRole(ORACLE_ROLE, owner.address);
+      await energyFloor.depositEnergy(producer.address, 200); // 200 kWh credits
 
       // Producer lists 100 kWh at 1 JOL/kWh
       await marketplace.connect(producer).createListing(
@@ -427,13 +426,13 @@ describe("JOULE Core Flow", function () {
   describe("10. Full Lifecycle: Energy → JOL → Payment → Burn", function () {
     it("producer generates energy, earns JOL, AI agent pays, fees burned", async function () {
       // Step 1: Register energy producer in peg
-      await energyPeg.connect(producer).registerProducer("Solar Farm Tallinn", "EE", "solar");
+      await energyFloor.connect(producer).registerProducer("Solar Farm Tallinn", "EE", "solar");
 
-      const ORACLE_ROLE = await energyPeg.ORACLE_ROLE();
-      await energyPeg.grantRole(ORACLE_ROLE, owner.address);
+      const ORACLE_ROLE = await energyFloor.ORACLE_ROLE();
+      await energyFloor.grantRole(ORACLE_ROLE, owner.address);
 
       // Step 2: Oracle verifies 500 kWh production → 500 JOL minted
-      await energyPeg.depositEnergy(producer.address, 500);
+      await energyFloor.depositEnergy(producer.address, 500);
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("500"));
 
       // Step 3: Producer funds AI agent wallet

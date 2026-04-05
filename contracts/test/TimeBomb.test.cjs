@@ -7,7 +7,7 @@ const { ethers } = require("hardhat");
  * After enough halvings, PoW block rewards drop to 0 (integer division).
  * JOULE must survive on:
  *   1. Transaction fees (partially burned → deflationary)
- *   2. PoE rewards via EnergyPeg (1 JOL/kWh, capped at 42M)
+ *   2. PoE rewards via EnergyFloor (1 JOL/kWh, capped at 42M)
  *   3. Governance by existing token holders
  *
  * This file validates the math and on-chain behavior for end-of-emission.
@@ -19,9 +19,9 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
   const HALVING_INTERVAL  = 2_100_000n;
   const BLOCKS_PER_DAY    = 14_400n;
   const INITIAL_REWARD    = 50n;
-  const MAX_PEG_MINT      = 42_000_000n;
+  const MAX_FLOOR_MINT      = 42_000_000n;
 
-  let jolToken, registry, poeMining, energyPeg, governance;
+  let jolToken, registry, poeMining, energyFloor, governance;
   let owner, producer, oracleNode, voter1, voter2;
 
   beforeEach(async function () {
@@ -36,8 +36,8 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
     const PoEMining = await ethers.getContractFactory("PoEMining");
     poeMining = await PoEMining.deploy(owner.address, jolToken.target, registry.target);
 
-    const EnergyPeg = await ethers.getContractFactory("EnergyPeg");
-    energyPeg = await EnergyPeg.deploy(owner.address, jolToken.target);
+    const EnergyFloor = await ethers.getContractFactory("EnergyFloor");
+    energyFloor = await EnergyFloor.deploy(owner.address, jolToken.target);
 
     const Governance = await ethers.getContractFactory("Governance");
     governance = await Governance.deploy(owner.address, jolToken.target);
@@ -46,15 +46,15 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     const BURNER_ROLE = await jolToken.BURNER_ROLE();
     const ORACLE_ROLE_POE = await poeMining.ORACLE_ROLE();
-    const ORACLE_ROLE_PEG = await energyPeg.ORACLE_ROLE();
+    const ORACLE_ROLE_PEG = await energyFloor.ORACLE_ROLE();
     const VERIFIER_ROLE = await registry.VERIFIER_ROLE();
 
     await jolToken.grantRole(MINTER_ROLE, owner.address);
     await jolToken.grantRole(MINTER_ROLE, poeMining.target);
-    await jolToken.grantRole(MINTER_ROLE, energyPeg.target);
-    await jolToken.grantRole(BURNER_ROLE, energyPeg.target);
+    await jolToken.grantRole(MINTER_ROLE, energyFloor.target);
+    await jolToken.grantRole(BURNER_ROLE, energyFloor.target);
     await poeMining.grantRole(ORACLE_ROLE_POE, oracleNode.address);
-    await energyPeg.grantRole(ORACLE_ROLE_PEG, oracleNode.address);
+    await energyFloor.grantRole(ORACLE_ROLE_PEG, oracleNode.address);
     await registry.grantRole(VERIFIER_ROLE, owner.address);
   });
 
@@ -146,13 +146,13 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
 
     it("6.3M JOL gap is unreachable — permanently lost supply", function () {
       // These 6.3M JOL can NEVER be minted via PoW
-      // Only EnergyPeg (42M cap) could partially fill the gap
+      // Only EnergyFloor (42M cap) could partially fill the gap
       const powTotal = 203_700_000n;
       const gap = MAX_SUPPLY - powTotal;
       expect(gap).to.equal(6_300_000n);
 
-      // EnergyPeg cap (42M) far exceeds the gap
-      expect(MAX_PEG_MINT).to.be.gt(gap);
+      // EnergyFloor cap (42M) far exceeds the gap
+      expect(MAX_FLOOR_MINT).to.be.gt(gap);
     });
   });
 
@@ -219,32 +219,32 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
     });
   });
 
-  // ─── Scenario 4: PoE Survives via EnergyPeg ────────────────────
+  // ─── Scenario 4: PoE Survives via EnergyFloor ────────────────────
 
   describe("Scenario 4 — PoE survives when block reward = 0", function () {
-    it("EnergyPeg mints 1 JOL per kWh regardless of block reward", async function () {
-      // Register producer in EnergyPeg
-      await energyPeg.connect(producer).registerProducer("Solar Farm EE", "EE", "solar");
+    it("EnergyFloor mints 1 JOL per kWh regardless of block reward", async function () {
+      // Register producer in EnergyFloor
+      await energyFloor.connect(producer).registerProducer("Solar Farm EE", "EE", "solar");
 
       // Oracle deposits 100 kWh of verified energy
-      await energyPeg.connect(oracleNode).depositEnergy(producer.address, 100);
+      await energyFloor.connect(oracleNode).depositEnergy(producer.address, 100);
 
       // Producer received 100 JOL (1 per kWh)
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("100"));
     });
 
-    it("EnergyPeg has independent cap of 42M JOL (MAX_PEG_MINT)", async function () {
-      const maxPegMint = await energyPeg.MAX_PEG_MINT();
+    it("EnergyFloor has independent cap of 42M JOL (MAX_FLOOR_MINT)", async function () {
+      const maxPegMint = await energyFloor.MAX_FLOOR_MINT();
       expect(maxPegMint).to.equal(ethers.parseEther("42000000"));
     });
 
-    it("EnergyPeg works even after PoW exhausted (supply allows it)", async function () {
+    it("EnergyFloor works even after PoW exhausted (supply allows it)", async function () {
       // Mint 203.7M via PoW (simulated)
       await jolToken.mint(owner.address, ethers.parseEther("203700000"));
 
-      // 6.3M remaining capacity. EnergyPeg can still mint.
-      await energyPeg.connect(producer).registerProducer("Post-PoW Solar", "EE", "solar");
-      await energyPeg.connect(oracleNode).depositEnergy(producer.address, 1000);
+      // 6.3M remaining capacity. EnergyFloor can still mint.
+      await energyFloor.connect(producer).registerProducer("Post-PoW Solar", "EE", "solar");
+      await energyFloor.connect(oracleNode).depositEnergy(producer.address, 1000);
 
       // 1000 JOL minted via peg
       expect(await jolToken.balanceOf(producer.address)).to.equal(ethers.parseEther("1000"));
@@ -253,22 +253,22 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       expect(await jolToken.totalSupply()).to.equal(ethers.parseEther("203701000"));
     });
 
-    it("EnergyPeg respects its own 42M cap", async function () {
-      await energyPeg.connect(producer).registerProducer("Cap Test", "EE", "solar");
+    it("EnergyFloor respects its own 42M cap", async function () {
+      await energyFloor.connect(producer).registerProducer("Cap Test", "EE", "solar");
 
       // Deposit just under the cap (using totalMintedFromEnergy tracking)
-      // The cap check is: totalMintedFromEnergy * 1 ether + jolAmount <= MAX_PEG_MINT
+      // The cap check is: totalMintedFromEnergy * 1 ether + jolAmount <= MAX_FLOOR_MINT
       // So max kWh via peg = 42,000,000
       // Deposit 42M kWh in one shot would be the limit
       // Test: deposit a small amount succeeds
-      await energyPeg.connect(oracleNode).depositEnergy(producer.address, 100);
-      expect(await energyPeg.totalMintedFromEnergy()).to.equal(100);
+      await energyFloor.connect(oracleNode).depositEnergy(producer.address, 100);
+      expect(await energyFloor.totalMintedFromEnergy()).to.equal(100);
     });
 
     it("PoE mining via PoEMining still accrues with 3x multiplier", async function () {
       // Even post-PoW, PoEMining still works (mints from JOLToken supply)
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("POSTPOW-WIND-001"));
-      await registry.connect(producer).registerFacility(1, 1000, meterId, 0, 0, "EE");
+      await registry.connect(producer).registerFacility(1, 1000, meterId, "0x75636674", 2, "EE");
       await registry.verifyFacility(1);
 
       await poeMining.connect(oracleNode).accrueReward(1, 50);
@@ -425,7 +425,7 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
     it("post-emission economy: PoE + fees sustain the network", function () {
       // After all PoW emissions (203.7M minted):
       // Remaining mintable via JOLToken: 210M - 203.7M = 6.3M
-      // EnergyPeg cap: 42M (but limited by remaining supply)
+      // EnergyFloor cap: 42M (but limited by remaining supply)
       // PoE (3x multiplier) also mints from remaining supply
       //
       // Long-term: fee burns reduce circulating supply

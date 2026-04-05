@@ -7,12 +7,12 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "./JOLToken.sol";
 
 /**
- * @title EnergyPeg
+ * @title EnergyFloor
  * @notice THE core value mechanism of JOULE.
  *
  * 1 JOL = 1 kWh of verified renewable energy.
  *
- * This is NOT a stablecoin peg. It's a FLOOR PRICE mechanism:
+ * This is a FLOOR PRICE mechanism:
  * - Energy producers deposit verified kWh → receive 1 JOL per kWh
  * - Anyone holding JOL can redeem it for energy credits (1 JOL = 1 kWh)
  * - Energy credits are redeemable at participating producers
@@ -23,16 +23,16 @@ import "./JOLToken.sol";
  * As global energy prices rise → JOL floor rises.
  * As AI compute demand grows → energy demand grows → JOL floor rises.
  */
-contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
+contract EnergyFloor is AccessControl, ReentrancyGuard, Pausable {
     bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
     bytes32 public constant PRODUCER_ROLE = keccak256("PRODUCER_ROLE");
 
     JOLToken public jolToken;
 
     // Energy Reserve cap — shared with PoEMining (total 42M for energy)
-    // EnergyPeg uses the Energy Reserve allocation (20% of supply)
+    // EnergyFloor uses the Energy Reserve allocation (20% of supply)
     // This cap prevents unlimited minting via depositEnergy
-    uint256 public constant MAX_PEG_MINT = 42_000_000 ether; // 20% of 210M
+    uint256 public constant MAX_FLOOR_MINT = 42_000_000 ether; // 20% of 210M
 
     // Energy Reserve: total kWh backing in the system
     uint256 public totalEnergyReserveKWh;
@@ -114,7 +114,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
         emit ProducerRegistered(msg.sender, _name);
     }
 
-    // ─── THE PEG: Deposit Energy → Get JOL ─────────────────────────
+    // ─── THE FLOOR: Deposit Energy → Get JOL ───────────────────────
 
     /**
      * @notice Deposit verified energy production, receive 1 JOL per kWh.
@@ -130,9 +130,9 @@ contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
         require(producers[_producer].active, "Not registered producer");
         require(_kWh > 0, "Zero kWh");
 
-        // Check peg mint cap
+        // Check floor mint cap
         uint256 jolAmount = _kWh * 1 ether;
-        require(totalMintedFromEnergy * 1 ether + jolAmount <= MAX_PEG_MINT, "Peg mint cap reached");
+        require(totalMintedFromEnergy * 1 ether + jolAmount <= MAX_FLOOR_MINT, "Floor mint cap reached");
 
         // Update producer state
         producers[_producer].totalDeposited += _kWh;
@@ -148,7 +148,7 @@ contract EnergyPeg is AccessControl, ReentrancyGuard, Pausable {
         emit EnergyDeposited(_producer, _kWh, jolAmount);
     }
 
-    // ─── THE PEG: Burn JOL → Get Energy Credit ─────────────────────
+    // ─── THE FLOOR: Burn JOL → Get Energy Credit ───────────────────
 
     /**
      * @notice Redeem JOL for energy credits.

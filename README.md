@@ -154,10 +154,10 @@ Min 0.5%, max 5% of daily production. Resets daily.
 | ConflictScore | 4 levels, proportional penalties, monthly decay |
 | SellLimit | Square root harmony sell limiter |
 | FounderSellLimit | 1% daily volume cap |
-| FoundersVesting | OpenZeppelin VestingWallet, 6mo cliff + 48mo linear |
-| LiquidityMining | 4.2B JOL, 180 days, 2× early bird |
-| DEXLiquidity | 6.3B JOL, JOL/USDC + JOL/ETH pools |
-| EnergyPeg | 1 JOL = 1 kWh floor price |
+| FoundersVesting | OpenZeppelin VestingWallet, 1yr cliff + 4yr linear |
+| LiquidityMining | 4.2M JOL, 180 days, 2× early bird |
+| DEXLiquidity | 6.3M JOL, JOL/USDC + JOL/ETH pools |
+| EnergyFloor | 1 JOL = 1 kWh floor price |
 | PaymentChannel | Off-chain micropayments |
 | StreamingPayments | Per-second billing |
 | AgentWallet | AI autonomous spending with limits |

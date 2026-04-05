@@ -21,8 +21,8 @@ describe("EnergyRegistry", function () {
         0, // Solar
         50, // 50 kW
         meterId,
-        58381000, // Tallinn lat
-        24655000, // Tallinn lon
+        "0x75636674", // geohash "ucft" (Tallinn)
+        2, // subarctic (Tallinn ~59°N)
         "EE"
       );
 
@@ -34,17 +34,17 @@ describe("EnergyRegistry", function () {
 
     it("should prevent duplicate meter IDs", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-001"));
-      await registry.connect(producer1).registerFacility(0, 50, meterId, 0, 0, "EE");
+      await registry.connect(producer1).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
 
       await expect(
-        registry.connect(producer2).registerFacility(0, 30, meterId, 0, 0, "EE")
+        registry.connect(producer2).registerFacility(0, 30, meterId, "0x75636674", 2, "EE")
       ).to.be.revertedWith("Meter ID already registered");
     });
 
     it("should reject zero capacity", async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-002"));
       await expect(
-        registry.connect(producer1).registerFacility(0, 0, meterId, 0, 0, "EE")
+        registry.connect(producer1).registerFacility(0, 0, meterId, "0x75636674", 2, "EE")
       ).to.be.revertedWith("Capacity must be > 0");
     });
   });
@@ -54,7 +54,7 @@ describe("EnergyRegistry", function () {
 
     beforeEach(async function () {
       meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-001"));
-      await registry.connect(producer1).registerFacility(0, 50, meterId, 0, 0, "EE");
+      await registry.connect(producer1).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
     });
 
     it("should allow verifier to verify facility", async function () {
@@ -79,7 +79,7 @@ describe("EnergyRegistry", function () {
   describe("Production Recording", function () {
     beforeEach(async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-001"));
-      await registry.connect(producer1).registerFacility(0, 50, meterId, 0, 0, "EE");
+      await registry.connect(producer1).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
       await registry.connect(verifier).verifyFacility(1);
     });
 
@@ -103,7 +103,7 @@ describe("EnergyRegistry", function () {
   describe("Deregistration", function () {
     beforeEach(async function () {
       const meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-001"));
-      await registry.connect(producer1).registerFacility(0, 50, meterId, 0, 0, "EE");
+      await registry.connect(producer1).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
     });
 
     it("should allow owner to deregister", async function () {

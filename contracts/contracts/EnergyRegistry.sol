@@ -24,8 +24,8 @@ contract EnergyRegistry is AccessControl {
         FacilityType facilityType;
         uint256 capacityKW;          // nameplate capacity in kW
         bytes32 meterId;             // hashed smart meter identifier
-        int64 latitude;              // scaled by 1e6
-        int64 longitude;             // scaled by 1e6
+        bytes4 geohash;              // 4-char geohash (~20 km precision, privacy-safe)
+        uint8 latitudeBand;          // 0=tropical, 1=temperate, 2=subarctic, 3=arctic, 4=equator
         string country;              // ISO 3166-1 alpha-2
         uint256 registeredAt;
         uint256 verifiedAt;
@@ -62,13 +62,14 @@ contract EnergyRegistry is AccessControl {
         FacilityType _type,
         uint256 _capacityKW,
         bytes32 _meterId,
-        int64 _lat,
-        int64 _lon,
+        bytes4 _geohash,
+        uint8 _latitudeBand,
         string calldata _country
     ) external returns (uint256) {
         require(_capacityKW > 0, "Capacity must be > 0");
         require(_capacityKW <= 100_000, "Capacity max 100 MW");
         require(!meterIdUsed[_meterId], "Meter ID already registered");
+        require(_latitudeBand <= 4, "Invalid latitude band");
 
         uint256 id = nextFacilityId++;
         facilities[id] = Facility({
@@ -77,8 +78,8 @@ contract EnergyRegistry is AccessControl {
             facilityType: _type,
             capacityKW: _capacityKW,
             meterId: _meterId,
-            latitude: _lat,
-            longitude: _lon,
+            geohash: _geohash,
+            latitudeBand: _latitudeBand,
             country: _country,
             registeredAt: block.timestamp,
             verifiedAt: 0,

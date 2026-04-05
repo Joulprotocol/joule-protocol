@@ -97,6 +97,7 @@ contract WeatherOracle is AccessControl {
         );
 
         (, , , uint256 capacityKW, , , , , , , , , ) = registry.facilities(_facilityId);
+        // geohash and latitudeBand replace lat/lon but tuple position count stays same
         require(capacityKW > 0, "Facility not found");
 
         uint256 id = nextWeatherId++;
@@ -176,7 +177,7 @@ contract WeatherOracle is AccessControl {
             , , , , , , , ,
         ) = registry.facilities(_facilityId);
 
-        uint256 peakHours = physicalCap.getSolarPeak(getLatitude(_facilityId));
+        uint256 peakHours = physicalCap.getSolarPeakByBand(getLatitudeBand(_facilityId));
 
         if (facilityType == EnergyRegistry.FacilityType.Solar) {
             maxKWh = calcSolarMax(capacityKW, peakHours, w.irradiance);
@@ -257,10 +258,10 @@ contract WeatherOracle is AccessControl {
     }
 
     /**
-     * @notice Helper: get facility latitude from registry.
+     * @notice Helper: get facility latitude band from registry.
      */
-    function getLatitude(uint256 _facilityId) public view returns (int64) {
-        (, , , , , int64 lat, , , , , , , ) = registry.facilities(_facilityId);
-        return lat;
+    function getLatitudeBand(uint256 _facilityId) public view returns (uint8) {
+        (, , , , , , uint8 band, , , , , , ) = registry.facilities(_facilityId);
+        return band;
     }
 }

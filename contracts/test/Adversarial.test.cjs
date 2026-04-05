@@ -16,7 +16,7 @@ const { ethers } = require("hardhat");
 
 describe("JOULE Adversarial Agents", function () {
   let jolToken, registry, poeMining, oracleConsensus, governance;
-  let energyPeg, physicalCap, weatherOracle, stakeSlash, conflictScore;
+  let energyFloor, physicalCap, weatherOracle, stakeSlash, conflictScore;
   let ecosystemTreasury, bridgeLock, energyProofEngine;
 
   let admin, attacker, legitimateOracle1, legitimateOracle2, legitimateOracle3;
@@ -53,8 +53,8 @@ describe("JOULE Adversarial Agents", function () {
       admin.address, jolToken.target, registry.target, treasuryAddr.address
     );
 
-    const EnergyPeg = await ethers.getContractFactory("EnergyPeg");
-    energyPeg = await EnergyPeg.deploy(admin.address, jolToken.target);
+    const EnergyFloor = await ethers.getContractFactory("EnergyFloor");
+    energyFloor = await EnergyFloor.deploy(admin.address, jolToken.target);
 
     const StakeSlash = await ethers.getContractFactory("StakeSlash");
     stakeSlash = await StakeSlash.deploy(
@@ -81,7 +81,7 @@ describe("JOULE Adversarial Agents", function () {
       stakeSlash.target,
       conflictScore.target,
       poeMining.target,
-      energyPeg.target
+      energyFloor.target
     );
 
     // ─── Configure roles ──────────────────────────────────────
@@ -91,16 +91,16 @@ describe("JOULE Adversarial Agents", function () {
     const ORACLE_ROLE_MINING = await poeMining.ORACLE_ROLE();
     const REPORTER_ROLE = await conflictScore.REPORTER_ROLE();
     const SLASHER_ROLE = await stakeSlash.SLASHER_ROLE();
-    const ORACLE_ROLE_PEG = await energyPeg.ORACLE_ROLE();
+    const ORACLE_ROLE_PEG = await energyFloor.ORACLE_ROLE();
     const ENGINE_OPERATOR = await energyProofEngine.ENGINE_OPERATOR();
     const ORACLE_ROLE_WEATHER = await weatherOracle.ORACLE_ROLE();
 
     // Token minting roles
     await jolToken.grantRole(MINTER_ROLE, admin.address);
     await jolToken.grantRole(MINTER_ROLE, poeMining.target);
-    await jolToken.grantRole(MINTER_ROLE, energyPeg.target);
+    await jolToken.grantRole(MINTER_ROLE, energyFloor.target);
     await jolToken.grantRole(MINTER_ROLE, ecosystemTreasury.target);
-    await jolToken.grantRole(BURNER_ROLE, energyPeg.target);
+    await jolToken.grantRole(BURNER_ROLE, energyFloor.target);
 
     // Registry roles
     await registry.grantRole(VERIFIER_ROLE, oracleConsensus.target);
@@ -111,9 +111,9 @@ describe("JOULE Adversarial Agents", function () {
     await poeMining.grantRole(ORACLE_ROLE_MINING, energyProofEngine.target);
     await oracleConsensus.setPoEMining(poeMining.target);
 
-    // EnergyPeg oracle
-    await energyPeg.grantRole(ORACLE_ROLE_PEG, energyProofEngine.target);
-    await energyPeg.grantRole(ORACLE_ROLE_PEG, admin.address);
+    // EnergyFloor oracle
+    await energyFloor.grantRole(ORACLE_ROLE_PEG, energyProofEngine.target);
+    await energyFloor.grantRole(ORACLE_ROLE_PEG, admin.address);
 
     // StakeSlash roles
     await stakeSlash.grantRole(SLASHER_ROLE, admin.address);
@@ -151,14 +151,14 @@ describe("JOULE Adversarial Agents", function () {
       0, // Solar
       50, // 50 kW
       meterId,
-      58381000, // Tallinn latitude
-      24655000, // Tallinn longitude
+      "0x75636674", // geohash "ucft" (Tallinn)
+      2, // subarctic
       "EE"
     );
     await registry.verifyFacility(1);
 
-    // Register producer in EnergyPeg
-    await energyPeg.connect(legitimateProducer).registerProducer("Legit Solar", "EE", "solar");
+    // Register producer in EnergyFloor
+    await energyFloor.connect(legitimateProducer).registerProducer("Legit Solar", "EE", "solar");
   });
 
   // ═══════════════════════════════════════════════════════════════════
@@ -207,7 +207,7 @@ describe("JOULE Adversarial Agents", function () {
         attacksAttempted++;
         try {
           await registry.connect(attacker).registerFacility(
-            0, 100, existingMeterId, 40000000, 20000000, "XX"
+            0, 100, existingMeterId, "0x75636674", 2, "XX"
           );
           attacksSucceeded++;
         } catch (e) {
@@ -249,7 +249,7 @@ describe("JOULE Adversarial Agents", function () {
       // Register a fake facility
       const fakeMeterId = ethers.keccak256(ethers.toUtf8Bytes("FAKE-METER-001"));
       await registry.connect(attacker).registerFacility(
-        0, 50, fakeMeterId, 58000000, 24000000, "EE"
+        0, 50, fakeMeterId, "0x75636674", 2, "EE"
       );
       // Facility #2 (attacker's), not verified yet
 
@@ -353,7 +353,7 @@ describe("JOULE Adversarial Agents", function () {
       for (let i = 0; i < 2; i++) {
         totalAttempted++;
         try {
-          await registry.connect(attacker).registerFacility(0, 50, usedMeter, 0, 0, "XX");
+          await registry.connect(attacker).registerFacility(0, 50, usedMeter, "0x75636674", 2, "XX");
           totalSucceeded++;
         } catch (e) { /* blocked */ }
       }
@@ -366,7 +366,7 @@ describe("JOULE Adversarial Agents", function () {
 
       // Attack 4: stake without JOL
       const fakeMeter = ethers.keccak256(ethers.toUtf8Bytes("FAKE-SCORECARD-001"));
-      await registry.connect(attacker).registerFacility(0, 50, fakeMeter, 58000000, 24000000, "EE");
+      await registry.connect(attacker).registerFacility(0, 50, fakeMeter, "0x75636674", 2, "EE");
       const attackFacilityId = await registry.nextFacilityId() - 1n;
       await registry.verifyFacility(attackFacilityId);
       totalAttempted++;

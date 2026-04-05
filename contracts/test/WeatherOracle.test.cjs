@@ -11,18 +11,18 @@ describe("WeatherOracle — Weather Layer", function () {
   let weatherOracle, physicalCap, registry;
   let owner, oracleNode, producer;
 
-  const TALLINN_LAT = 58381000;
-  const TALLINN_LON = 24655000;
-  const NAIROBI_LAT = -1286000;
-  const NAIROBI_LON = 36821000;
+  const TALLINN_GEOHASH = "0x75636674"; // "ucft"
+  const TALLINN_BAND = 2; // subarctic
+  const NAIROBI_GEOHASH = "0x73373268"; // "s72h"
+  const NAIROBI_BAND = 4; // equator
 
   let now;
 
-  async function registerFacility(type, capacityKW, lat, lon) {
+  async function registerFacility(type, capacityKW, geohash, band) {
     const meterId = ethers.keccak256(
       ethers.toUtf8Bytes(`METER-${Date.now()}-${Math.random()}`)
     );
-    await registry.connect(producer).registerFacility(type, capacityKW, meterId, lat, lon, "XX");
+    await registry.connect(producer).registerFacility(type, capacityKW, meterId, geohash, band, "XX");
     const id = (await registry.nextFacilityId()) - 1n;
     await registry.connect(owner).verifyFacility(id);
     return id;
@@ -56,7 +56,7 @@ describe("WeatherOracle — Weather Layer", function () {
 
   describe("Weather Submission", function () {
     it("oracle submits weather data", async function () {
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
 
       const tx = await weatherOracle.connect(oracleNode).submitWeather(
         id, now, 800, 50, 0, 150 // 800 W/m², 5.0 m/s wind, 0 rain, 15°C
@@ -70,21 +70,21 @@ describe("WeatherOracle — Weather Layer", function () {
     });
 
     it("rejects future timestamp", async function () {
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       await expect(
         weatherOracle.connect(oracleNode).submitWeather(id, now + 3600, 800, 50, 0, 150)
       ).to.be.revertedWith("Future timestamp");
     });
 
     it("rejects data older than 2 days", async function () {
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       await expect(
         weatherOracle.connect(oracleNode).submitWeather(id, now - 200000, 800, 50, 0, 150)
       ).to.be.revertedWith("Data too old");
     });
 
     it("rejects non-oracle submission", async function () {
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       await expect(
         weatherOracle.connect(producer).submitWeather(id, now, 800, 50, 0, 150)
       ).to.be.reverted;
@@ -105,7 +105,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // Weather: 1000 W/m² (clear sky)
       // calcSolarMax = 50 × 300 × 1000 × 2000 / (100 × 1000 × 10000) = 30
       // + 10% tolerance = 33
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 1000, 0, 0, 200);
@@ -119,7 +119,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // Weather: 200 W/m² (heavy clouds — only 20% of clear sky)
       // calcSolarMax = 50 × 300 × 200 × 2000 / (100 × 1000 × 10000) = 6
       // + 10% tolerance = 6 (6.6 rounds down)
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 200, 0, 0, 80);
@@ -141,7 +141,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // 100kW solar, Tallinn
       // calcSolarMax = 100 × 300 × 500 × 2000 / (100 × 1000 × 10000) = 30
       // + 10% = 33
-      const id = await registerFacility(0, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 500, 0, 0, 150);
@@ -163,7 +163,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // 100 × 24 × 3000 / 10000 = 720 kWh (weather)
       // PhysicalCap: 100 × 300 × 3000 / (100 × 10000) × 110% = 99 kWh
       // Cross-verified: min(weather, physics) → physics caps at 99
-      const id = await registerFacility(1, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(1, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 150, 0, 100);
@@ -174,7 +174,7 @@ describe("WeatherOracle — Weather Layer", function () {
     });
 
     it("calm day (2 m/s) → below cut-in, zero output", async function () {
-      const id = await registerFacility(1, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(1, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 20, 0, 100);
@@ -189,7 +189,7 @@ describe("WeatherOracle — Weather Layer", function () {
     });
 
     it("storm (30 m/s) → above cut-out, safety shutdown", async function () {
-      const id = await registerFacility(1, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(1, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 300, 0, 50);
@@ -203,7 +203,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // Weather: factor = 1500, 100 × 24 × 1500 / 10000 = 360 kWh
       // PhysicalCap: 100kW wind Tallinn = 99 kWh max
       // Cross-verified: physics caps at 99
-      const id = await registerFacility(1, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(1, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 75, 0, 100);
@@ -226,7 +226,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // factor = 3000
       // 200 × 550 × 3000 / (100 × 10000) = 330
       // + 10% = 363
-      const id = await registerFacility(2, 200, NAIROBI_LAT, NAIROBI_LON);
+      const id = await registerFacility(2, 200, NAIROBI_GEOHASH, NAIROBI_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 0, 0, 250);
@@ -243,7 +243,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // factor = 5000
       // 200 × 550 × 5000 / (100 × 10000) = 550
       // + 10% = 605
-      const id = await registerFacility(2, 200, NAIROBI_LAT, NAIROBI_LON);
+      const id = await registerFacility(2, 200, NAIROBI_GEOHASH, NAIROBI_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 0, 0, 1000, 250);
@@ -260,7 +260,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // 50kW solar, Tallinn: PhysicalCap max = 33 kWh
       // Clear sky weather would allow ~33 kWh
       // But claiming 50 kWh → physics says no first
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       await weatherOracle.connect(oracleNode).submitWeather(id, now, 1000, 0, 0, 200);
@@ -272,7 +272,7 @@ describe("WeatherOracle — Weather Layer", function () {
     it("no weather data → conservative 50% of physics cap", async function () {
       // 50kW solar, Tallinn: PhysicalCap max = 33
       // No weather → 33/2 = 16 kWh max
-      const id = await registerFacility(0, 50, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 50, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
       // No weather submitted
 
@@ -284,7 +284,7 @@ describe("WeatherOracle — Weather Layer", function () {
     });
 
     it("full cycle: submit weather → verify → passes", async function () {
-      const id = await registerFacility(0, 100, TALLINN_LAT, TALLINN_LON);
+      const id = await registerFacility(0, 100, TALLINN_GEOHASH, TALLINN_BAND);
       const day = dayOf(now);
 
       // Sunny day in Tallinn (rare but it happens)
@@ -304,7 +304,7 @@ describe("WeatherOracle — Weather Layer", function () {
       // 500kW geo, equator
       // 500 × 550 × 9500 / (100 × 10000) = 2612
       // + 10% = 2873
-      const id = await registerFacility(3, 500, NAIROBI_LAT, NAIROBI_LON);
+      const id = await registerFacility(3, 500, NAIROBI_GEOHASH, NAIROBI_BAND);
       const day = dayOf(now);
 
       // Terrible weather — doesn't matter for geo

@@ -46,8 +46,7 @@ contract MachineRegistry is AccessControl {
         string manufacturer;
         string model;
         bytes32 firmwareHash;  // hash of current firmware (integrity check)
-        int64 latitude;
-        int64 longitude;
+        bytes4 geohash;        // 4-char geohash (~20 km precision, privacy-safe)
         uint256 registeredAt;
         uint256 verifiedAt;
         // Reputation
@@ -87,8 +86,7 @@ contract MachineRegistry is AccessControl {
         string calldata _manufacturer,
         string calldata _model,
         bytes32 _firmwareHash,
-        int64 _lat,
-        int64 _lon
+        bytes4 _geohash
     ) external returns (uint256) {
         require(_wallet != address(0), "Invalid wallet");
         require(walletToMachine[_wallet] == 0, "Wallet already registered");
@@ -103,8 +101,7 @@ contract MachineRegistry is AccessControl {
             manufacturer: _manufacturer,
             model: _model,
             firmwareHash: _firmwareHash,
-            latitude: _lat,
-            longitude: _lon,
+            geohash: _geohash,
             registeredAt: block.timestamp,
             verifiedAt: 0,
             totalTransactions: 0,

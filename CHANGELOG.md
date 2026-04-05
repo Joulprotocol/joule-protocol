@@ -23,7 +23,7 @@
 ## [0.5.0] - 2026-04-05
 
 ### Security Fixes (Critical)
-- **EnergyPeg**: Fix MAX_PEG_MINT to 42M (20% of 210M supply)
+- **EnergyFloor**: Fix MAX_FLOOR_MINT to 42M (20% of 210M supply)
 - **EcosystemTreasury**: Fix MAX_TREASURY to 10.5M (5% of 210M supply)
 - **MachineRegistry**: Add RECORDER_ROLE to `recordTransaction()` and `recordEnergy()` — prevents unauthorized reputation manipulation
 - **SellLimit**: Add AccessControl with EXCHANGE_ROLE to `checkSell()` — prevents sell quota exhaustion attacks
@@ -61,6 +61,6 @@
 ## [0.1.0] - 2026-03-20
 
 ### Initial Release
-- JOULE Protocol core: JOLToken, EnergyPeg, EnergyRegistry
+- JOULE Protocol core: JOLToken, EnergyFloor, EnergyRegistry
 - go-joule (geth fork) with ethash mining
 - Genesis block, testnet launch

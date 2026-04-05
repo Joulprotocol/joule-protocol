@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "./JOLToken.sol";
-import "./EnergyPeg.sol";
+import "./EnergyFloor.sol";
 
 /**
  * @title EnergyMarketplace
@@ -15,7 +15,7 @@ import "./EnergyPeg.sol";
  */
 contract EnergyMarketplace is AccessControl, ReentrancyGuard, Pausable {
     JOLToken public jolToken;
-    EnergyPeg public energyPeg;
+    EnergyFloor public energyFloor;
 
     uint256 public constant BURN_BPS = 150;          // 1.5% burn (all fees burned — no founder cut)
 
@@ -43,10 +43,10 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard, Pausable {
     event TradExecuted(uint256 indexed listingId, address indexed buyer, uint256 kWh, uint256 totalPrice);
     event FeeBurned(uint256 amount);
 
-    constructor(address admin, address _jolToken, address _energyPeg) {
+    constructor(address admin, address _jolToken, address _energyFloor) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         jolToken = JOLToken(_jolToken);
-        energyPeg = EnergyPeg(_energyPeg);
+        energyFloor = EnergyFloor(_energyFloor);
     }
 
     function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
@@ -65,8 +65,8 @@ contract EnergyMarketplace is AccessControl, ReentrancyGuard, Pausable {
         require(_pricePerKWh > 0, "Zero price");
 
         // Verify seller has energy credits in the peg registry
-        if (address(energyPeg) != address(0)) {
-            (, , , , , , uint256 availableKWh, ) = energyPeg.producers(msg.sender);
+        if (address(energyFloor) != address(0)) {
+            (, , , , , , uint256 availableKWh, ) = energyFloor.producers(msg.sender);
             require(availableKWh >= _kWh, "Insufficient energy credits in registry");
         }
 

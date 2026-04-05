@@ -10,12 +10,11 @@ import "./EnergyRegistry.sol";
  * Kiht 1 of Proof of Energy — physics is the judge.
  * Calculates the theoretical maximum daily output based on:
  *   - Installed capacity (kW)
- *   - GPS coordinates (latitude → solar peak hours)
+ *   - Latitude band (→ solar peak hours)
  *   - Technology type (solar, wind, hydro, geothermal)
  *   - Technology-specific efficiency factors
  *
  * 10% buffer for measurement tolerances.
- * GPS is locked at registration. 90-day freeze before change.
  */
 contract PhysicalCap {
     EnergyRegistry public registry;
@@ -39,12 +38,6 @@ contract PhysicalCap {
     uint256 public constant PEAK_HOURS_SUBARCTIC = 300;    // 3.0h — 45-60°
     uint256 public constant PEAK_HOURS_ARCTIC = 200;       // 2.0h — 60°+
 
-    // GPS change freeze period
-    uint256 public constant GPS_FREEZE_PERIOD = 90 days;
-
-    // GPS change tracking
-    mapping(uint256 => uint256) public lastGpsChange;  // facilityId → timestamp
-
     event PhysicsCheckPassed(uint256 indexed facilityId, uint256 claimedKWh, uint256 maxAllowed);
     event PhysicsCheckFailed(uint256 indexed facilityId, uint256 claimedKWh, uint256 maxAllowed);
 
@@ -64,8 +57,8 @@ contract PhysicalCap {
             EnergyRegistry.FacilityType facilityType,
             uint256 capacityKW,
             ,                              // meterId
-            int64 latitude,
-            ,                              // longitude
+            ,                              // geohash
+            uint8 latitudeBand,
             ,                              // country
             ,                              // registeredAt
             ,                              // verifiedAt
@@ -76,7 +69,7 @@ contract PhysicalCap {
 
         require(capacityKW > 0, "Facility not found");
 
-        uint256 peakHours = getSolarPeak(latitude);
+        uint256 peakHours = getSolarPeakByBand(latitudeBand);
         uint256 efficiency = getTechEfficiency(facilityType);
 
         // Base max = capacity × peakHours × efficiency
@@ -110,30 +103,24 @@ contract PhysicalCap {
     }
 
     /**
-     * @notice Get solar peak hours based on latitude.
+     * @notice Get solar peak hours based on latitude band.
      * Wind/hydro/geo use this as a proxy for daylight hours affecting all renewables.
-     * @param _lat Latitude scaled by 1e6 (e.g., 58381000 = 58.381°N)
+     * @param _band Latitude band: 0=tropical, 1=temperate, 2=subarctic, 3=arctic, 4=equator
      * @return peakHours Peak sun hours × 100
      */
-    function getSolarPeak(int64 _lat) public pure returns (uint256 peakHours) {
-        // Get absolute latitude in degrees
-        uint256 absLat;
-        if (_lat >= 0) {
-            absLat = uint256(uint64(_lat)) / 1e6;
+    function getSolarPeakByBand(uint8 _band) public pure returns (uint256 peakHours) {
+        if (_band == 4) {
+            return PEAK_HOURS_EQUATOR;       // 5.5h — 0-15°
+        } else if (_band == 0) {
+            return PEAK_HOURS_TROPICAL;      // 5.0h — 15-30°
+        } else if (_band == 1) {
+            return PEAK_HOURS_TEMPERATE;     // 4.0h — 30-45°
+        } else if (_band == 2) {
+            return PEAK_HOURS_SUBARCTIC;     // 3.0h — 45-60°
+        } else if (_band == 3) {
+            return PEAK_HOURS_ARCTIC;        // 2.0h — 60°+
         } else {
-            absLat = uint256(uint64(-_lat)) / 1e6;
-        }
-
-        if (absLat < 15) {
-            return PEAK_HOURS_EQUATOR;       // 5.5h
-        } else if (absLat < 30) {
-            return PEAK_HOURS_TROPICAL;      // 5.0h
-        } else if (absLat < 45) {
-            return PEAK_HOURS_TEMPERATE;     // 4.0h
-        } else if (absLat < 60) {
-            return PEAK_HOURS_SUBARCTIC;     // 3.0h
-        } else {
-            return PEAK_HOURS_ARCTIC;        // 2.0h
+            revert("Invalid latitude band");
         }
     }
 

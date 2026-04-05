@@ -35,7 +35,7 @@ contract JOLToken is ERC20, ERC20Permit, ERC20Votes, AccessControl {
 
     constructor(address admin) ERC20("JOULE", "JOL") ERC20Permit("JOULE") {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        // MINTER_ROLE granted only to contracts (PoEMining, EnergyPeg), never to addresses.
+        // MINTER_ROLE granted only to contracts (PoEMining, EnergyFloor), never to addresses.
         // Admin sets up roles via grantRole() then renounces ADMIN for immutability.
     }
 

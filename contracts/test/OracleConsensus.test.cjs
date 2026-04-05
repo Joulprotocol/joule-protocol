@@ -32,7 +32,7 @@ describe("OracleConsensus", function () {
   async function setupFacility() {
     const meterId = ethers.keccak256(ethers.toUtf8Bytes("METER-OC-TEST"));
     // Solar, 50 kW capacity
-    await registry.connect(producer).registerFacility(0, 50, meterId, 58381000, 24655000, "EE");
+    await registry.connect(producer).registerFacility(0, 50, meterId, "0x75636674", 2, "EE");
     await registry.connect(owner).verifyFacility(1);
     return 1; // facilityId
   }
@@ -512,7 +512,7 @@ describe("OracleConsensus", function () {
 
       // Register a second facility for a fresh report
       const meterId2 = ethers.keccak256(ethers.toUtf8Bytes("METER-OC-TEST-2"));
-      await registry.connect(producer).registerFacility(0, 50, meterId2, 58381000, 24655000, "EE");
+      await registry.connect(producer).registerFacility(0, 50, meterId2, "0x75636674", 2, "EE");
       await registry.connect(owner).verifyFacility(2);
 
       await oracle.connect(oracle1).submitReport(2, ps2, pe2, 80, weatherHash);
