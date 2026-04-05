@@ -14,7 +14,8 @@ contract JOLToken is ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
-    uint256 public constant MAX_SUPPLY = 210_000_000 ether; // 210M JOL
+    uint256 public constant MAX_SUPPLY = 210_000_000_000 ether; // 210B JOL
+    address public constant BURN_ADDRESS = 0x0000000000000000000000000000000000000369;
     uint256 public totalBurned;
 
     // Burn tracking

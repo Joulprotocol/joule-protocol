@@ -21,8 +21,8 @@ describe("JOLToken", function () {
       expect(await jolToken.symbol()).to.equal("JOL");
     });
 
-    it("should have max supply of 210M", async function () {
-      expect(await jolToken.MAX_SUPPLY()).to.equal(ethers.parseEther("210000000"));
+    it("should have max supply of 210B", async function () {
+      expect(await jolToken.MAX_SUPPLY()).to.equal(ethers.parseEther("210000000000"));
     });
 
     it("should start with zero supply", async function () {
@@ -64,7 +64,7 @@ describe("JOLToken", function () {
     it("should track remaining supply correctly", async function () {
       await jolToken.connect(minter).mint(user2.address, ethers.parseEther("5000"));
       const remaining = await jolToken.remainingSupply();
-      expect(remaining).to.equal(ethers.parseEther("210000000") - ethers.parseEther("15000"));
+      expect(remaining).to.equal(ethers.parseEther("210000000000") - ethers.parseEther("15000"));
     });
   });
 
