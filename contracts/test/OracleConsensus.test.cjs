@@ -424,6 +424,28 @@ describe("OracleConsensus", function () {
       expect(report.finalKWh).to.equal(75);
     });
 
+    it("stake-weighted median: equal stakes produce regular median", async function () {
+      // All oracles have 10k stake (equal weight)
+      // Submissions: 8, 9, 10
+      // Sorted: [8, 9, 10], stakes: [10k, 10k, 10k], total: 30k, half: 15k
+      // Walk: 10k (< 15k), 20k (> 15k) → return 9 (middle value, same as unweighted)
+      const weatherHash = ethers.keccak256(ethers.toUtf8Bytes("weighted"));
+
+      const now = (await ethers.provider.getBlock("latest")).timestamp;
+      const ps = now - 3600;
+      const pe = now;
+
+      await oracle.connect(oracle1).submitReport(facilityId, ps, pe, 8, weatherHash);
+      await oracle.connect(oracle2).submitReport(facilityId, ps, pe, 10, weatherHash);
+      await oracle.connect(oracle3).submitReport(facilityId, ps, pe, 9, weatherHash);
+
+      const rId = ethers.keccak256(
+        ethers.solidityPacked(["uint256", "uint256", "uint256"], [facilityId, ps, pe])
+      );
+      const report = await oracle.reports(rId);
+      expect(report.finalKWh).to.equal(9);
+    });
+
     it("selects correct median when submissions are in descending order (90, 82, 80)", async function () {
       const weatherHash = ethers.keccak256(ethers.toUtf8Bytes("sunny"));
 

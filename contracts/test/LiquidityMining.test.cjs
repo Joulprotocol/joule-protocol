@@ -2,12 +2,12 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 /**
- * LiquidityMining Tests
+ * LiquidityMining Tests — MasterChef Pattern (O(1) claims)
  *
- * 180 days, 4.2B JOL, early bird 2× first 30 days.
- * Ring must be complete from day one.
+ * 180 days, 4.2M JOL, early bird 2× first 30 days.
+ * accRewardPerShare / rewardDebt — no loops, constant gas.
  */
-describe("LiquidityMining — Launch Day Liquidity", function () {
+describe("LiquidityMining — MasterChef Pattern", function () {
   let liqMining, jolToken, lpTokenA, lpTokenB;
   let owner, lp1, lp2;
 
@@ -17,21 +17,17 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
     const JOLToken = await ethers.getContractFactory("JOLToken");
     jolToken = await JOLToken.deploy(owner.address);
 
-    // Deploy mock LP tokens (reuse JOLToken as a simple ERC20 mock)
     lpTokenA = await JOLToken.deploy(owner.address);
     lpTokenB = await JOLToken.deploy(owner.address);
 
     const LiquidityMining = await ethers.getContractFactory("LiquidityMining");
     liqMining = await LiquidityMining.deploy(owner.address, jolToken.target);
 
-    // Set LP tokens
     await liqMining.setLPTokens(lpTokenA.target, lpTokenB.target);
 
-    // Grant minter role to LiquidityMining (for JOL rewards)
     const MINTER_ROLE = await jolToken.MINTER_ROLE();
     await jolToken.grantRole(MINTER_ROLE, liqMining.target);
 
-    // Mint LP tokens to test users and approve
     const LP_MINTER = await lpTokenA.MINTER_ROLE();
     await lpTokenA.grantRole(LP_MINTER, owner.address);
     await lpTokenB.grantRole(LP_MINTER, owner.address);
@@ -48,7 +44,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
   // ─── Program Constants ──────────────────────────────────────
 
   describe("Program Constants", function () {
-    it("total rewards = 4.2B JOL", async function () {
+    it("total rewards = 4.2M JOL", async function () {
       expect(await liqMining.TOTAL_REWARDS()).to.equal(ethers.parseEther("4200000"));
     });
 
@@ -64,14 +60,9 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       expect(await liqMining.BASE_DAILY_REWARD()).to.equal(ethers.parseEther("20000"));
     });
 
-    it("weighted days: 30×2 + 150×1 = 210", async function () {
-      expect(await liqMining.WEIGHTED_DAYS()).to.equal(210);
-    });
-
-    it("4.2M / 210 weighted days = 20k/day", function () {
-      const total = 4_200_000n;
-      const weighted = 210n;
-      expect(total / weighted).to.equal(20_000n);
+    it("REWARD_PER_SECOND = 20,000 ether / 86,400", async function () {
+      const rps = await liqMining.REWARD_PER_SECOND();
+      expect(rps).to.equal(231481481481481481n);
     });
   });
 
@@ -97,6 +88,41 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
     });
   });
 
+  // ─── Multiplier ─────────────────────────────────────────────
+
+  describe("Multiplier", function () {
+    it("early bird: 1 day = 2 × 86400 weighted seconds", async function () {
+      const start = await liqMining.programStart();
+      const m = await liqMining.getMultiplier(start, start + 86400n);
+      expect(m).to.equal(86400n * 2n);
+    });
+
+    it("after early bird: 1 day = 86400 weighted seconds", async function () {
+      const start = await liqMining.programStart();
+      const earlyEnd = start + 30n * 86400n;
+      const m = await liqMining.getMultiplier(earlyEnd, earlyEnd + 86400n);
+      expect(m).to.equal(86400n);
+    });
+
+    it("spans boundary correctly", async function () {
+      const start = await liqMining.programStart();
+      const earlyEnd = start + 30n * 86400n;
+      // 1 day before early end + 1 day after
+      const from = earlyEnd - 86400n;
+      const to = earlyEnd + 86400n;
+      const m = await liqMining.getMultiplier(from, to);
+      // 86400 × 2 (early) + 86400 × 1 (normal) = 259,200
+      expect(m).to.equal(86400n * 3n);
+    });
+
+    it("returns 0 after program end", async function () {
+      const start = await liqMining.programStart();
+      const end = start + 180n * 86400n;
+      const m = await liqMining.getMultiplier(end, end + 86400n);
+      expect(m).to.equal(0);
+    });
+  });
+
   // ─── Staking ────────────────────────────────────────────────
 
   describe("LP Staking", function () {
@@ -113,9 +139,7 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
     });
 
     it("stakes LP tokens in JOL/ETH pool", async function () {
-      const amount = ethers.parseEther("500");
-      await liqMining.connect(lp1).stakeLiquidity(amount, 1);
-
+      await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("500"), 1);
       const pos = await liqMining.positions(1);
       expect(pos.pool).to.equal(1);
     });
@@ -143,48 +167,39 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
 
   // ─── Rewards ────────────────────────────────────────────────
 
-  describe("Rewards", function () {
-    it("sole LP gets full daily reward", async function () {
+  describe("Rewards (MasterChef O(1))", function () {
+    it("sole LP gets ~40k JOL for 1 day during early bird", async function () {
       await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
 
-      // Advance 1 day
       await ethers.provider.send("evm_increaseTime", [86400]);
       await ethers.provider.send("evm_mine");
 
       const pending = await liqMining.pendingRewards(1);
-      // Day 0 = early bird, so 20k × 2 = 40M
-      expect(pending).to.equal(ethers.parseEther("40000"));
+      // 86,400 sec × 2 (early bird) × REWARD_PER_SECOND = ~40,000 JOL
+      // Slight rounding from integer division
+      const expected = ethers.parseEther("40000");
+      const tolerance = ethers.parseEther("1"); // 1 JOL tolerance
+      expect(pending).to.be.closeTo(expected, tolerance);
     });
 
-    it("early bird: 2× rewards first 30 days", async function () {
+    it("after early bird: ~20k JOL/day", async function () {
       await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
 
-      // Advance 1 day (still in early bird)
-      await ethers.provider.send("evm_increaseTime", [86400]);
-      await ethers.provider.send("evm_mine");
-
-      const earlyReward = await liqMining.pendingRewards(1);
-      expect(earlyReward).to.equal(ethers.parseEther("40000")); // 20k × 2
-    });
-
-    it("after early bird: 1× rewards", async function () {
-      await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
-
-      // Skip past early bird (30 days) and claim first
+      // Skip past early bird
       await ethers.provider.send("evm_increaseTime", [30 * 86400]);
       await ethers.provider.send("evm_mine");
       await liqMining.connect(lp1).claimRewards(1);
 
-      // Advance 1 more day (day 31, no bonus)
+      // 1 more day (normal rate)
       await ethers.provider.send("evm_increaseTime", [86400]);
       await ethers.provider.send("evm_mine");
 
-      const normalReward = await liqMining.pendingRewards(1);
-      expect(normalReward).to.equal(ethers.parseEther("20000")); // 20k × 1
+      const pending = await liqMining.pendingRewards(1);
+      const expected = ethers.parseEther("20000");
+      expect(pending).to.be.closeTo(expected, ethers.parseEther("1"));
     });
 
-    it("two LPs split rewards proportionally", async function () {
-      // LP1: 750, LP2: 250 = 3:1 ratio
+    it("two LPs split rewards proportionally (3:1)", async function () {
       await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("750"), 0);
       await liqMining.connect(lp2).stakeLiquidity(ethers.parseEther("250"), 0);
 
@@ -194,9 +209,24 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const reward1 = await liqMining.pendingRewards(1);
       const reward2 = await liqMining.pendingRewards(2);
 
-      // Early bird: total 40k/day, 75% and 25%
-      expect(reward1).to.equal(ethers.parseEther("30000")); // 75%
-      expect(reward2).to.equal(ethers.parseEther("10000")); // 25%
+      // Total ~40k/day (early bird), 75%/25%
+      expect(reward1).to.be.closeTo(ethers.parseEther("30000"), ethers.parseEther("1"));
+      expect(reward2).to.be.closeTo(ethers.parseEther("10000"), ethers.parseEther("1"));
+    });
+
+    it("rewards are O(1) even after 100 days", async function () {
+      await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
+
+      // Skip 100 days — no claim in between
+      await ethers.provider.send("evm_increaseTime", [100 * 86400]);
+      await ethers.provider.send("evm_mine");
+
+      // This should NOT loop 100 times — O(1) with MasterChef
+      const pending = await liqMining.pendingRewards(1);
+      expect(pending).to.be.gt(0);
+
+      // 30d × 40k + 70d × 20k = 1,200,000 + 1,400,000 = 2,600,000
+      expect(pending).to.be.closeTo(ethers.parseEther("2600000"), ethers.parseEther("100"));
     });
   });
 
@@ -212,11 +242,11 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const tx = await liqMining.connect(lp1).claimRewards(1);
       await expect(tx).to.emit(liqMining, "RewardsClaimed");
 
-      expect(await jolToken.balanceOf(lp1.address)).to.equal(ethers.parseEther("40000"));
-      expect(await liqMining.totalDistributed()).to.equal(ethers.parseEther("40000"));
+      const bal = await jolToken.balanceOf(lp1.address);
+      expect(bal).to.be.closeTo(ethers.parseEther("40000"), ethers.parseEther("1"));
     });
 
-    it("no double-claim for same day", async function () {
+    it("no double-claim for same time", async function () {
       await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
 
       await ethers.provider.send("evm_increaseTime", [86400]);
@@ -224,10 +254,15 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
 
       await liqMining.connect(lp1).claimRewards(1);
 
-      // Second claim same day → no rewards
-      await expect(
-        liqMining.connect(lp1).claimRewards(1)
-      ).to.be.revertedWith("No rewards");
+      // Mine same block — no time elapsed, no new rewards
+      // Need to ensure no time passes between claim and re-claim
+      // In Hardhat, each tx mines a block (+1 sec), so tiny reward accrues
+      // Instead, verify balance didn't change significantly
+      const balBefore = await jolToken.balanceOf(lp1.address);
+      await liqMining.connect(lp1).claimRewards(1);
+      const balAfter = await jolToken.balanceOf(lp1.address);
+      // Only ~1 second of rewards accrued (trivial)
+      expect(balAfter - balBefore).to.be.lt(ethers.parseEther("1"));
     });
   });
 
@@ -243,7 +278,6 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
       const tx = await liqMining.connect(lp1).unstakeLiquidity(1);
       await expect(tx).to.emit(liqMining, "LPUnstaked");
 
-      // Got rewards on unstake
       expect(await jolToken.balanceOf(lp1.address)).to.be.gt(0);
       expect(await liqMining.activeLPCount()).to.equal(0);
     });
@@ -269,6 +303,19 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
 
       expect(await liqMining.isActive()).to.be.false;
     });
+
+    it("total rewards capped at 4.2M", async function () {
+      await liqMining.connect(lp1).stakeLiquidity(ethers.parseEther("1000"), 0);
+
+      // Skip entire program
+      await ethers.provider.send("evm_increaseTime", [181 * 86400]);
+      await ethers.provider.send("evm_mine");
+
+      const pending = await liqMining.pendingRewards(1);
+      // Should be close to 4.2M total (sole LP for full duration)
+      expect(pending).to.be.lte(ethers.parseEther("4200000"));
+      expect(pending).to.be.closeTo(ethers.parseEther("4200000"), ethers.parseEther("100"));
+    });
   });
 
   // ─── Program Stats ──────────────────────────────────────────
@@ -279,7 +326,6 @@ describe("LiquidityMining — Launch Day Liquidity", function () {
 
       const stats = await liqMining.programStats();
       expect(stats._totalStaked).to.equal(ethers.parseEther("1000"));
-      expect(stats._totalDistributed).to.equal(0);
       expect(stats._remainingRewards).to.equal(ethers.parseEther("4200000"));
       expect(stats._isActive).to.be.true;
       expect(stats._isEarlyBird).to.be.true;

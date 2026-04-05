@@ -221,9 +221,8 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
         require(!report.finalized, "Already finalized");
         require(report.voters.length >= quorum, "No quorum");
 
-        // Calculate median
-        uint256[] memory sorted = _sortArray(report.submissions);
-        uint256 median = sorted[sorted.length / 2];
+        // Stake-weighted median: oracles with more stake have more influence
+        uint256 median = _stakeWeightedMedian(report.voters, report.submissions);
 
         report.finalKWh = median;
         report.finalized = true;
@@ -294,6 +293,51 @@ contract OracleConsensus is AccessControl, ReentrancyGuard, Pausable {
     }
 
     // ─── Utilities ─────────────────────────────────────────────────
+
+    /**
+     * @notice Stake-weighted median: sort submissions by kWh, walk through
+     * accumulating stake until >= 50% of total voter stake. That value is the median.
+     * Oracles with more skin in the game have proportionally more influence.
+     */
+    function _stakeWeightedMedian(
+        address[] memory voters,
+        uint256[] memory submissions
+    ) internal view returns (uint256) {
+        uint256 n = voters.length;
+        require(n > 0, "No submissions");
+
+        // Build (kWh, stake) pairs and sort by kWh
+        uint256[] memory indices = new uint256[](n);
+        for (uint256 i = 0; i < n; i++) indices[i] = i;
+
+        // Sort indices by submission value (ascending)
+        for (uint256 i = 0; i < n; i++) {
+            for (uint256 j = i + 1; j < n; j++) {
+                if (submissions[indices[j]] < submissions[indices[i]]) {
+                    (indices[i], indices[j]) = (indices[j], indices[i]);
+                }
+            }
+        }
+
+        // Sum total stake of voters
+        uint256 totalVoterStake = 0;
+        for (uint256 i = 0; i < n; i++) {
+            totalVoterStake += oracles[voters[i]].stake;
+        }
+
+        // Walk sorted values, accumulate stake until >= half
+        uint256 accumulated = 0;
+        uint256 halfStake = totalVoterStake / 2;
+        for (uint256 i = 0; i < n; i++) {
+            accumulated += oracles[voters[indices[i]]].stake;
+            if (accumulated > halfStake) {
+                return submissions[indices[i]];
+            }
+        }
+
+        // Fallback: return last value (shouldn't reach here)
+        return submissions[indices[n - 1]];
+    }
 
     function _sortArray(uint256[] memory arr) internal pure returns (uint256[] memory) {
         uint256[] memory sorted = new uint256[](arr.length);
