@@ -44,20 +44,20 @@ MINER_ADDR="0x$MINER_ADDR"
 
 echo "Starting JOULE testnet..."
 echo "  Miner: $MINER_ADDR"
-echo "  RPC:   http://0.0.0.0:8547"
+echo "  RPC:   http://127.0.0.1:8547 (localhost only)"
+echo "  API:   eth,net,web3 (no personal/admin/miner)"
 echo "  Chain: 707070"
 
 $GJOULE \
     --datadir "$DATADIR" \
     --networkid 707070 \
     --port 30307 \
-    --http --http.port 8547 --http.addr "0.0.0.0" \
-    --http.api "eth,net,web3,personal,miner,admin,txpool" \
-    --http.corsdomain "*" \
+    --http --http.port 8547 --http.addr "127.0.0.1" \
+    --http.api "eth,net,web3" \
+    --http.vhosts "localhost" \
     --syncmode full --snapshot=false \
     --mine --miner.etherbase "$MINER_ADDR" \
     --miner.threads 2 \
-    --allow-insecure-unlock \
     --bootnodes "enode://70df6358dd077546d9c836a4bcbf9c217a5f15356c69f53a471ebd16fa6d00ed0b0da23c1847b85ffa152bd9ed3bf1d42ba4844f717e76925d54baeeac4f2085@204.168.211.136:30307" \
     --nodiscover \
     --maxpeers 50 \
