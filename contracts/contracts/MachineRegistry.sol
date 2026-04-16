@@ -72,6 +72,7 @@ contract MachineRegistry is AccessControl {
     event MachineTransactionRecorded(uint256 indexed id, uint256 amount, bool success);
     event ReputationUpdated(uint256 indexed id, uint256 newScore);
     event FirmwareUpdated(uint256 indexed id, bytes32 newHash);
+    event EnergyRecorded(uint256 indexed id, uint256 kWh);
 
     constructor(address admin) {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
@@ -167,6 +168,7 @@ contract MachineRegistry is AccessControl {
         uint256 id = walletToMachine[_machineWallet];
         if (id == 0) return;
         machines[id].totalEnergyKWh += _kWh;
+        emit EnergyRecorded(id, _kWh);
     }
 
     /**

@@ -447,8 +447,8 @@ describe("JOULE Adversarial Agents", function () {
       await governance.connect(legitimateProducer).propose(
         "Legit Proposal",
         "A real governance proposal",
-        [],
-        []
+        [admin.address],
+        ["0x"]
       );
 
       // Attacker gets tokens AFTER proposal (snapshot already taken)
@@ -491,8 +491,8 @@ describe("JOULE Adversarial Agents", function () {
       await governance.connect(legitimateProducer).propose(
         "Test Timelock",
         "Should require timelock",
-        [],
-        []
+        [admin.address],
+        ["0x"]
       );
 
       // Vote
@@ -575,8 +575,8 @@ describe("JOULE Adversarial Agents", function () {
       await governance.connect(legitimateProducer).propose(
         "Producer Proposal",
         "Only producer can cancel",
-        [],
-        []
+        [admin.address],
+        ["0x"]
       );
 
       // Attacker tries to cancel
@@ -600,7 +600,7 @@ describe("JOULE Adversarial Agents", function () {
       // Attack 1: propose without voting power
       totalAttempted++;
       try {
-        await governance.connect(attacker).propose("Steal", "Drain", [], []);
+        await governance.connect(attacker).propose("Steal", "Drain", [admin.address], ["0x"]);
         totalSucceeded++;
       } catch (e) { /* blocked */ }
 
@@ -623,7 +623,7 @@ describe("JOULE Adversarial Agents", function () {
       await jolToken.connect(legitimateProducer).delegate(legitimateProducer.address);
       await ethers.provider.send("evm_mine");
 
-      await governance.connect(legitimateProducer).propose("Legit", "Test", [], []);
+      await governance.connect(legitimateProducer).propose("Legit", "Test", [admin.address], ["0x"]);
 
       // Attack 3: cancel someone else's proposal
       totalAttempted++;
@@ -1161,8 +1161,8 @@ describe("JOULE Adversarial Agents", function () {
       await governance.connect(legitimateProducer).propose(
         "Test Replay Vote",
         "Cannot vote twice",
-        [],
-        []
+        [admin.address],
+        ["0x"]
       );
 
       // First vote (legitimate)
@@ -1289,7 +1289,7 @@ describe("JOULE Adversarial Agents", function () {
       await jolToken.mint(legitimateProducer.address, ethers.parseEther("200000"));
       await jolToken.connect(legitimateProducer).delegate(legitimateProducer.address);
       await ethers.provider.send("evm_mine");
-      await governance.connect(legitimateProducer).propose("Test", "Replay", [], []);
+      await governance.connect(legitimateProducer).propose("Test", "Replay", [admin.address], ["0x"]);
       await governance.connect(legitimateProducer).vote(1, true);
       totalAttempted++;
       try {

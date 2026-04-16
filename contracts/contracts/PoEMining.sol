@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
 
@@ -17,7 +18,7 @@ import "./EnergyRegistry.sol";
  * ONLY renewable energy: Solar, Wind, Hydro, Geothermal.
  * No biomass, no nuclear, no fossil. Period.
  */
-contract PoEMining is AccessControl, ReentrancyGuard {
+contract PoEMining is AccessControl, ReentrancyGuard, Pausable {
     bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
 
     uint256 public constant ORACLE_FEE_BPS = 200;              // 2%
@@ -60,6 +61,9 @@ contract PoEMining is AccessControl, ReentrancyGuard {
         lastAdjustmentBlock = block.number;
     }
 
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+
     /**
      * @notice Get current JOL reward per kWh.
      * PoE gets 3× the base PoW reward from the same 147M mining pool.
@@ -78,7 +82,7 @@ contract PoEMining is AccessControl, ReentrancyGuard {
     function accrueReward(
         uint256 _facilityId,
         uint256 _verifiedKWh
-    ) external onlyRole(ORACLE_ROLE) {
+    ) external onlyRole(ORACLE_ROLE) whenNotPaused {
         require(_verifiedKWh > 0, "Zero production");
 
         // Calculate reward: kWh × 3× multiplier (from same 147M mining pool)

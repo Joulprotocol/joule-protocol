@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./JOLToken.sol";
 
 /**
@@ -15,7 +16,7 @@ import "./JOLToken.sol";
  * This is not about restricting the founder.
  * This is about proving commitment through code.
  */
-contract FounderSellLimit {
+contract FounderSellLimit is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     JOLToken public jolToken;
@@ -59,8 +60,10 @@ contract FounderSellLimit {
      * @param _to Buyer address
      * @param _amount JOL amount to sell
      */
-    function sell(address _to, uint256 _amount) external {
+    function sell(address _to, uint256 _amount) external nonReentrant {
         require(msg.sender == founder, "Not founder");
+        require(_to != address(0), "Zero address");
+        require(_amount > 0, "Zero amount");
 
         uint256 today = block.timestamp / 1 days;
         uint256 limit = getDailyLimit(today);

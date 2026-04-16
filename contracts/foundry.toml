@@ -1,0 +1,15 @@
+[profile.default]
+src = "contracts"
+out = "forge-out"
+libs = ["node_modules", "lib"]
+remappings = [
+    "@openzeppelin/=node_modules/@openzeppelin/"
+]
+solc = "0.8.24"
+via_ir = true
+evm_version = "paris"
+
+[fuzz]
+runs = 100000
+max_test_rejects = 500000
+seed = "0x42"

@@ -296,8 +296,8 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       const tx = await governance.connect(voter1).propose(
         "Post-emission upgrade",
         "Adjust fee structure for sustainability",
-        [],
-        []
+        [owner.address],
+        ["0x"]
       );
 
       const receipt = await tx.wait();
@@ -319,8 +319,8 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       await governance.connect(voter1).propose(
         "Fee burn rate change",
         "Increase burn from 50% to 75%",
-        [],
-        []
+        [owner.address],
+        ["0x"]
       );
 
       // Both vote
@@ -367,8 +367,8 @@ describe("TimeBomb — Year 8+ Zero Emission Scenarios", function () {
       await governance.connect(v1).propose(
         "Protocol upgrade v2",
         "Enable new fee model",
-        [],
-        []
+        [owner.address],
+        ["0x"]
       );
 
       // 2 vote for, 1 against — all capped to 5% of 350k = 17,500 each

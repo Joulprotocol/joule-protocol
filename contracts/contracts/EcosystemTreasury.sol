@@ -88,6 +88,7 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
      * For every 95 JOL mined by miners, 5 JOL minted to treasury.
      */
     function fundTreasury(uint256 _amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(_amount > 0, "Zero amount");
         require(totalMinted + _amount <= MAX_TREASURY, "Exceeds treasury cap");
         totalMinted += _amount;
         jolToken.mint(address(this), _amount);
@@ -165,6 +166,7 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
         uint256 _amount,
         string calldata _reason
     ) external onlyRole(GOVERNANCE_ROLE) nonReentrant {
+        require(_recipient != address(0), "Zero address");
         require(_amount > 0, "Zero amount");
         uint256 balance = jolToken.balanceOf(address(this));
         // Protect insurance reserve — general spend cannot touch it
@@ -196,6 +198,7 @@ contract EcosystemTreasury is AccessControl, ReentrancyGuard {
         uint256 _amount,
         string calldata _reason
     ) external onlyRole(GOVERNANCE_ROLE) returns (uint256) {
+        require(_recipient != address(0), "Zero address");
         require(_amount > 0 && _amount <= insuranceReserve, "Invalid amount");
         require(bytes(_reason).length > 0, "Reason required");
 

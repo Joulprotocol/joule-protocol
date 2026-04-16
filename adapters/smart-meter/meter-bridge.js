@@ -290,7 +290,8 @@ async function main() {
 
       if (deltaKWh > 0) {
         // Validate
-        const check = validateReading(reading, prevReading, 50); // TODO: get from registry
+        const maxCapacityKW = config.capacityKW || 50; // configured per facility
+        const check = validateReading(reading, prevReading, maxCapacityKW);
 
         if (check.valid) {
           console.log(`[Bridge] ${new Date().toISOString()} | +${deltaKWh.toFixed(3)} kWh | ${reading.currentPowerW}W`);

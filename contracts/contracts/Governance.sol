@@ -71,8 +71,12 @@ contract Governance is AccessControl, ReentrancyGuard {
             jolToken.getVotes(msg.sender) >= PROPOSAL_THRESHOLD,
             "Insufficient voting power to propose (delegate first)"
         );
+        require(_targets.length > 0, "No targets");
         require(_targets.length == _calldatas.length, "Length mismatch");
         require(_targets.length <= MAX_TARGETS, "Too many targets");
+        for (uint256 i = 0; i < _targets.length; i++) {
+            require(_targets[i] != address(0), "Zero target address");
+        }
 
         uint256 id = nextProposalId++;
         Proposal storage p = proposals[id];

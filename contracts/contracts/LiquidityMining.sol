@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
@@ -18,7 +19,7 @@ import "./JOLToken.sol";
  * Uses accRewardPerShare / rewardDebt model (SushiSwap MasterChef V1).
  * No loops in claim/deposit/withdraw — constant gas regardless of time elapsed.
  */
-contract LiquidityMining is AccessControl, ReentrancyGuard {
+contract LiquidityMining is AccessControl, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 
     JOLToken public jolToken;
@@ -67,6 +68,9 @@ contract LiquidityMining is AccessControl, ReentrancyGuard {
         programStart = block.timestamp;
         lastRewardTime = block.timestamp;
     }
+
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
 
     function setLPTokens(address _poolA, address _poolB) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(address(lpTokenPoolA) == address(0), "Already set");
@@ -136,7 +140,7 @@ contract LiquidityMining is AccessControl, ReentrancyGuard {
 
     // ─── Staking ──────────────────────────────────────────────────
 
-    function stakeLiquidity(uint256 _amount, uint256 _pool) external nonReentrant returns (uint256 positionId) {
+    function stakeLiquidity(uint256 _amount, uint256 _pool) external nonReentrant whenNotPaused returns (uint256 positionId) {
         require(isActive(), "Program ended");
         require(_amount > 0, "Zero amount");
         require(_pool <= 1, "Invalid pool");

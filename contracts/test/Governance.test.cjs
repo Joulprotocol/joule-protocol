@@ -64,7 +64,7 @@ describe("Governance — Snapshot + Timelock", function () {
   describe("Proposal Creation", function () {
     it("proposer with enough voting power can propose", async function () {
       const tx = await governance.connect(proposer).propose(
-        "Test Proposal", "Description", [], []
+        "Test Proposal", "Description", [admin.address], ["0x"]
       );
       await expect(tx).to.emit(governance, "ProposalCreated");
     });
@@ -73,7 +73,7 @@ describe("Governance — Snapshot + Timelock", function () {
       await jolToken.mint(attacker.address, ethers.parseEther("200000"));
       // attacker has tokens but never delegated
       await expect(
-        governance.connect(attacker).propose("Attack", "desc", [], [])
+        governance.connect(attacker).propose("Attack", "desc", [admin.address], ["0x"])
       ).to.be.revertedWith("Insufficient voting power to propose (delegate first)");
     });
 
@@ -82,7 +82,7 @@ describe("Governance — Snapshot + Timelock", function () {
       await jolToken.connect(attacker).delegate(attacker.address);
       await ethers.provider.send("evm_mine");
       await expect(
-        governance.connect(attacker).propose("Low", "desc", [], [])
+        governance.connect(attacker).propose("Low", "desc", [admin.address], ["0x"])
       ).to.be.revertedWith("Insufficient voting power to propose (delegate first)");
     });
   });
@@ -90,7 +90,7 @@ describe("Governance — Snapshot + Timelock", function () {
   describe("Flashloan Resistance", function () {
     it("tokens bought after proposal have zero voting power", async function () {
       // Create proposal
-      await governance.connect(proposer).propose("Test", "desc", [], []);
+      await governance.connect(proposer).propose("Test", "desc", [admin.address], ["0x"]);
 
       // Attacker buys tokens AFTER proposal
       await jolToken.mint(attacker.address, ethers.parseEther("5000000")); // 5M
@@ -105,7 +105,7 @@ describe("Governance — Snapshot + Timelock", function () {
 
     it("snapshot captures pre-proposal balances only", async function () {
       // Create proposal
-      await governance.connect(proposer).propose("Test", "desc", [], []);
+      await governance.connect(proposer).propose("Test", "desc", [admin.address], ["0x"]);
 
       // voter1 votes with snapshot power (capped at 5% of snapshot supply)
       await governance.connect(voter1).vote(1, true);
@@ -120,7 +120,7 @@ describe("Governance — Snapshot + Timelock", function () {
 
   describe("Voting", function () {
     beforeEach(async function () {
-      await governance.connect(proposer).propose("Test", "Description", [], []);
+      await governance.connect(proposer).propose("Test", "Description", [admin.address], ["0x"]);
     });
 
     it("votes for and against counted correctly", async function () {
@@ -152,7 +152,7 @@ describe("Governance — Snapshot + Timelock", function () {
 
   describe("Finalization", function () {
     beforeEach(async function () {
-      await governance.connect(proposer).propose("Test", "Description", [], []);
+      await governance.connect(proposer).propose("Test", "Description", [admin.address], ["0x"]);
     });
 
     it("passes with majority and quorum", async function () {
@@ -196,7 +196,7 @@ describe("Governance — Snapshot + Timelock", function () {
 
   describe("Timelock + Execution", function () {
     beforeEach(async function () {
-      await governance.connect(proposer).propose("Test", "Description", [], []);
+      await governance.connect(proposer).propose("Test", "Description", [admin.address], ["0x"]);
       await governance.connect(voter1).vote(1, true);
       await governance.connect(voter2).vote(1, true);
 
@@ -232,19 +232,19 @@ describe("Governance — Snapshot + Timelock", function () {
 
   describe("Cancellation", function () {
     it("proposer can cancel own proposal", async function () {
-      await governance.connect(proposer).propose("Test", "desc", [], []);
+      await governance.connect(proposer).propose("Test", "desc", [admin.address], ["0x"]);
       await governance.connect(proposer).cancel(1);
       const state = (await governance.proposals(1)).state;
       expect(state).to.equal(4); // Cancelled
     });
 
     it("admin can cancel any proposal", async function () {
-      await governance.connect(proposer).propose("Test", "desc", [], []);
+      await governance.connect(proposer).propose("Test", "desc", [admin.address], ["0x"]);
       await governance.connect(admin).cancel(1);
     });
 
     it("random address cannot cancel", async function () {
-      await governance.connect(proposer).propose("Test", "desc", [], []);
+      await governance.connect(proposer).propose("Test", "desc", [admin.address], ["0x"]);
       await expect(
         governance.connect(attacker).cancel(1)
       ).to.be.revertedWith("Not authorized");

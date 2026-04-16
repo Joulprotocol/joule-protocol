@@ -199,11 +199,12 @@ describe("JOULE Core Flow", function () {
 
       // Sign off-chain payment
       const payAmount = ethers.parseEther("3");
-      const hash = await payChannel.getMessageHash(1, payAmount);
+      const deadline = (await ethers.provider.getBlock("latest")).timestamp + 86400;
+      const hash = await payChannel.getMessageHash(1, payAmount, deadline);
       const sig = await buyer.signMessage(ethers.getBytes(hash));
 
       // Receiver closes with proof
-      await payChannel.connect(producer).closeChannel(1, payAmount, sig);
+      await payChannel.connect(producer).closeChannel(1, payAmount, deadline, sig);
 
       // Check balances
       expect(await jolToken.balanceOf(producer.address)).to.equal(payAmount);

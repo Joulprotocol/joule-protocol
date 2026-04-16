@@ -251,15 +251,16 @@ describe("Trail of Bits — Attack Scenarios", function () {
       await paymentChannel.connect(alice).openChannel(bob.address, ethers.parseEther("1000"), 86400);
 
       // Attacker forges signature claiming 1000 JOL
+      const deadline = (await ethers.provider.getBlock("latest")).timestamp + 86400;
       const message = ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(
-        ["address", "uint256", "uint256"],
-        [paymentChannel.target, 1, ethers.parseEther("1000")]
+        ["address", "uint256", "uint256", "uint256"],
+        [paymentChannel.target, 1, ethers.parseEther("1000"), deadline]
       ));
       const fakeSignature = await attacker.signMessage(ethers.getBytes(message));
 
       // Bob (receiver) tries to close with attacker's fake signature
       await expect(
-        paymentChannel.connect(bob).closeChannel(1, ethers.parseEther("1000"), fakeSignature)
+        paymentChannel.connect(bob).closeChannel(1, ethers.parseEther("1000"), deadline, fakeSignature)
       ).to.be.revertedWith("Invalid signature");
     });
 
@@ -574,10 +575,10 @@ describe("Trail of Bits — Attack Scenarios", function () {
       await jolToken.connect(alice).delegate(alice.address);
       await ethers.provider.send("evm_mine");
 
-      // Create proposal with a target that would revert
+      // Create proposal with a target that would revert (call nonsense function on a real contract)
       await governance.connect(alice).propose(
         "Revert test", "desc",
-        [ethers.ZeroAddress], // calling address(0) will revert
+        [jolToken.target], // calling a non-existent function selector will revert
         ["0x12345678"]
       );
       await governance.connect(alice).vote(1, true);

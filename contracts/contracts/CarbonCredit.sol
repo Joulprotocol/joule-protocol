@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./EnergyRegistry.sol";
 
 /**
@@ -27,12 +28,13 @@ import "./EnergyRegistry.sol";
  * - Bundled for institutional buyers
  * - Verified by third-party auditors
  */
-contract CarbonCredit is ERC721, AccessControl {
+contract CarbonCredit is ERC721, AccessControl, Pausable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant AUDITOR_ROLE = keccak256("AUDITOR_ROLE");
 
     // EU average grid emission factor: 230g CO2/kWh = 230000 mg/kWh
     uint256 public constant EU_EMISSION_FACTOR_MG_PER_KWH = 230_000;
+    uint256 public constant MAX_CREDITS = 1_000_000; // max 1M carbon credits
 
     struct Credit {
         uint256 id;
@@ -66,6 +68,9 @@ contract CarbonCredit is ERC721, AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
     }
 
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+
     /**
      * @notice Issue a carbon credit NFT for verified energy production.
      * Called after oracle verification of real energy output.
@@ -77,9 +82,11 @@ contract CarbonCredit is ERC721, AccessControl {
         string calldata _country,
         uint256 _periodStart,
         uint256 _periodEnd
-    ) external onlyRole(MINTER_ROLE) returns (uint256) {
+    ) external onlyRole(MINTER_ROLE) whenNotPaused returns (uint256) {
+        require(_producer != address(0), "Zero address");
         require(_energyKWh > 0, "Zero energy");
         require(_periodEnd > _periodStart, "Invalid period");
+        require(totalCreditsIssued < MAX_CREDITS, "Max credits reached");
 
         // Calculate CO2 avoided
         uint256 co2Grams = (_energyKWh * EU_EMISSION_FACTOR_MG_PER_KWH) / 1000;

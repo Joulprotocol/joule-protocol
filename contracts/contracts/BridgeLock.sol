@@ -85,6 +85,8 @@ contract BridgeLock is AccessControl, ReentrancyGuard {
         uint256 _amount,
         bytes32 _ethTxHash
     ) external onlyRole(VALIDATOR_ROLE) nonReentrant {
+        require(_user != address(0), "Zero address");
+        require(_amount > 0, "Zero amount");
         require(!processedEthTxHashes[_ethTxHash], "Already processed");
 
         UnlockRequest storage req = unlockRequests[_unlockId];

@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./JOLToken.sol";
 import "./EnergyRegistry.sol";
@@ -22,7 +23,7 @@ import "./ConflictScore.sol";
  *
  * Slashed stakes go to the ecosystem treasury (burned or redistributed).
  */
-contract StakeSlash is AccessControl, ReentrancyGuard {
+contract StakeSlash is AccessControl, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant SLASHER_ROLE = keccak256("SLASHER_ROLE");
@@ -85,6 +86,9 @@ contract StakeSlash is AccessControl, ReentrancyGuard {
         conflictScore = ConflictScore(_conflictScore);
     }
 
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+
     /**
      * @notice Calculate required stake for a facility.
      * Stake = 3 days × capacityKW × avgPeakHours × avgCapacityFactor × JOL_PER_KWH
@@ -102,7 +106,7 @@ contract StakeSlash is AccessControl, ReentrancyGuard {
      * @notice Stake JOL to activate a facility for PoE mining.
      * Must be the facility owner. Facility must be verified.
      */
-    function stake(uint256 _facilityId) external nonReentrant returns (uint256 stakeId) {
+    function stake(uint256 _facilityId) external nonReentrant whenNotPaused returns (uint256 stakeId) {
         require(!isBanned(msg.sender), "Account banned");
         // ConflictScore Level 3+ cannot stake (suspended/expelled)
         if (address(conflictScore) != address(0)) {

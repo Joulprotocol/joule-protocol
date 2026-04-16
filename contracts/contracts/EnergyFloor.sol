@@ -126,7 +126,8 @@ contract EnergyFloor is AccessControl, ReentrancyGuard, Pausable {
     function depositEnergy(
         address _producer,
         uint256 _kWh
-    ) external onlyRole(ORACLE_ROLE) whenNotPaused {
+    ) external onlyRole(ORACLE_ROLE) nonReentrant whenNotPaused {
+        require(_producer != address(0), "Zero address");
         require(producers[_producer].active, "Not registered producer");
         require(_kWh > 0, "Zero kWh");
 
@@ -162,6 +163,7 @@ contract EnergyFloor is AccessControl, ReentrancyGuard, Pausable {
         address _producer,
         uint256 _kWh
     ) external nonReentrant whenNotPaused {
+        require(_producer != address(0), "Zero address");
         require(producers[_producer].active, "Producer not active");
         require(producers[_producer].availableKWh >= _kWh, "Insufficient producer capacity");
         require(_kWh > 0, "Zero kWh");

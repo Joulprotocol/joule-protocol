@@ -45,8 +45,8 @@ echo "  Peers:     $PEERS"
 
 # Calculate reward era
 if [ "$BLOCK" -gt 0 ]; then
-    ERA=$((BLOCK / 2102400))
-    REWARD=$((50 >> ERA))
+    ERA=$((BLOCK / 2100000))
+    REWARD=$((36 >> ERA))
     echo "  Era:       $ERA (reward: $REWARD JOL/block)"
 fi
 

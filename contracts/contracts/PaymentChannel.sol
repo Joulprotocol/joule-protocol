@@ -76,7 +76,7 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
     ) external nonReentrant whenNotPaused returns (uint256) {
         require(_receiver != address(0) && _receiver != msg.sender, "Invalid receiver");
         require(_deposit > 0, "Zero deposit");
-        require(_duration >= 60 && _duration <= 365 days, "Invalid duration");
+        require(_duration >= MIN_CHANNEL_DURATION && _duration <= MAX_CHANNEL_DURATION, "Invalid duration");
 
         // Effects (state changes BEFORE external calls)
         uint256 id = nextChannelId++;
@@ -114,18 +114,22 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
     function closeChannel(
         uint256 _channelId,
         uint256 _amount,
+        uint256 _deadline,
         bytes memory _signature
     ) external nonReentrant {
         Channel storage ch = channels[_channelId];
         require(ch.open && !ch.closed, "Channel not open");
         require(msg.sender == ch.receiver, "Only receiver can close");
         require(_amount <= ch.deposit, "Amount exceeds deposit");
+        require(block.timestamp <= _deadline, "Signature expired");
+        require(_deadline <= block.timestamp + SIGNATURE_VALIDITY, "Deadline too far");
 
-        // Verify sender's signature
+        // Verify sender's signature (includes deadline for replay protection)
         bytes32 message = keccak256(abi.encodePacked(
             address(this),
             _channelId,
-            _amount
+            _amount,
+            _deadline
         ));
         bytes32 ethSignedMessage = ECDSA.toEthSignedMessageHash(message);
         address signer = ethSignedMessage.recover(_signature);
@@ -156,8 +160,10 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
     /**
      * @notice Expire channel (sender can reclaim after expiration)
      */
-    // Grace period: receiver has 1 hour after expiration to submit closeChannel
     uint256 public constant EXPIRE_GRACE_PERIOD = 1 hours;
+    uint256 public constant SIGNATURE_VALIDITY = 24 hours;
+    uint256 public constant MIN_CHANNEL_DURATION = 60;
+    uint256 public constant MAX_CHANNEL_DURATION = 365 days;
 
     function expireChannel(uint256 _channelId) external nonReentrant {
         Channel storage ch = channels[_channelId];
@@ -192,6 +198,7 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
         Channel storage ch = channels[_channelId];
         require(ch.open, "Not open");
         require(msg.sender == ch.sender, "Only sender");
+        require(_amount > 0, "Zero amount");
         ch.deposit += _amount;
         require(jolToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
     }
@@ -216,8 +223,11 @@ contract PaymentChannel is ReentrancyGuard, Pausable, AccessControl {
 
     /**
      * @notice Helper to create the message hash for off-chain signing
+     * @param _channelId Channel ID
+     * @param _amount Cumulative payment amount
+     * @param _deadline Signature expiration timestamp
      */
-    function getMessageHash(uint256 _channelId, uint256 _amount) external view returns (bytes32) {
-        return keccak256(abi.encodePacked(address(this), _channelId, _amount));
+    function getMessageHash(uint256 _channelId, uint256 _amount, uint256 _deadline) external view returns (bytes32) {
+        return keccak256(abi.encodePacked(address(this), _channelId, _amount, _deadline));
     }
 }
